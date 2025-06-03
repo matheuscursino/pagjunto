@@ -1,10 +1,113 @@
-<meta charset="UTF-8">
-<title>test</title>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Resumo do Pedido</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --bg-color: #f4f6f8;
+      --card-bg: #fff;
+      --text-color: #333;
+    }
 
-<style>
-  body { padding-top:50px; }
-</style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background-color: var(--card-bg);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 30px;
+    }
+
+    .info {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+
+    .value {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .progress-container {
+      margin-top: 30px;
+    }
+
+    .progress-bar-background {
+      width: 100%;
+      height: 16px;
+      background-color: #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: <%= (orderData.paidValue / orderData.totalValue) * 100 %>%;
+      background-color: var(--primary-color);
+      transition: width 0.5s ease-in-out;
+    }
+
+    .progress-text {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
 <body>
-  <% console.log(partnerId) %>   <%= orderId %>
+
+  <div class="container">
+    <div class="title">Resumo do Pagamento</div>
+
+    <div class="info">
+      Valor do pedido:<br>
+      <span class="value">R$ <%= orderData.totalValue.toFixed(2) %></span>
+    </div>
+
+    <div class="info">
+      Valor pago:<br>
+      <span class="value">R$ <%= orderData.paidValue.toFixed(2) %></span>
+    </div>
+
+    <div class="info">
+      Número de pagamentos:<br>
+      <span class="value"><%= orderData.paymentsNumber %></span>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-bar-background">
+        <div class="progress-bar-fill"></div>
+      </div>
+      <div class="progress-text">
+        <%= Math.round((orderData.paidValue / orderData.totalValue) * 100) %>% do valor pago
+      </div>
+    </div>
+  </div>
+
 </body>
+</html>

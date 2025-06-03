@@ -36,16 +36,15 @@ app.get('/:partnerId/:orderId', (req, res) => {
                 'orderId': req.params.orderId
             }
         }, axiosConfig).then((response2) => {
-            console.log(response2)
+            res.render('order', {orderData: response2.data})
         }).catch((error2) => {
             res.send("order doesnt exist")
         })
     }).catch((error) => {
         res.send("partner doesnt exist")
     })
-
-   // res.render('order', {partnerId: req.params.partnerId, orderId: req.params.orderId})
 })
+
 
 app.listen(port, () => {
     console.log(`server started on port: ${port}`)
