@@ -31,12 +31,13 @@ app.get('/:partnerId/:orderId', (req, res) => {
             'partnerId': req.params.partnerId
         }
     }, axiosConfig).then((response) => {
+        var partnerData = response.data
         axios.get('http://127.0.0.1:3000/order', {
             data: {
                 'orderId': req.params.orderId
             }
         }, axiosConfig).then((response2) => {
-            res.render('order', {orderData: response2.data})
+            res.render('order', {orderData: response2.data, partnerData})
         }).catch((error2) => {
             res.send("order doesnt exist")
         })

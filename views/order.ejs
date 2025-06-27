@@ -3,30 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pagamento - Pagjunto</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Pagamento Seguro - Pagjunto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
-      --primary: #4f46e5;
-      --bg: #f9fafb;
-      --card: #fff;
-      --text: #1f2937;
-      --subtext: #6b7280;
+      /* Paleta de Cores Restaurada - Vibrante e Profissional */
+      --primary: #2563eb;       /* Azul Vibrante */
+      --primary-hover: #1d4ed8;  /* Azul Mais Escuro */
+      --primary-light: #dbeafe;  /* Azul Bem Claro */
+      
+      --accent: #059669;        /* Verde para Sucesso e Destaques */
+      --accent-light: #d1fae5;  /* Verde Claro */
+      --accent-hover: #a7f3d0;  /* Verde para Hover */
+
+      --error: #dc2626;         /* Vermelho para Erros */
+
+      --bg: #f9fafb;             /* Fundo Cinza Muito Claro */
+      --card: #ffffff;           /* Cartões Brancos */
+      
+      --text-header: #111827;    /* Texto Principal (Títulos) */
+      --text-body: #374151;      /* Texto Secundário (Corpo) */
+      --text-muted: #6b7280;     /* Texto Atenuado (Labels, etc) */
+
       --border: #e5e7eb;
+      --shadow: 0 8px 25px rgba(37, 99, 235, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Inter', sans-serif;
       margin: 0;
       background-color: var(--bg);
-      color: var(--text);
+      color: var(--text-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
 
     header {
-      background: white;
-      padding: 20px 40px;
+      background: var(--card);
+      padding: 20px 0;
       border-bottom: 1px solid var(--border);
+    }
+
+    .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -37,49 +66,87 @@
       font-size: 24px;
       color: var(--primary);
     }
+    header .logo i {
+        margin-right: 8px;
+    }
+
+    header .secure-badge {
+        font-size: 14px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    header .secure-badge i {
+        color: var(--accent);
+    }
 
     main {
-      max-width: 1100px;
-      margin: 40px auto;
+      padding: 60px 0; 
       display: flex;
-      gap: 30px;
+      gap: 40px;
       flex-wrap: wrap;
-      padding: 0 20px;
+      align-items: flex-start;
     }
 
     .card {
       background: var(--card);
       border-radius: 16px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      box-shadow: var(--shadow);
       padding: 30px;
       flex: 1;
-      min-width: 320px;
+      min-width: 350px;
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(37, 99, 235, 0.1);
     }
 
     .section-title {
       font-size: 20px;
       font-weight: 600;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      color: var(--text-header);
+    }
+    .section-title i {
+        color: var(--primary);
     }
 
     .info-group {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     .info-group label {
+      display: block;
       font-weight: 500;
-      color: var(--subtext);
-      font-size: 15px;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 6px;
     }
 
-    .info-group span {
-      display: block;
-      font-size: 18px;
+    .info-group .value {
+      font-size: 22px;
       font-weight: 600;
-      color: var(--primary);
+      color: var(--text-header);
+    }
+    .info-group .value.primary {
+        color: var(--primary);
+    }
+
+    .progress-container {
+      margin-top: 25px;
+    }
+    .progress-container label {
+      display: block;
+      font-weight: 500;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 8px;
     }
 
     .progress {
@@ -87,13 +154,24 @@
       height: 12px;
       border-radius: 6px;
       overflow: hidden;
-      margin-top: 10px;
     }
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(to right, var(--primary), #6366f1);
+      background: var(--primary);
       width: <%= (orderData.paidValue / orderData.totalValue) * 100 %>%;
+      transition: width 0.5s ease-in-out;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+        font-size: 15px;
+        color: var(--text-body);
     }
 
     input[type="number"],
@@ -101,49 +179,144 @@
       width: 100%;
       padding: 14px;
       font-size: 16px;
-      margin-top: 10px;
-      margin-bottom: 20px;
+      color: var(--text-body);
+      background-color: #fff;
       border: 1px solid var(--border);
       border-radius: 10px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="number"]:focus,
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    
+    .error-message {
+        color: var(--error);
+        font-size: 14px;
+        margin-top: -10px;
+        margin-bottom: 15px;
+        height: 16px;
     }
 
-    button {
+    .btn {
       background-color: var(--primary);
       color: white;
       font-size: 16px;
-      padding: 14px;
+      padding: 15px;
       width: 100%;
       border: none;
       border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    .btn:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+    .btn:disabled {
+        background-color: var(--text-muted);
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .loader {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255,255,255,0.5);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
     }
 
-    button:hover {
-      background-color: #4338ca;
+    @keyframes spin {
+        to { transform: rotate(360deg); }
     }
 
     .qr-container {
       text-align: center;
       margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px dashed var(--border);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
       display: none;
+    }
+    .qr-container.visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .qr-container img {
       max-width: 200px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    
+    .pix-key-wrapper {
+        display: flex;
+        background-color: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 4px;
+        margin-top: 15px;
+        align-items: center;
+    }
+    .pix-key-wrapper input {
+        flex-grow: 1;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        font-size: 14px;
+        outline: none;
+        padding: 0 8px;
+    }
+    .copy-btn {
+        background: var(--accent-light);
+        color: var(--accent);
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: background-color 0.2s;
+    }
+    .copy-btn:hover {
+        background-color: var(--accent-hover);
     }
 
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 40px 0;
       font-size: 14px;
-      color: var(--subtext);
+      color: var(--text-muted);
       border-top: 1px solid var(--border);
-      margin-top: 40px;
+      margin-top: 60px;
+    }
+    .footer-content i {
+        color: var(--accent);
+        margin-right: 5px;
+    }
+    footer a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    footer a:hover {
+        text-decoration: underline;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       main {
         flex-direction: column;
       }
@@ -153,72 +326,227 @@
 <body>
 
   <header>
-    <div class="logo"><i class="fas fa-building"></i> Pagjunto</div>
-    <div>Pagamento Compartilho</div>
+    <div class="container header-content">
+      <div class="logo"><i class="fas fa-layer-group"></i> Pagjunto</div>
+      <div class="secure-badge">
+          <i class="fas fa-lock"></i> Pagamento Seguro
+      </div>
+    </div>
   </header>
 
-  <main>
-    <!-- RESUMO DO PEDIDO -->
+  <main class="container">
     <div class="card">
-      <div class="section-title"><i class="fas fa-file-invoice"></i> Resumo do Pedido</div>
+      <div class="section-title"><i class="fas fa-file-invoice-dollar"></i> Resumo da Cobrança de <%= partnerData.partnerName %></div>
+      
       <div class="info-group">
         <label>Valor total</label>
-        <span>R$ <%= orderData.totalValue.toFixed(2) %></span>
+        <span class="value">R$ <%= orderData.totalValue.toFixed(2) %></span>
       </div>
       <div class="info-group">
         <label>Valor já pago</label>
-        <span>R$ <%= orderData.paidValue.toFixed(2) %></span>
+        <span class="value primary">R$ <%= orderData.paidValue.toFixed(2) %></span>
       </div>
       <div class="info-group">
-        <label>Pagamentos realizados</label>
-        <span><%= orderData.paymentsNumber %></span>
+        <label>Pagamentos recebidos</label>
+        <span class="value"><%= orderData.paymentsNumber %></span>
       </div>
-      <div class="progress">
-        <div class="progress-fill"></div>
+
+      <div class="progress-container">
+        <label>Progresso do Pagamento</label>
+        <div class="progress">
+          <div class="progress-fill"></div>
+        </div>
       </div>
     </div>
 
-    <!-- PAGAMENTO -->
     <div class="card">
-      <div class="section-title"><i class="fas fa-coins"></i> Realizar Pagamento</div>
+      <div class="section-title"><i class="fas fa-qrcode"></i> Pague com Pix</div>
+      
+      <form id="paymentForm" novalidate>
+        <div class="form-group">
+            <label for="cpf">Seu CPF (para identificação)</label>
+            <input type="text" id="cpf" placeholder="000.000.000-00" required />
+        </div>
 
-      <label for="cpf">Informe seu CPF:</label>
-      <input type="text" id="cpf" placeholder="Ex: 123.456.789-00" maxlength="14" />
+        <div class="form-group">
+            <label for="valor">Valor a pagar</label>
+            <input type="number" id="valor" placeholder="Ex: 50.00" min="1" step="0.01" required />
+        </div>
 
-      <label for="valor">Digite o valor que deseja pagar:</label>
-      <input type="number" id="valor" placeholder="Ex: 50.00" min="1" step="0.01" />
+        <div id="errorMessage" class="error-message"></div>
 
-      <button onclick="gerarPix()">Gerar QR Code Pix</button>
+        <button type="submit" id="generateBtn" class="btn">
+            <span id="btnText">Gerar QR Code Pix</span>
+            <div id="loader" class="loader" style="display: none;"></div>
+        </button>
+      </form>
 
       <div class="qr-container" id="qrBox">
-        <p>Escaneie o QR Code com seu banco:</p>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?data=chavepixficticia123&size=200x200" alt="QR Code Pix" />
-        <p><small>Chave Pix: chavepixficticia123</small></p>
+        <p><strong>Tudo pronto!</strong> Escaneie o código abaixo:</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?data=chavepixficticia123&size=200x200&qzone=1" alt="QR Code Pix" />
+        <p>Ou copie a chave Pix:</p>
+        <div class="pix-key-wrapper">
+          <input type="text" readonly id="pixKey" value="00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-42661417400053039865802BR5913NOME COMPLETO6009SAO PAULO62070503***6304ABCD" />
+          <button class="copy-btn" id="copyBtn">Copiar</button>
+        </div>
       </div>
     </div>
   </main>
 
   <footer>
-    © 2025 Pagjunto — Suporte: suporte@pagjunto.com
+    <div class="container footer-content">
+        <p><i class="fas fa-shield-alt"></i>Conexão Segura. © 2025 Pagjunto — Dúvidas? <a href="mailto:suporte@pagjunto.com">suporte@pagjunto.com</a></p>
+    </div>
   </footer>
 
   <script>
-    function gerarPix() {
-      const valor = parseFloat(document.getElementById("valor").value);
-      const cpf = document.getElementById("cpf").value.trim();
+    const paymentForm = document.getElementById('paymentForm');
+    const cpfInput = document.getElementById('cpf');
+    const valueInput = document.getElementById('valor');
+    const generateBtn = document.getElementById('generateBtn');
+    const btnText = document.getElementById('btnText');
+    const loader = document.getElementById('loader');
+    const qrBox = document.getElementById('qrBox');
+    const errorMessage = document.getElementById('errorMessage');
+    const copyBtn = document.getElementById('copyBtn');
+    const pixKeyInput = document.getElementById('pixKey');
 
-      if (!cpf) {
-        alert("Por favor, informe seu CPF.");
-        return;
-      }
+    // MÁSCARA DE CPF RESTAURADA
+    cpfInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 11) value = value.slice(0, 11);
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        e.target.value = value;
+    });
 
-      if (!valor || valor <= 0) {
-        alert("Insira um valor válido.");
-        return;
-      }
+    paymentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        gerarPix();
+    });
 
-      document.getElementById("qrBox").style.display = "block";
+    // FUNÇÕES DE UI RESTAURADAS
+    function mostrarErro(mensagem) {
+        errorMessage.textContent = mensagem;
     }
+
+    function limparEstado() {
+        mostrarErro('');
+        qrBox.classList.remove('visible');
+        generateBtn.disabled = false;
+        loader.style.display = 'none';
+        btnText.style.display = 'inline';
+    }
+
+    let pollingInterval;
+let tentativas = 0;
+
+function iniciarPolling(chargeId) {
+  pollingInterval = setInterval(async () => {
+    tentativas++;
+    if (tentativas > 30) clearInterval(pollingInterval); // ⏱️ Limite: 5 minutos, se for 10s por tentativa
+
+    try {
+      const response = await fetch(`http://localhost:3000/payment/status/${chargeId}`);
+      const data = await response.json();
+
+      if (data.status === 'paid') {
+        clearInterval(pollingInterval);
+
+        alert("Pagamento confirmado com sucesso!");
+
+        // Atualize a UI conforme necessário:
+        document.querySelector('#qrBox').innerHTML = '<p><strong>Pagamento recebido!</strong> Obrigado.</p>';
+      }
+    } catch (err) {
+      console.error('Erro no polling:', err);
+    }
+  }, 10000); // a cada 10 segundos
+}
+
+
+    // LÓGICA DE GERAÇÃO DE PIX COM LOADING RESTAURADA
+async function gerarPix() {
+  limparEstado();
+
+  const valor = parseFloat(valueInput.value);
+  const cpf = cpfInput.value;
+  const totalValue = <%= orderData.totalValue %>;
+  const paidValue = <%= orderData.paidValue %>;
+  const restante = totalValue - paidValue;
+
+  if (cpf.length !== 14) {
+    mostrarErro("Por favor, informe um CPF válido.");
+    cpfInput.focus();
+    return;
+  }
+
+  if (!valor || valor <= 0) {
+    mostrarErro("Por favor, insira um valor de pagamento válido.");
+    valueInput.focus();
+    return;
+  }
+
+  if (valor > restante) {
+    mostrarErro(`O valor excede o restante da cobrança (R$ ${restante.toFixed(2)}).`);
+    valueInput.focus();
+    return;
+  }
+  generateBtn.disabled = true;
+  btnText.style.display = 'none';
+  loader.style.display = 'block';
+
+  try {
+    var recipient_id = "<%=partnerData.recipient_id%>"
+    const response = await fetch('http://localhost:3000/payment/create-pix', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        cpf: cpf.replace(/\D/g, ''),
+        amount: valor,
+        recipient_id: recipient_id
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Erro ao criar pagamento Pix.');
+    } else {
+      iniciarPolling(data.data.id)
+    }
+
+    // ✅ Exibe o QR code e a chave retornados
+    document.querySelector('#qrBox img').src =
+      data.data.last_transaction.qr_code_url;
+    pixKeyInput.value = data.data.last_transaction.qr_code;
+
+    qrBox.classList.add('visible');
+    qrBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  } catch (error) {
+    console.error(error);
+    mostrarErro("Erro ao gerar o Pix. Tente novamente.");
+  } finally {
+    generateBtn.disabled = false;
+    btnText.style.display = 'inline';
+    loader.style.display = 'none';
+  }
+}
+    
+    // BOTÃO COPIAR COM API MODERNA
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(pixKeyInput.value).then(() => {
+            copyBtn.textContent = 'Copiado!';
+            setTimeout(() => {
+                copyBtn.textContent = 'Copiar';
+            }, 2000);
+        }).catch(err => {
+            console.error('Falha ao copiar texto: ', err);
+            // Poderia adicionar um fallback ou mensagem de erro aqui
+        });
+    });
   </script>
 
 </body>
