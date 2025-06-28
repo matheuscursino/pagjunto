@@ -25,6 +25,10 @@ app.get('/', (req, res) =>  {
     res.send('index')
 })
 
+app.get('/login', (req, res) => {
+    res.render('login')
+})
+
 app.get('/:partnerId/:orderId', (req, res) => {
     axios.get('http://127.0.0.1:3000/partner', {
         data: {
