@@ -74,7 +74,6 @@
             align-items: flex-start;
         }
         .card {
-            margin-top: 50px;
             background: var(--card);
             border-radius: 16px;
             box-shadow: var(--shadow);
@@ -83,6 +82,7 @@
             min-width: 350px;
             transition: all 0.3s ease;
             position: relative;
+            margin-top: 40px
         }
         .card:hover {
             transform: translateY(-4px);
@@ -111,6 +111,35 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
+        }
+        /* --- NOVO ESTILO PARA O BOTÃO DE COPIAR LINK --- */
+        .copy-link-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: 15px;
+            transition: all 0.2s ease;
+        }
+        .copy-link-btn:hover {
+            background: var(--bg);
+            color: var(--primary);
+            border-color: var(--primary-light);
+        }
+        .copy-link-btn.copied {
+            color: var(--accent);
+            border-color: var(--accent-light);
+            background-color: var(--accent-light);
+        }
+        .copy-link-btn:disabled {
+            cursor: default;
         }
         .paid-card-message {
             text-align: center;
@@ -318,7 +347,6 @@
                 flex-direction: column;
             }
         }
-
         .logo:hover{
             cursor: pointer;
         }
@@ -340,6 +368,11 @@
             <div class="section-title">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <span>Resumo da Cobrança de <%= partnerData.partnerName %></span>
+                
+                <button class="copy-link-btn" id="copyLinkBtn" title="Copiar link da cobrança">
+                    <i class="fas fa-link"></i>
+                </button>
+                
                 <% if (orderData.paidValue >= orderData.totalValue) { %>
                     <span class="paid-flag">
                         <i class="fas fa-check-circle"></i> PAGO
@@ -419,6 +452,30 @@
     </footer>
 
     <script>
+        // --- NOVO SCRIPT PARA O BOTÃO DE COPIAR LINK ---
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        if (copyLinkBtn) {
+            copyLinkBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    // Sucesso
+                    const originalIcon = copyLinkBtn.innerHTML;
+                    copyLinkBtn.innerHTML = '<i class="fas fa-check"></i>';
+                    copyLinkBtn.classList.add('copied');
+                    copyLinkBtn.disabled = true;
+
+                    setTimeout(() => {
+                        copyLinkBtn.innerHTML = originalIcon;
+                        copyLinkBtn.classList.remove('copied');
+                        copyLinkBtn.disabled = false;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Falha ao copiar o link: ', err);
+                    alert('Não foi possível copiar o link.');
+                });
+            });
+        }
+
+
         // Verifica se o formulário de pagamento existe na página antes de adicionar os listeners
         if (document.getElementById('paymentForm')) {
             const paymentForm = document.getElementById('paymentForm');
