@@ -692,7 +692,7 @@
                         <i class="fas fa-wallet"></i>
                     </div>
                 </div>
-                <div class="metric-value">R$ <% if (typeof summary !== 'undefined' && summary.accountBalance !== undefined) { %><%= summary.accountBalance.toFixed(2) %><% } else { %>15.234,56<% } %></div>
+                <div class="metric-value" id="accountBalanceValue">R$ 0,00</div>
                 <div class="metric-subtitle">Disponível para saque</div>
             </div>
             
@@ -703,7 +703,7 @@
                         <i class="fas fa-chart-line"></i>
                     </div>
                 </div>
-                <div class="metric-value">R$ <% if (typeof summary !== 'undefined' && summary.totalSales !== undefined) { %><%= summary.totalSales.toFixed(2) %><% } else { %>87.654,32<% } %></div>
+                <div class="metric-value" id="totalSalesValue">R$ 0,00</div>
                 <div class="metric-subtitle">Valor bruto de todas as ordens</div>
             </div>
             
@@ -714,7 +714,7 @@
                         <i class="fas fa-money-bill-wave"></i>
                     </div>
                 </div>
-                <div class="metric-value">R$ <% if (typeof summary !== 'undefined' && summary.totalPaidValue !== undefined) { %><%= summary.totalPaidValue.toFixed(2) %><% } else { %>72.110,00<% } %></div>
+                <div class="metric-value" id="totalPaidValue">R$ 0,00</div>
                 <div class="metric-subtitle">Valor já pago pelos clientes</div>
             </div>
             
@@ -725,7 +725,7 @@
                         <i class="fas fa-box"></i>
                     </div>
                 </div>
-                <div class="metric-value"><% if (typeof summary !== 'undefined' && summary.totalOrders !== undefined) { %><%= summary.totalOrders %><% } else { %>458<% } %></div>
+                <div class="metric-value" id="totalOrdersValue">0</div>
                 <div class="metric-subtitle">Total de ordens geradas</div>
             </div>
             
@@ -736,7 +736,7 @@
                         <i class="fas fa-hourglass-half"></i>
                     </div>
                 </div>
-                <div class="metric-value"><% if (typeof summary !== 'undefined' && summary.progressOrders !== undefined) { %><%= summary.progressOrders %><% } else { %>35<% } %></div>
+                <div class="metric-value" id="progressOrdersValue">0</div>
                 <div class="metric-subtitle">Aguardando pagamento</div>
             </div>
         </div>
@@ -813,6 +813,9 @@
 const mockSalesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'];
 const mockSalesData = [8500, 11000, 9800, 14200, 13000, 17500, 19000];
 
+        const ordersFromBackend = <%- JSON.stringify(orders || []) %>;
+
+
 // Os dados do gráfico de status devem vir de 'statusCounts', não 'statusData'
 // 'statusCounts' é preenchido pelo EJS com dados do backend ou com mockStatusData
 const mockStatusData = {
@@ -821,15 +824,7 @@ const mockStatusData = {
     paid: 238
 };
 
-// --- Variáveis injetadas pelo EJS (use estas quando tiver dados do backend) ---
-// Certifique-se de que estas variáveis globais sejam definidas no seu EJS antes do script,
-// ou que seus valores sejam obtidos do DOM se forem embutidos como atributos.
-// Exemplo no EJS:
-// <script>
-//    const partnerId = "<%= typeof partnerId !== 'undefined' ? partnerId : 'mockPartner123' %>";
-//    const partnerApiKey = "<%= typeof partnerApiKey !== 'undefined' ? partnerApiKey : 'mockApiKeyXYZ' %>";
-//    // ... demais variáveis
-// 
+
 
 // Garante que as variáveis existam e sejam arrays/objetos válidos, mesmo que vazios
 const salesLabels = typeof salesLabelsForChart !== 'undefined' && salesLabelsForChart.length > 0 ?
@@ -838,12 +833,52 @@ const salesLabels = typeof salesLabelsForChart !== 'undefined' && salesLabelsFor
 const salesData = typeof salesDataForChart !== 'undefined' && salesDataForChart.length > 0 ?
                     salesDataForChart : mockSalesData;
 
-const statusCounts = {
-    fresh: typeof summary !== 'undefined' && summary.freshOrders !== undefined ? summary.freshOrders : mockStatusData.fresh,
-    progress: typeof summary !== 'undefined' && summary.progressOrders !== undefined ? summary.progressOrders : mockStatusData.progress,
-    paid: typeof summary !== 'undefined' && summary.paidOrders !== undefined ? summary.paidOrders : mockStatusData.paid
-};
+// **IMPORTANTE:** Obtém o array de ordens que o backend já está passando
+// Se o seu backend não passa um array chamado 'orders' para o EJS, esta parte não funcionará.
+// Assumimos que 'orders' está disponível globalmente no escopo do JavaScript.
+const allOrders = typeof ordersFromBackend !== 'undefined' ? ordersFromBackend : [];
 
+// --- Nova Lógica: Calcular Métricas de Resumo no Frontend ---
+function calculateDashboardMetrics(orders) {
+    let totalSales = 0;
+    let totalPaidValue = 0;
+    let totalOrders = orders.length;
+    let freshOrders = 0;
+    let progressOrders = 0;
+    let paidOrders = 0;
+    // O saldo da conta geralmente não é calculado apenas a partir das ordens,
+    // mas sim de um registro de transações financeiras.
+    // Por isso, manteremos um valor mockado ou buscado de outra forma.
+    let accountBalance = typeof summaryFromBackend !== 'undefined' && summaryFromBackend.accountBalance !== undefined
+                         ? summaryFromBackend.accountBalance : 15234.56; // Valor inicial ou mockado
+
+    orders.forEach(order => {
+        totalSales += order.totalValue || 0;
+        totalPaidValue += order.paidValue || 0; // Use || 0 para garantir que não haja NaN se o campo estiver faltando
+
+        switch (order.status) {
+            case 'fresh':
+                freshOrders++;
+                break;
+            case 'progress':
+                progressOrders++;
+                break;
+            case 'paid':
+                paidOrders++;
+                break;
+        }
+    });
+
+    return {
+        accountBalance: accountBalance,
+        totalSales: totalSales,
+        totalPaidValue: totalPaidValue,
+        totalOrders: totalOrders,
+        freshOrders: freshOrders,
+        progressOrders: progressOrders,
+        paidOrders: paidOrders
+    };
+}
 
 // Helper para obter variáveis CSS no JS (Mantenha esta função)
 function var_to_css_var(variable) {
@@ -851,7 +886,6 @@ function var_to_css_var(variable) {
 }
 
 // --- Gráfico de Vendas Mensais (Line Chart) ---
-// Certifique-se de que 'salesChart' existe no seu HTML
 const salesCtx = document.getElementById('salesChart').getContext('2d');
 const salesChart = new Chart(salesCtx, {
     type: 'line',
@@ -861,7 +895,7 @@ const salesChart = new Chart(salesCtx, {
             label: 'Vendas Totais (R$)',
             data: salesData,
             borderColor: var_to_css_var('--primary-color'),
-            backgroundColor: 'rgba(0, 86, 179, 0.1)', /* Variação da cor primária */
+            backgroundColor: 'rgba(0, 86, 179, 0.1)',
             tension: 0.4,
             fill: true,
             pointBackgroundColor: var_to_css_var('--primary-color'),
@@ -916,59 +950,7 @@ const salesChart = new Chart(salesCtx, {
 
 // --- Gráfico de Status de Pedidos (Doughnut Chart) ---
 const statusCtx = document.getElementById('statusChart').getContext('2d');
-const statusChart = new Chart(statusCtx, {
-    type: 'doughnut', // Alterado para doughnut
-    data: {
-        labels: ['Novas', 'Em Progresso', 'Pagas'],
-        datasets: [{
-            // Use statusCounts aqui, que já pega os dados do EJS ou os mocks
-            data: [statusCounts.fresh, statusCounts.progress, statusCounts.paid],
-            backgroundColor: [
-                '#007bff', // Cor para Fresh (azul) - correspondente ao CSS
-                '#ffc107', // Cor para Progress (amarelo) - correspondente ao CSS
-                '#28a745'  // Cor para Paid (verde) - correspondente ao CSS
-            ],
-            borderWidth: 0,
-            hoverBorderWidth: 3,
-            hoverBorderColor: '#ffffff'
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '60%', // Tamanho do buraco no meio do doughnut
-        plugins: {
-            legend: {
-                position: 'bottom', // Legenda abaixo do gráfico
-                labels: {
-                    padding: 20,
-                    usePointStyle: true,
-                    pointStyle: 'circle', // Bolinhas como indicadores na legenda
-                    font: {
-                        size: 13,
-                        weight: '600'
-                    }
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(26, 32, 44, 0.9)', // Fundo escuro para tooltip
-                titleColor: '#ffffff',
-                bodyColor: '#ffffff',
-                borderColor: '#667eea',
-                borderWidth: 1,
-                cornerRadius: 8,
-                callbacks: {
-                    label: function(context) {
-                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                        const percentage = ((context.parsed / total) * 100).toFixed(1);
-                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
-                    }
-                }
-            }
-        }
-    }
-});
-
+let statusChart; // Declare a variável fora do DOMContentLoaded para poder acessá-la globalmente
 
 // --- Formulário de Nova Ordem ---
 document.getElementById('newOrderForm').addEventListener('submit', async function(e) {
@@ -976,24 +958,22 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
 
     const totalValue = document.getElementById('totalValue').value;
     const submitButton = e.target.querySelector('button[type="submit"]');
-    const originalText = submitButton.innerHTML; // Guarde o HTML original do botão
+    const originalText = submitButton.innerHTML;
     const orderCreationResult = document.getElementById('orderCreationResult');
     const orderLinkElement = document.getElementById('orderLink');
 
-    // Validação básica do valor
     if (isNaN(parseFloat(totalValue)) || parseFloat(totalValue) <= 0) {
         alert('Por favor, insira um Valor Total válido (número maior que zero).');
         return;
     }
 
-    // Carregando estado do botão
     submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
     submitButton.disabled = true;
 
     // Garante que partnerId e partnerApiKey estão disponíveis
     // Se eles vêm do backend via EJS, certifique-se de que estão no escopo global ou passados via data attributes
-    const localPartnerId = "<%= partnerData.partnerId %>"
-    const localPartnerApiKey = "<%= partnerData.apiKey %>"
+    const localPartnerId = "<%= partnerData.partnerId %>"; // Ou use uma variável JS global como `partnerId` se for injetada assim
+    const localPartnerApiKey = "<%= partnerData.apiKey %>"; // Ou use uma variável JS global como `partnerApiKey`
 
     try {
         const response = await fetch('http://localhost:3000/order', {
@@ -1002,42 +982,44 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                partnerId: localPartnerId, // Usando a variável local
-                totalValue: totalValue, // Converte para float para enviar
-                apiKey: localPartnerApiKey // Usando a variável local
+                partnerId: localPartnerId,
+                totalValue: parseFloat(totalValue), // Converte para float para enviar
+                apiKey: localPartnerApiKey
             })
         });
 
-        // Verifica se a resposta HTTP é OK antes de tentar ler o JSON
         if (!response.ok) {
-            // Tenta ler o erro do corpo da resposta, se disponível
             const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido.' }));
             throw new Error(errorData.message || `Erro HTTP: ${response.status}`);
         }
 
         const result = await response.json();
 
-        // O backend retorna apenas o orderId, então construímos a URL completa aqui
-        if (result) {
-            const generatedOrderLink = `http://localhost/${localPartnerId}/${result}`; // Construa a URL completa
+        if (result) { // Assumindo que o backend retorna { orderId: "..." }
+            const generatedOrderLink = `http://localhost/${localPartnerId}/${result}`;
 
             orderLinkElement.href = generatedOrderLink;
             orderLinkElement.textContent = generatedOrderLink;
-            orderCreationResult.style.display = 'flex'; // Exibe o resultado
+            orderCreationResult.style.display = 'flex';
 
-            // Limpar formulário
             document.getElementById('totalValue').value = '';
 
-            // Scroll para o resultado
-            orderCreationResult.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Ajuste para melhor visualização
+            orderCreationResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             alert('Ordem criada com sucesso! Link gerado: ' + generatedOrderLink);
 
-            // Opcional: Atualizar a lista de ordens ou os dados dos gráficos aqui
-            // updateDashboardData(); // Se você tiver essa função implementada
+            // **NOVA LÓGICA:** Atualizar as métricas e gráficos após uma nova ordem
+            // Simular a adição da nova ordem ao array existente (idealmente, você refaria a requisição de ordens)
+            allOrders.unshift({ // Adiciona a nova ordem no início do array
+                orderId: result.orderId,
+                totalValue: parseFloat(totalValue),
+                paidValue: 0, // Novas ordens geralmente começam com 0 pago
+                status: 'fresh', // Nova ordem começa como 'fresh'
+                payersIds: []
+            });
+            updateDashboardDisplay(); // Chama a função para recalcular e atualizar o DOM
             
         } else {
-            // Se a resposta não contiver orderId, é um erro
             throw new Error('Resposta inválida do servidor: Order ID não encontrado.');
         }
 
@@ -1045,7 +1027,6 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
         console.error('Erro ao criar ordem:', error);
         alert('Erro ao criar ordem: ' + error.message);
     } finally {
-        // Restaurar botão
         submitButton.innerHTML = originalText;
         submitButton.disabled = false;
     }
@@ -1055,44 +1036,38 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
 document.getElementById('copyLinkButton').addEventListener('click', function() {
     const orderLink = document.getElementById('orderLink');
     const copyButton = this;
-    const originalText = copyButton.innerHTML; // Salva o estado original do botão
+    const originalText = copyButton.innerHTML;
 
     if (!orderLink.href || orderLink.href === '#') {
         alert('Nenhum link para copiar. Crie uma ordem primeiro.');
         return;
     }
 
-    // Copiar para clipboard
     navigator.clipboard.writeText(orderLink.href)
         .then(() => {
-            // Feedback visual de sucesso
             copyButton.innerHTML = '<i class="fas fa-check"></i> Copiado!';
-            copyButton.style.backgroundColor = '#28a745'; // Verde de sucesso
+            copyButton.style.backgroundColor = '#28a745';
             copyButton.style.color = '#ffffff';
 
             setTimeout(() => {
-                // Restaurar estado original
                 copyButton.innerHTML = originalText;
-                // Restaurar cor de fundo para a cor padrão definida no CSS
                 copyButton.style.backgroundColor = var_to_css_var('--secondary-color');
-                copyButton.style.color = '#ffffff'; // Garante que o texto volte a ser branco
+                copyButton.style.color = '#ffffff';
             }, 2000);
         })
         .catch(err => {
             console.error('Erro ao copiar:', err);
-            // Fallback para navegadores mais antigos (usando execCommand)
             const textArea = document.createElement('textarea');
             textArea.value = orderLink.href;
-            textArea.style.position = 'fixed'; // Evita que a textarea afete o layout
+            textArea.style.position = 'fixed';
             textArea.style.top = '0';
             textArea.style.left = '0';
-            textArea.style.opacity = '0'; // Torna invisível
+            textArea.style.opacity = '0';
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
             try {
                 document.execCommand('copy');
-                // Feedback visual de sucesso para o fallback
                 copyButton.innerHTML = '<i class="fas fa-check"></i> Copiado!';
                 copyButton.style.backgroundColor = '#28a745';
                 copyButton.style.color = '#ffffff';
@@ -1110,10 +1085,97 @@ document.getElementById('copyLinkButton').addEventListener('click', function() {
         });
 });
 
+// --- Função para atualizar o display do dashboard com base nos dados calculados ---
+function updateDashboardDisplay() {
+    // Atualizar os cartões de métricas
+    const metrics = calculateDashboardMetrics(allOrders);
 
+    // Atualizar os cartões de métricas usando os IDs
+    document.getElementById('accountBalanceValue').textContent = formatCurrency(metrics.accountBalance);
+    document.getElementById('totalSalesValue').textContent = formatCurrency(metrics.totalSales);
+    document.getElementById('totalPaidValue').textContent = formatCurrency(metrics.totalPaidValue);
+    document.getElementById('totalOrdersValue').textContent = formatNumber(metrics.totalOrders);
+    document.getElementById('progressOrdersValue').textContent = formatNumber(metrics.progressOrders);
+
+    // Ajustar os seletores para serem mais específicos se o layout mudar
+    // Ou adicione IDs aos elementos de valor se houver ambiguidade:
+    // Ex: <div id="totalSalesValue" class="metric-value">...</div>
+    //    document.getElementById('totalSalesValue').textContent = formatCurrency(metrics.totalSales);
+
+
+    // Atualizar o gráfico de status
+    if (statusChart) {
+        statusChart.data.datasets[0].data = [metrics.freshOrders, metrics.progressOrders, metrics.paidOrders];
+        statusChart.update();
+    } else {
+        // Se o gráfico ainda não foi inicializado (primeira carga da página)
+        // Isso pode acontecer se o script for executado antes do DOMContentLoaded
+        statusChart = new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Novas', 'Em Progresso', 'Pagas'],
+                datasets: [{
+                    data: [metrics.freshOrders, metrics.progressOrders, metrics.paidOrders],
+                    backgroundColor: [
+                        '#007bff',
+                        '#ffc107',
+                        '#28a745'
+                    ],
+                    borderWidth: 0,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, pointStyle: 'circle', font: { size: 13, weight: '600' } } },
+                    tooltip: {
+                        backgroundColor: 'rgba(26, 32, 44, 0.9)', titleColor: '#ffffff', bodyColor: '#ffffff',
+                        borderColor: '#667eea', borderWidth: 1, cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Atualizar a tabela de ordens (se você quiser que as novas ordens apareçam sem recarregar a página)
+    const tableBody = document.querySelector('.table tbody');
+    if (tableBody) {
+        tableBody.innerHTML = ''; // Limpa as linhas existentes
+        allOrders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${order.orderId}</td>
+                <td>R$ ${order.totalValue.toFixed(2)}</td>
+                <td>R$ ${(order.paidValue || 0).toFixed(2)}</td>
+                <td><span class="status-badge ${order.status}">${order.status}</span></td>
+                <td><span class="payer-ids">${(order.payersIds && order.payersIds.length > 0) ? order.payersIds.join(', ') : ''}</span></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+}
+
+
+// --- Inicialização ---
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Dashboard PagJunto Corporate carregado');
 
+    // Remove as condições EJS nos cartões de métricas no HTML
+    // E chama updateDashboardDisplay para preencher os valores iniciais
+    updateDashboardDisplay();
+
+    // Animações de entrada (mantidas)
     const cards = document.querySelectorAll('.summary-cards .card, .section');
     cards.forEach((card, index) => {
         card.style.opacity = '0';
@@ -1123,15 +1185,16 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             card.style.opacity = '1';
             card.style.transform = 'translateY(0)';
-        }, index * 80); 
+        }, index * 80);
     });
 
     document.getElementById('orderCreationResult').style.display = 'none';
 });
 
-// --- Utilitários (Mantenha estas funções se as usar no EJS para exibir os dados) ---
+
+// --- Utilitários ---
 function formatCurrency(value) {
-    if (typeof value !== 'number') return 'R$ 0,00'; // Fallback
+    if (typeof value !== 'number') return 'R$ 0,00';
     return value.toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL'
@@ -1139,14 +1202,13 @@ function formatCurrency(value) {
 }
 
 function formatNumber(value) {
-    if (typeof value !== 'number') return '0'; // Fallback
+    if (typeof value !== 'number') return '0';
     return value.toLocaleString('pt-BR');
 }
 
-// --- Responsividade para gráficos (Mantenha esta parte) ---
+// --- Responsividade para gráficos ---
 window.addEventListener('resize', function() {
     if (salesChart) salesChart.resize();
     if (statusChart) statusChart.resize();
 });
-
 </script>
