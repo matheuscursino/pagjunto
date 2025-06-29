@@ -30,7 +30,7 @@ app.use(cookieParser())
 
 
 app.get('/', (req, res) =>  {
-    res.send('index')
+    res.render('lp')
 })
 
 app.get('/login', (req, res) => {

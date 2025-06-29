@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PagJunto - A Revolução nos Pagamentos Compartilhados</title>
+    <meta name="description" content="Simplifique pagamentos em grupo, rateios e comissões. Com o PagJunto, você cria uma ordem de pagamento e nós cuidamos do resto.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* --- Variáveis Globais de Design --- */
+        :root {
+            --primary-color: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-light: #f8f9fa;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #dee2e6;
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --gradient-bg: linear-gradient(120deg, #f0f6ff 0%, #e6efff 100%);
+        }
+
+        /* --- Reset e Estilos Base --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-secondary);
+            background-color: var(--bg-white);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        h1, h2, h3 {
+            color: var(--text-primary);
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        h1 { font-size: 3.2rem; letter-spacing: -0.04em; }
+        h2 { font-size: 2.5rem; letter-spacing: -0.03em; margin-bottom: 20px; }
+        h3 { font-size: 1.5rem; }
+
+        p { margin-bottom: 1rem; }
+        .lead { font-size: 1.25rem; font-weight: 400; color: var(--text-secondary); }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--bg-white);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover {
+            background-color: var(--bg-light);
+            border-color: var(--primary-color);
+        }
+
+
+        /* --- Header / Navegação --- */
+        .header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { color: var(--primary-color); }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--primary-color); }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding-top: 180px;
+            background: var(--gradient-bg);
+            text-align: center;
+        }
+        .hero h1 { max-width: 800px; margin: 0 auto 20px; }
+        .hero .lead { max-width: 650px; margin: 0 auto 30px; }
+        .hero-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
+        .hero-image {
+            max-width: 900px;
+            width: 100%;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background-color: #ccc;
+            height: 500px;
+            margin: 0 auto -50px;
+            position: relative;
+            background: url('https://i.imgur.com/Zvi8af3.png') no-repeat center center;
+            background-size: cover;
+            border: 1px solid #FFF;
+        }
+
+        /* --- Seção de Prova Social (Logos) --- */
+        .trust-section { padding: 80px 0; background-color: var(--bg-light); text-align: center; }
+        .trust-title { text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 30px; }
+        .logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 50px; filter: grayscale(100%) opacity(60%); }
+        .logos i { font-size: 2.5rem; }
+
+        /* --- Seção de Features/Como Funciona --- */
+        .features { text-align: center; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
+        .feature-card { padding: 30px; background: var(--bg-white); border-radius: 12px; border: 1px solid var(--border-color); transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .feature-icon { width: 60px; height: 60px; border-radius: 50%; background: var(--gradient-bg); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 20px; }
+
+        /* --- Seção de Benefícios (Alternada) --- */
+        .benefits .benefit-item { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; margin-bottom: 80px; }
+        .benefits .benefit-item:last-child { margin-bottom: 0; }
+        .benefits .benefit-item:nth-child(even) .benefit-image { grid-row: 1; grid-column: 2; }
+        .benefits .benefit-item:nth-child(even) .benefit-content { grid-row: 1; grid-column: 1; }
+        .benefit-image { background-color: var(--gradient-bg); border-radius: 12px; padding: 40px; text-align: center; }
+        .benefit-image i { font-size: 8rem; color: var(--primary-color); opacity: 0.5; }
+        .benefit-content ul { list-style: none; padding-left: 0; }
+        .benefit-content li { position: relative; padding-left: 30px; margin-bottom: 15px; font-size: 1.1rem; }
+        .benefit-content li::before { content: '\f058'; font-family: "Font Awesome 6 Free"; font-weight: 900; color: var(--primary-color); position: absolute; left: 0; top: 4px; }
+
+        /* --- Seção de Testemunhos --- */
+        .testimonials { background: var(--gradient-bg); text-align: center; }
+        .testimonial-card { max-width: 750px; margin: 40px auto 0; }
+        .testimonial-text { font-size: 1.5rem; font-weight: 500; color: var(--text-primary); line-height: 1.6; margin-bottom: 25px; }
+        .testimonial-author { font-weight: 600; }
+        .testimonial-author span { font-weight: 400; color: var(--text-secondary); display: block; }
+
+        /* --- NOVA SEÇÃO DE CONTATO --- */
+        .contact { background-color: var(--bg-light); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: flex-start; }
+        .contact-info-list { list-style: none; margin-top: 30px; }
+        .contact-info-list li { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; }
+        .contact-info-list i { font-size: 1.2rem; color: var(--primary-color); margin-top: 5px; }
+        .contact-form .form-group { margin-bottom: 20px; }
+        .contact-form label { display: block; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; }
+        .contact-form input, .contact-form select, .contact-form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-white);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        .contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+        }
+        .contact-form .btn-primary { width: 100%; font-size: 1rem; padding-top: 15px; padding-bottom: 15px; }
+
+        /* --- Seção de CTA Final --- */
+        .cta-section { background: var(--primary-color); color: var(--text-light); text-align: center; padding: 80px 0; border-radius: 20px; margin: 0 20px; }
+        .cta-section .container { max-width: 700px; }
+        .cta-section h2 { color: var(--text-light); }
+        .cta-section p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 30px;}
+        .cta-section .btn-secondary { background-color: var(--bg-white); color: var(--primary-color); border-color: var(--bg-white); font-size: 1.1rem; padding: 16px 36px; }
+        .cta-section .btn-secondary:hover { background-color: var(--bg-light); }
+
+
+        /* --- Footer --- */
+        .footer { background: var(--bg-light); padding: 60px 0; margin-top: 100px; text-align: center; }
+        .footer .logo { justify-content: center; margin-bottom: 20px; }
+        .footer p { font-size: 0.9rem; }
+        .social-links a { color: var(--text-secondary); margin: 0 10px; font-size: 1.2rem; text-decoration: none; }
+        .social-links a:hover { color: var(--primary-color); }
+
+
+        /* --- Animação de Fade-in --- */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* --- Media Queries para Responsividade --- */
+        @media(max-width: 992px) {
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 2.2rem; }
+            .benefits .benefit-item, .benefits .benefit-item:nth-child(even) { grid-template-columns: 1fr; }
+            .benefits .benefit-item:nth-child(even) .benefit-image { grid-row: 1; grid-column: 1; }
+            .benefits .benefit-item:nth-child(even) .benefit-content { grid-row: 2; grid-column: 1; }
+            .contact-grid { grid-template-columns: 1fr; gap: 50px; }
+        }
+
+        @media(max-width: 768px) {
+            .nav-links { display: none; }
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            section { padding: 80px 0; }
+            .hero { padding-top: 140px; }
+            .hero-image { height: 350px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .testimonial-text { font-size: 1.2rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo"><i class="fas fa-chart-line"></i> PagJunto</a>
+            <nav class="nav-links">
+                <a href="#features">Soluções</a>
+                <a href="#benefits">Vantagens</a>
+                <a href="#contact">Contato</a>
+            </nav>
+            <a href="/login" class="btn btn-primary">Entrar</a>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero" id="home">
+            <div class="container">
+                <h1 class="fade-in">A revolução nos pagamentos compartilhados.</h1>
+                <p class="lead fade-in" style="transition-delay: 100ms;">Crie um link de pagamento único, divida os valores e receba de todos os envolvidos de forma automática e rápida.</p>
+                <div class="hero-buttons fade-in" style="transition-delay: 200ms;">
+                    <a href="#contact" class="btn btn-primary">Quero falar com um especialista</a>
+                    <a href="#features" class="btn btn-secondary">Ver como funciona</a>
+                </div>
+                <div class="hero-image fade-in" style="transition-delay: 300ms;"></div>
+            </div>
+        </section>
+
+
+        <section class="features" id="features">
+            <div class="container">
+                <div style="max-width: 700px; margin: 0 auto; text-align: center;">
+                    <h2>Pagamentos complexos, em 3 passos simples.</h2>
+                    <p class="lead">Nossa plataforma foi desenhada para ser intuitiva. Veja como é fácil transformar uma cobrança complicada em um processo simples.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon"><i class="fas fa-plus"></i></div>
+                        <h3>1. Crie a Ordem</h3>
+                        <p>Defina o valor total da ordem de pagamento com apenas um clique no seu dashboard (ou por API).</p>
+                    </div>
+                    <div class="feature-card fade-in" style="transition-delay: 150ms;">
+                        <div class="feature-icon"><i class="fas fa-share-alt"></i></div>
+                        <h3>2. Compartilhe o Link</h3>
+                        <p>Envie o link gerado para todos os pagadores. Eles escolhem quanto pagar.</p>
+                    </div>
+                    <div class="feature-card fade-in" style="transition-delay: 300ms;">
+                        <div class="feature-icon"><i class="fas fa-wallet"></i></div>
+                        <h3>3. Receba na sua Conta</h3>
+                        <p>Acompanhe os pagamentos em tempo real e receba o valor consolidado na sua conta.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="benefits" id="benefits">
+            <div class="container">
+                <div class="benefit-item fade-in">
+                    <div class="benefit-content">
+                        <h2>Mais agilidade, maior número de vendas.</h2>
+                        <p>Ao facilitar o pagamento para seus clientes, você aumenta o seu número de vendas. Incentive seu cliente a dividir a conta e comprar mais vezes.</p>
+                        <ul>
+                            <li>Múltiplos pagadores em um único link</li>
+                            <li>Flexibilidade para dividir o valor como quiser</li>
+                            <li>Agilidade no processo</li>
+                        </ul>
+                    </div>
+                    <div class="benefit-image"> <i class="fas fa-users"></i> </div>
+                </div>
+                <div class="benefit-item fade-in">
+                    <div class="benefit-image"> <i class="fas fa-chart-pie"></i> </div>
+                    <div class="benefit-content">
+                        <h2>Controle e visibilidade total.</h2>
+                        <p>Seu dashboard executivo centraliza todas as informações. Saiba exatamente quem pagou, quanto falta e qual o status de cada ordem em tempo real.</p>
+                        <ul>
+                            <li>Dashboard completo com métricas chave</li>
+                            <li>Relatórios detalhados por ordem</li>
+                            <li>Segurança e transparência em cada transação</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials" id="testimonials">
+            <div class="container">
+                <div style="max-width: 700px; margin: 0 auto; text-align: center;"> <h2>O que nossos parceiros dizem</h2> </div>
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-text">"Nossas vendas foram impulsionadas após a parceria com a Pagjunto. Quando podem dividir a conta, os clientes se sentem à vontade para comprar mais vezes. É simplesmente genial."</p>
+                    <p class="testimonial-author">Marcelo <span>CEO, Empresa Anônima</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="contact-grid fade-in">
+                    <div class="contact-text">
+                        <h2>Dúvidas? Fale com um especialista.</h2>
+                        <p class="lead">Preencha o formulário e nossa equipe entrará em contato para entender suas necessidades e mostrar como o PagJunto pode ajudar sua empresa a crescer.</p>
+                        <ul class="contact-info-list">
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <div><strong>Email</strong><br>contato@pagjunto.com</div>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone"></i>
+                                <div><strong>Telefone</strong><br>(12) 99142-4278</div>
+                            </li>
+                             <li>
+                                <i class="fas fa-clock"></i>
+                                <div><strong>Atendimento</strong><br>Segunda a Sexta, das 9h às 18h</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <form action="#" method="POST" class="contact-form">
+                        <div class="form-group">
+                            <label for="name">Nome Completo</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Corporativo</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Nome da Empresa</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="employees">Número de Funcionários</label>
+                            <select id="employees" name="employees">
+                                <option>Selecione uma opção</option>
+                                <option value="1-10">1-10</option>
+                                <option value="11-50">11-50</option>
+                                <option value="51-200">51-200</option>
+                                <option value="201+">201+</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Sua mensagem</label>
+                            <textarea id="message" name="message" rows="4"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="cta-final">
+            <div class="container">
+                <div class="cta-section fade-in">
+                    <div class="container">
+                        <h2>Pronto para revolucionar seus recebimentos?</h2>
+                        <p>Fale com um especialista e comece a simplificar suas cobranças. Sem mensalidade, sem burocracia.</p>
+                        <a href="#contact" class="btn btn-secondary">Quero simplificar meus pagamentos</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <a href="#" class="logo"><i class="fas fa-chart-line"></i> PagJunto</a>
+            <p>Simplificando a forma como o mundo divide contas.</p>
+            <div class="social-links" style="margin: 20px 0;">
+                <a href="https://www.linkedin.com/company/pagjunto" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.instagram.com/pagjunto" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>&copy; 2025 PagJunto. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const fadeInElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            fadeInElements.forEach(el => { observer.observe(el); });
+        });
+    </script>
+</body>
+</html>
