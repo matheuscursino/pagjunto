@@ -42,8 +42,16 @@ app.get('/dashboard', (req, res) => {
         res
             .redirect('/login')
     } else {
-        res
-            .render('dashboard')
+        jwt.verify(req.cookies.access_token, process.env.SEGREDO, function(err, decoded){
+            axios.get('http://127.0.0.1:3000/partner', {
+                data: {
+                    'partnerId': decoded.partnerId
+                }
+            }, axiosConfig).then((response) => {
+                var partnerData = response.data
+                res.render('dashboard', {partnerData})
+            })
+        })
     }
 })
 

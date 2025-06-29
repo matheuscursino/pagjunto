@@ -3,524 +3,775 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard do Parceiro - <% if (typeof partnerName !== 'undefined') { %><%= partnerName %><% } else { %>PagJunto Corporativo<% } %></title>
+    <title>Dashboard do Parceiro - <% if (typeof partnerData.partnerName !== 'undefined') { %><%= partnerData.partnerName %><% } else { %>PagJunto Corporativo<% } %></title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* --- Variáveis CSS (Ajustadas para mais profissionalismo) --- */
+        /* --- Variáveis CSS Modernas --- */
         :root {
-            --primary-color: #0056b3; /* Azul corporativo, forte */
-            --secondary-color: #007bff; /* Azul para detalhes */
-            --accent-color: #28a745; /* Verde para sucesso/ações */
-            --danger-color: #dc3545; /* Vermelho para atenção */
-            --text-dark: #212529;
-            --text-light: #495057;
-            --bg-light: #f8f9fa; /* Fundo mais claro */
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary-color: #4c51bf;
+            --accent-color: #48bb78;
+            --accent-hover: #38a169;
+            --danger-color: #f56565;
+            --warning-color: #ed8936;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --bg-primary: #f7fafc;
+            --bg-secondary: #edf2f7;
             --bg-card: #ffffff;
-            --border-color: #e0e6eb; /* Bordas mais suaves */
-            --shadow-light: rgba(0, 0, 0, 0.04); /* Sombra mais sutil */
-            --shadow-medium: rgba(0, 0, 0, 0.08);
-            --header-bg: #343a40; /* Cinza escuro para o cabeçalho */
-            --header-text: #f8f9fa;
+            --border-light: #e2e8f0;
+            --border-medium: #cbd5e0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
         }
 
-        /* --- Estilos Gerais --- */
-        body {
-            font-family: 'Inter', sans-serif;
+        /* --- Reset e Base --- */
+        * {
             margin: 0;
             padding: 0;
-            background-color: var(--bg-light);
-            color: var(--text-light);
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
             line-height: 1.6;
+            font-size: 14px;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        .main-content {
-            flex: 1;
-            padding: 40px 25px; /* Mais padding lateral */
+        /* --- Header Moderno --- */
+        .header {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            padding: 0;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
-        .container {
+        .header-content {
             max-width: 1400px;
             margin: 0 auto;
-            background-color: var(--bg-card);
-            padding: 35px; /* Mais padding geral */
-            border-radius: 6px; /* Bordas mais sutis */
-            box-shadow: 0 4px 15px var(--shadow-medium); /* Sombra mais presente */
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        h1 {
-            color: var(--primary-color);
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: -0.025em;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-gradient);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            color: #a0aec0;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .logout-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- Container Principal --- */
+        .main-content {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 32px;
+            width: 100%;
+        }
+
+        /* --- Título Principal --- */
+        .page-header {
+            margin-bottom: 48px;
             text-align: center;
-            margin-bottom: 45px;
-            font-size: 2.8em; /* Um pouco maior */
-            font-weight: 700;
-            letter-spacing: -0.8px;
         }
 
-        h2 {
-            color: var(--text-dark);
-            font-size: 1.8em; /* Um pouco maior */
-            font-weight: 600;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-        }
-        h2 i {
-            margin-right: 15px;
-            color: var(--primary-color);
-            font-size: 1.2em;
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.025em;
         }
 
-        /* --- Top Bar (Cabeçalho) --- */
-        .top-bar {
-            background-color: var(--header-bg);
-            color: var(--header-text);
-            padding: 18px 35px; /* Mais padding */
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* --- Seção de Nova Ordem --- */
+        .create-order-section {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            margin-bottom: 48px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .create-order-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .section-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            font-weight: 500;
+            gap: 12px;
+            margin-bottom: 24px;
         }
-        .top-bar .logo {
-            font-size: 1.8em; /* Maior */
-            font-weight: 700;
-            color: var(--header-text);
-            text-decoration: none;
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
-            letter-spacing: -0.5px;
-        }
-        .top-bar .logo i {
-            margin-right: 12px;
-            color: var(--secondary-color);
-            font-size: 1.4em;
-        }
-        .top-bar .user-info {
-            display: flex;
-            align-items: center;
-            font-size: 1.05em; /* Um pouco maior */
-        }
-        .top-bar .user-info i {
-            margin-right: 10px;
-            color: var(--secondary-color);
-        }
-        .top-bar .user-info a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            margin-left: 20px;
-            transition: color 0.3s ease;
-        }
-        .top-bar .user-info a:hover {
+            justify-content: center;
             color: white;
+            font-size: 18px;
         }
 
-        /* --- Formulário de Nova Ordem --- */
-        .order-form-section {
-            margin-bottom: 50px;
-            padding: 35px;
-            background-color: var(--bg-card);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px var(--shadow-light);
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.025em;
         }
-        .order-form-section .form-group {
-            margin-bottom: 20px; /* Mais espaçamento */
+
+        .form-group {
+            margin-bottom: 24px;
         }
-        .order-form-section label {
+
+        .form-label {
             display: block;
-            margin-bottom: 8px; /* Mais espaçamento */
-            font-weight: 600; /* Mais peso */
-            color: var(--text-dark);
-            font-size: 1.05em;
-        }
-        .order-form-section input[type="number"] {
-            width: calc(100% - 24px); /* Ajuste para padding e borda */
-            padding: 12px; /* Mais padding */
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-size: 1.1em; /* Maior */
-            color: var(--text-dark);
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.06); /* Sombra interna sutil */
-        }
-        .order-form-section input[type="number"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
-        }
-        .order-form-section button {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 15px 30px; /* Mais padding */
-            border: none;
-            border-radius: 6px;
-            font-size: 1.1em;
+            font-size: 14px;
             font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 20px; /* Mais margem */
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .order-form-section button:hover {
-            background-color: #218838;
-            transform: translateY(-1px);
-        }
-        .order-form-section button i {
-            font-size: 1.2em;
+            color: var(--text-primary);
+            margin-bottom: 8px;
         }
 
-        /* Mensagem de Sucesso e Link para Copiar */
-        #orderCreationResult {
-            margin-top: 25px;
-            padding: 15px 20px;
-            background-color: #e6ffed; /* Fundo verde claro */
-            border: 1px solid #c3e6cb;
-            border-radius: 5px;
-            color: #155724; /* Texto verde escuro */
-            font-size: 0.95em;
-            display: none; /* Escondido por padrão */
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            background: var(--bg-card);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: var(--radius-lg);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-md);
+            letter-spacing: -0.025em;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* --- Resultado da Ordem --- */
+        .order-result {
+            margin-top: 24px;
+            padding: 20px 24px;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            border-radius: var(--radius-lg);
+            color: white;
+            display: none;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap; /* Para responsividade */
+            flex-wrap: wrap;
+            gap: 16px;
         }
-        #orderCreationResult p {
-            margin: 0;
+
+        .order-result-text {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .order-link {
+            color: white;
+            word-break: break-all;
+            text-decoration: underline;
             font-weight: 500;
         }
-        #orderCreationResult a {
-            color: var(--primary-color);
-            word-break: break-all; /* Quebra a linha se o link for muito longo */
-        }
-        #copyLinkButton {
-            background-color: var(--secondary-color);
+
+        .btn-copy {
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 8px 15px;
             border: none;
-            border-radius: 4px;
-            font-size: 0.85em;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-left: 15px;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-        }
-        #copyLinkButton:hover {
-            background-color: #0069d9;
-        }
-        #copyLinkButton i {
-            font-size: 1em;
+            gap: 6px;
+            backdrop-filter: blur(10px);
         }
 
-        /* --- Cards de Resumo --- */
-        .summary-cards {
+        .btn-copy:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- Cards de Métricas --- */
+        .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Maior base */
-            gap: 25px; /* Mais espaçamento */
-            margin-bottom: 55px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
         }
 
-        .card {
-            background-color: #fff;
-            padding: 25px 30px;
-            border-radius: 8px;
-            text-align: left;
-            box-shadow: 0 3px 12px var(--shadow-light); /* Sombra mais definida */
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 25px var(--shadow-medium);
+        .metric-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .card h3 {
-            margin-top: 0;
-            color: var(--text-dark); /* Mais escuro */
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 10px;
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+        }
+
+        .metric-header {
             display: flex;
             align-items: center;
-        }
-        .card h3 i {
-            margin-right: 10px;
-            font-size: 1.1em;
-            color: var(--primary-color);
+            justify-content: space-between;
+            margin-bottom: 16px;
         }
 
-        .card p {
-            font-size: 2.8em; /* Maior */
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 0;
-            line-height: 1;
-        }
-        .card p.sub-info {
-            font-size: 0.9em;
-            color: var(--text-light);
-            margin-top: 8px;
+        .metric-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        /* --- Seções do Dashboard --- */
-        .section {
-            margin-bottom: 50px;
-            padding: 35px;
-            background-color: var(--bg-card);
-            border-radius: 8px;
-            box-shadow: 0 4px 15px var(--shadow-medium);
+        .metric-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
         }
 
-        /* --- Gráficos --- */
-        .charts-grid {
+        .metric-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .metric-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* --- Seções de Conteúdo --- */
+        .content-section {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+        }
+
+        /* --- Grid de Gráficos --- */
+        .charts-container {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 30px;
+            gap: 32px;
+            margin-bottom: 32px;
         }
 
-        .chart-container {
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px var(--shadow-light);
-            height: 400px;
+        .chart-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            position: relative;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            letter-spacing: -0.025em;
+        }
+
+        .chart-wrapper {
+            height: 350px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .chart-container canvas {
-            max-height: 100%;
-            max-width: 100%;
+
+        /* --- Tabela Moderna --- */
+        .table-container {
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            background: var(--bg-card);
         }
 
-        /* --- Tabela de Pedidos --- */
-        table {
+        .table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 25px;
+            border-collapse: collapse;
+            font-size: 14px;
         }
 
-        th, td {
-            padding: 15px 20px; /* Mais padding */
+        .table th {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 20px 24px;
             text-align: left;
-            font-size: 0.95em;
-            border-bottom: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-light);
         }
 
-        th {
-            background-color: #e9ecef;
-            color: var(--text-dark);
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.85em;
-            letter-spacing: 0.5px;
-        }
-        th:first-child { border-top-left-radius: 6px; }
-        th:last-child { border-top-right-radius: 6px; border-right: none; }
-
-        tr:last-child td { border-bottom: none; }
-        td:last-child { border-right: none; }
-
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
+        .table td {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
-        tr:hover {
-            background-color: #e2f0ff;
-            cursor: pointer;
+        .table tbody tr {
+            transition: all 0.2s ease;
         }
 
+        .table tbody tr:hover {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* --- Status Badges --- */
         .status-badge {
-            display: inline-block;
-            padding: 8px 15px; /* Mais padding */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 16px;
             border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
-            color: white;
+            letter-spacing: 0.05em;
             min-width: 90px;
-            text-align: center;
         }
 
-        .status-badge.fresh { background-color: #007bff; }
-        .status-badge.progress { background-color: #ffc107; color: #333; }
-        .status-badge.paid { background-color: #28a745; }
+        .status-badge.fresh {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+        }
 
-        /* Estilo para IDs de pagadores */
+        .status-badge.progress {
+            background: linear-gradient(135deg, #ed8936 0%, #c05621 100%);
+            color: white;
+        }
+
+        .status-badge.paid {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        /* --- Payer IDs --- */
         .payer-ids {
-            font-size: 0.85em;
-            color: var(--text-light);
-            word-break: break-all;
-            display: block; /* Garante que o span ocupe a linha */
-            margin-top: 5px;
-        }
-        .payer-ids:empty:before { /* Adiciona texto se não houver pagadores */
-            content: "N/A";
-            color: #adb5bd;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: 'Courier New', monospace;
+            background: var(--bg-secondary);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
+        .payer-ids:empty:before {
+            content: "Sem pagadores";
+            color: var(--text-muted);
+            font-style: italic;
+        }
 
-        /* --- Rodapé --- */
+        /* --- Footer --- */
         .footer {
-            background-color: var(--header-bg);
-            color: var(--header-text);
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #a0aec0;
             text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-            font-size: 0.9em;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+            padding: 32px;
+            margin-top: 48px;
+            font-size: 13px;
         }
+
         .footer a {
-            color: var(--secondary-color);
+            color: var(--primary-color);
             text-decoration: none;
-            margin: 0 10px;
+            margin: 0 12px;
+            font-weight: 500;
         }
+
         .footer a:hover {
             text-decoration: underline;
         }
 
         /* --- Responsividade --- */
         @media (max-width: 1024px) {
-            .container {
-                padding: 25px;
+            .main-content {
+                padding: 32px 24px;
             }
-            .summary-cards, .charts-grid {
+            
+            .charts-container {
                 grid-template-columns: 1fr;
+                gap: 24px;
             }
-            h1 { font-size: 2.4em; }
-            h2 { font-size: 1.6em; }
-            .chart-container { height: 350px; }
-            .top-bar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-                padding: 15px 20px;
-            }
-            .top-bar .user-info {
-                margin-top: 10px;
+            
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 20px;
             }
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2em; margin-bottom: 30px; }
-            h2 { font-size: 1.4em; margin-bottom: 20px; }
-            .summary-cards, .charts-grid {
-                gap: 15px;
+            .header-content {
+                padding: 16px 24px;
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
             }
-            .card {
-                padding: 20px;
+            
+            .main-content {
+                padding: 24px 16px;
             }
-            .card p { font-size: 2.2em; }
-            th, td { padding: 10px 15px; font-size: 0.85em; }
-            .status-badge { padding: 6px 12px; font-size: 0.75em; min-width: 80px; }
-            .order-form-section input[type="number"] {
-                width: calc(100% - 20px);
+            
+            .page-title {
+                font-size: 28px;
             }
-            #orderCreationResult {
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metric-value {
+                font-size: 28px;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            .table {
+                min-width: 600px;
+            }
+            
+            .create-order-section,
+            .content-section,
+            .chart-card {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .order-result {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            #copyLinkButton {
-                margin-left: 0;
-                margin-top: 10px;
+            
+            .btn-copy {
+                margin-top: 12px;
+                align-self: flex-start;
             }
         }
     </style>
 </head>
 <body>
-    <header class="top-bar">
-        <a href="#" class="logo">
-            <i class="fas fa-chart-line"></i> PagJunto Corporate Dashboard
-        </a>
-        <div class="user-info">
-            <i class="fas fa-user-circle"></i> Olá, <% if (typeof partnerName !== 'undefined') { %><%= partnerName %><% } else { %>Parceiro Corporativo<% } %>
-            <a href="/logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <span>PagJunto</span>
+            </a>
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>Olá, <% if (typeof partnerData.partnerName !== 'undefined') { %><%= partnerData.partnerName %><% } else { %>Parceiro<% } %></span>
+                </div>
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </div>
         </div>
     </header>
 
     <main class="main-content">
-        <div class="container">
-            <h1>Visão Geral do Desempenho</h1>
+        <div class="page-header">
+            <h1 class="page-title">Dashboard Executivo</h1>
+            <p class="page-subtitle">Visão completa do desempenho da sua conta corporativa</p>
+        </div>
 
-            <div class="order-form-section section">
-                <h2><i class="fas fa-file-invoice-dollar"></i> Criar Nova Ordem</h2>
-                <form id="newOrderForm">
-                    <div class="form-group">
-                        <label for="totalValue">Valor Total da Ordem</label>
-                        <input type="number" id="totalValue" name="totalValue" step="0.01" min="0.01" required placeholder="Ex: 150.00">
-                    </div>
-                    <button type="submit"><i class="fas fa-plus"></i> Gerar Ordem</button>
-                </form>
-                <div id="orderCreationResult">
-                    <p>Link da Ordem Criada: <a id="orderLink" href="#" target="_blank"></a></p>
-                    <button id="copyLinkButton"><i class="fas fa-copy"></i> Copiar Link</button>
+        <section class="create-order-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-plus"></i>
                 </div>
+                <h2 class="section-title">Criar Nova Ordem</h2>
             </div>
-
-            <div class="summary-cards">
-                <div class="card">
-                    <h3><i class="fas fa-wallet"></i> Saldo da Conta</h3>
-                    <p>R$ <% if (typeof summary !== 'undefined' && summary.accountBalance !== undefined) { %><%= summary.accountBalance.toFixed(2) %><% } else { %>15.234,56<% } %></p>
-                    <p class="sub-info">Disponível para saque</p>
+            <form id="newOrderForm">
+                <div class="form-group">
+                    <label for="totalValue" class="form-label">Valor Total da Ordem</label>
+                    <input type="number" id="totalValue" name="totalValue" class="form-input" step="0.01" min="0.01" required placeholder="Ex: 150.00">
                 </div>
-                <div class="card">
-                    <h3><i class="fas fa-chart-line"></i> Vendas Totais</h3>
-                    <p>R$ <% if (typeof summary !== 'undefined' && summary.totalSales !== undefined) { %><%= summary.totalSales.toFixed(2) %><% } else { %>87.654,32<% } %></p>
-                    <p class="sub-info">Valor bruto de todas as ordens</p>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Gerar Ordem de Pagamento
+                </button>
+            </form>
+            <div id="orderCreationResult" class="order-result">
+                <div>
+                    <p class="order-result-text">Link da Ordem Criada:</p>
+                    <a id="orderLink" href="#" target="_blank" class="order-link"></a>
                 </div>
-                <div class="card">
-                    <h3><i class="fas fa-money-bill-wave"></i> Valor Recebido</h3>
-                    <p>R$ <% if (typeof summary !== 'undefined' && summary.totalPaidValue !== undefined) { %><%= summary.totalPaidValue.toFixed(2) %><% } else { %>72.110,00<% } %></p>
-                    <p class="sub-info">Valor já pago pelos clientes</p>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-box"></i> Total de Ordens</h3>
-                    <p><% if (typeof summary !== 'undefined' && summary.totalOrders !== undefined) { %><%= summary.totalOrders %><% } else { %>458<% } %></p>
-                    <p class="sub-info">Total de ordens geradas</p>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-hourglass-half"></i> Ordens em Progresso</h3>
-                    <p><% if (typeof summary !== 'undefined' && summary.progressOrders !== undefined) { %><%= summary.progressOrders %><% } else { %>35<% } %></p>
-                    <p class="sub-info">Aguardando pagamento ou conclusão</p>
-                </div>
+                <button id="copyLinkButton" class="btn-copy">
+                    <i class="fas fa-copy"></i> Copiar
+                </button>
             </div>
+        </section>
 
-            <div class="section">
-                <h2><i class="fas fa-chart-pie"></i> Análises de Performance</h2>
-                <div class="charts-grid">
-                    <div class="chart-container">
-                        <canvas id="salesChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="statusChart"></canvas>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Saldo da Conta</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-wallet"></i>
                     </div>
                 </div>
+                <div class="metric-value">R$ <% if (typeof summary !== 'undefined' && summary.accountBalance !== undefined) { %><%= summary.accountBalance.toFixed(2) %><% } else { %>15.234,56<% } %></div>
+                <div class="metric-subtitle">Disponível para saque</div>
             </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Vendas Totais</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="metric-value">R$ <% if (typeof summary !== 'undefined' && summary.totalSales !== undefined) { %><%= summary.totalSales.toFixed(2) %><% } else { %>87.654,32<% } %></div>
+                <div class="metric-subtitle">Valor bruto de todas as ordens</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Valor Recebido</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                </div>
+                <div class="metric-value">R$ <% if (typeof summary !== 'undefined' && summary.totalPaidValue !== undefined) { %><%= summary.totalPaidValue.toFixed(2) %><% } else { %>72.110,00<% } %></div>
+                <div class="metric-subtitle">Valor já pago pelos clientes</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Total de Ordens</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+                <div class="metric-value"><% if (typeof summary !== 'undefined' && summary.totalOrders !== undefined) { %><%= summary.totalOrders %><% } else { %>458<% } %></div>
+                <div class="metric-subtitle">Total de ordens geradas</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Em Progresso</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                </div>
+                <div class="metric-value"><% if (typeof summary !== 'undefined' && summary.progressOrders !== undefined) { %><%= summary.progressOrders %><% } else { %>35<% } %></div>
+                <div class="metric-subtitle">Aguardando pagamento</div>
+            </div>
+        </div>
 
-            <div class="section">
-                <h2><i class="fas fa-list-alt"></i> Ordens Recentes</h2>
-                <table>
+        <div class="charts-container">
+            <div class="chart-card">
+                <h3 class="chart-title">Tendência de Vendas Mensais</h3>
+                <div class="chart-wrapper">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">Status das Ordens</h3>
+                <div class="chart-wrapper">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-list-alt"></i>
+                </div>
+                <h2 class="section-title">Ordens Recentes</h2>
+            </div>
+            <div class="table-container">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>ID da Ordem</th>
                             <th>Valor Total</th>
                             <th>Valor Pago</th>
                             <th>Status</th>
-                            <th>Pagadores (IDs)</th>
+                            <th>Pagadores</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -535,218 +786,367 @@
                                         <span class="payer-ids">
                                             <% if (order.payerIds && order.payerIds.length > 0) { %>
                                                 <%= order.payerIds.join(', ') %>
-                                            <% } else { %>
-                                                N/A
                                             <% } %>
                                         </span>
                                     </td>
                                 </tr>
                             <% }) %>
                         <% } else { %>
-                            <% /* Dados mockados para a tabela se 'orders' não for fornecido pelo backend */ %>
-                            <tr><td>ORD-20250628-001</td><td>R$ 150,00</td><td>R$ 0,00</td><td><span class="status-badge fresh">Fresh</span></td><td><span class="payer-ids">N/A</span></td></tr>
+                            <tr><td>ORD-20250628-001</td><td>R$ 150,00</td><td>R$ 0,00</td><td><span class="status-badge fresh">Fresh</span></td><td><span class="payer-ids"></span></td></tr>
                             <tr><td>ORD-20250628-002</td><td>R$ 320,50</td><td>R$ 160,25</td><td><span class="status-badge progress">Progress</span></td><td><span class="payer-ids">payer_xyz, payer_abc</span></td></tr>
                             <tr><td>ORD-20250627-015</td><td>R$ 55,90</td><td>R$ 55,90</td><td><span class="status-badge paid">Paid</span></td><td><span class="payer-ids">payer_123</span></td></tr>
-                            <tr><td>ORD-20250627-014</td><td>R$ 890,00</td><td>R$ 0,00</td><td><span class="status-badge fresh">Fresh</span></td><td><span class="payer-ids">N/A</span></td></tr>
+                            <tr><td>ORD-20250627-014</td><td>R$ 890,00</td><td>R$ 0,00</td><td><span class="status-badge fresh">Fresh</span></td><td><span class="payer-ids"></span></td></tr>
                             <tr><td>ORD-20250626-003</td><td>R$ 250,00</td><td>R$ 250,00</td><td><span class="status-badge paid">Paid</span></td><td><span class="payer-ids">payer_456</span></td></tr>
                         <% } %>
                     </tbody>
                 </table>
             </div>
-        </div>
+        </section>
     </main>
 
     <footer class="footer">
-        <p>&copy; <%= new Date().getFullYear() %> PagJunto Corporativo. Todos os direitos reservados. | <a href="#">Política de Privacidade</a> | <a href="#">Termos de Serviço</a></p>
+        <p>&copy; <%= new Date().getFullYear() %> PagJunto. Todos os direitos reservados. | <a href="#">Política de Privacidade</a> | <a href="#">Termos de Serviço</a></p>
     </footer>
 
-    <script>
-        // --- Dados Mockados (para testar sem backend) ---
-        const mockSalesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'];
-        const mockSalesData = [8500, 11000, 9800, 14200, 13000, 17500, 19000];
+<script>
+// --- Dados Mockados (para testar sem backend) ---
+const mockSalesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'];
+const mockSalesData = [8500, 11000, 9800, 14200, 13000, 17500, 19000];
 
-        const mockStatusData = {
-            fresh: 150,
-            progress: 70,
-            paid: 238
-        };
+// Os dados do gráfico de status devem vir de 'statusCounts', não 'statusData'
+// 'statusCounts' é preenchido pelo EJS com dados do backend ou com mockStatusData
+const mockStatusData = {
+    fresh: 150,
+    progress: 70,
+    paid: 238
+};
 
-        // --- Variáveis injetadas pelo EJS ---
-        const salesLabels = <% if (typeof salesLabelsForChart !== 'undefined' && salesLabelsForChart.length > 0) { %>
-                                <%- JSON.stringify(salesLabelsForChart) %>
-                            <% } else { %>
-                                mockSalesLabels
-                            <% } %>;
+// --- Variáveis injetadas pelo EJS (use estas quando tiver dados do backend) ---
+// Certifique-se de que estas variáveis globais sejam definidas no seu EJS antes do script,
+// ou que seus valores sejam obtidos do DOM se forem embutidos como atributos.
+// Exemplo no EJS:
+// <script>
+//    const partnerId = "<%= typeof partnerId !== 'undefined' ? partnerId : 'mockPartner123' %>";
+//    const partnerApiKey = "<%= typeof partnerApiKey !== 'undefined' ? partnerApiKey : 'mockApiKeyXYZ' %>";
+//    // ... demais variáveis
+// 
 
-        const salesData = <% if (typeof salesDataForChart !== 'undefined' && salesDataForChart.length > 0) { %>
-                                <%- JSON.stringify(salesDataForChart) %>
-                            <% } else { %>
-                                mockSalesData
-                            <% } %>;
+// Garante que as variáveis existam e sejam arrays/objetos válidos, mesmo que vazios
+const salesLabels = typeof salesLabelsForChart !== 'undefined' && salesLabelsForChart.length > 0 ?
+                      salesLabelsForChart : mockSalesLabels;
 
-        const statusCounts = {
-            fresh: <% if (typeof summary !== 'undefined' && summary.freshOrders !== undefined) { %><%= summary.freshOrders %><% } else { %>mockStatusData.fresh<% } %>,
-            progress: <% if (typeof summary !== 'undefined' && summary.progressOrders !== undefined) { %><%= summary.progressOrders %><% } else { %>mockStatusData.progress<% } %>,
-            paid: <% if (typeof summary !== 'undefined' && summary.paidOrders !== undefined) { %><%= summary.paidOrders %><% } else { %>mockStatusData.paid<% } %>
-        };
+const salesData = typeof salesDataForChart !== 'undefined' && salesDataForChart.length > 0 ?
+                    salesDataForChart : mockSalesData;
+
+const statusCounts = {
+    fresh: typeof summary !== 'undefined' && summary.freshOrders !== undefined ? summary.freshOrders : mockStatusData.fresh,
+    progress: typeof summary !== 'undefined' && summary.progressOrders !== undefined ? summary.progressOrders : mockStatusData.progress,
+    paid: typeof summary !== 'undefined' && summary.paidOrders !== undefined ? summary.paidOrders : mockStatusData.paid
+};
 
 
-        // --- Gráfico de Vendas Mensais (Line Chart) ---
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-        new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: salesLabels,
-                datasets: [{
-                    label: 'Vendas Totais (R$)',
-                    data: salesData,
-                    borderColor: var_to_css_var('--primary-color'),
-                    backgroundColor: 'rgba(0, 86, 179, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointBackgroundColor: var_to_css_var('--primary-color'),
-                    pointBorderColor: '#fff',
-                    pointHoverRadius: 6,
-                    pointHoverBorderColor: var_to_css_var('--primary-color')
-                }]
+// Helper para obter variáveis CSS no JS (Mantenha esta função)
+function var_to_css_var(variable) {
+    return getComputedStyle(document.documentElement).getPropertyValue(variable);
+}
+
+// --- Gráfico de Vendas Mensais (Line Chart) ---
+// Certifique-se de que 'salesChart' existe no seu HTML
+const salesCtx = document.getElementById('salesChart').getContext('2d');
+const salesChart = new Chart(salesCtx, {
+    type: 'line',
+    data: {
+        labels: salesLabels,
+        datasets: [{
+            label: 'Vendas Totais (R$)',
+            data: salesData,
+            borderColor: var_to_css_var('--primary-color'),
+            backgroundColor: 'rgba(0, 86, 179, 0.1)', /* Variação da cor primária */
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: var_to_css_var('--primary-color'),
+            pointBorderColor: '#fff',
+            pointHoverRadius: 6,
+            pointHoverBorderColor: var_to_css_var('--primary-color')
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: { font: { family: 'Inter' } }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: { font: { family: 'Inter' } }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Tendência de Vendas Mensais',
-                        font: { size: 18, family: 'Inter', weight: '600' },
-                        color: var_to_css_var('--text-dark')
-                    },
-                    tooltip: {
-                        titleFont: { family: 'Inter' },
-                        bodyFont: { family: 'Inter' },
-                        callbacks: {
-                            label: function(context) {
-                                return ` ${context.dataset.label}: R$ ${context.parsed.y.toFixed(2)}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: var_to_css_var('--border-color') },
-                        ticks: {
-                            font: { family: 'Inter' },
-                            callback: function(value, index, values) {
-                                return 'R$ ' + value.toLocaleString('pt-BR');
-                            }
-                        }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { family: 'Inter' } }
+            title: {
+                display: true,
+                text: 'Tendência de Vendas Mensais',
+                font: { size: 18, family: 'Inter', weight: '600' },
+                color: var_to_css_var('--text-dark')
+            },
+            tooltip: {
+                titleFont: { family: 'Inter' },
+                bodyFont: { family: 'Inter' },
+                callbacks: {
+                    label: function(context) {
+                        return ` ${context.dataset.label}: R$ ${context.parsed.y.toFixed(2)}`;
                     }
                 }
             }
-        });
-
-        // --- Gráfico de Status de Pedidos (Pie Chart) ---
-        const statusCtx = document.getElementById('statusChart').getContext('2d');
-        new Chart(statusCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Novas Ordens', 'Em Progresso', 'Pagas'],
-                datasets: [{
-                    data: [
-                        statusCounts.fresh,
-                        statusCounts.progress,
-                        statusCounts.paid
-                    ],
-                    backgroundColor: [
-                        '#007bff', /* Fresh (Azul) */
-                        '#ffc107', /* Progress (Amarelo) */
-                        '#28a745'  /* Paid (Verde) */
-                    ],
-                    hoverOffset: 8
-                }]
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: var_to_css_var('--border-color') },
+                ticks: {
+                    font: { family: 'Inter' },
+                    callback: function(value, index, values) {
+                        return 'R$ ' + value.toLocaleString('pt-BR');
+                    }
+                }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: { font: { family: 'Inter' } }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Distribuição de Ordens por Status',
-                        font: { size: 18, family: 'Inter', weight: '600' },
-                        color: var_to_css_var('--text-dark')
-                    },
-                    tooltip: {
-                        titleFont: { family: 'Inter' },
-                        bodyFont: { family: 'Inter' }
+            x: {
+                grid: { display: false },
+                ticks: { font: { family: 'Inter' } }
+            }
+        }
+    }
+});
+
+
+// --- Gráfico de Status de Pedidos (Doughnut Chart) ---
+const statusCtx = document.getElementById('statusChart').getContext('2d');
+const statusChart = new Chart(statusCtx, {
+    type: 'doughnut', // Alterado para doughnut
+    data: {
+        labels: ['Novas', 'Em Progresso', 'Pagas'],
+        datasets: [{
+            // Use statusCounts aqui, que já pega os dados do EJS ou os mocks
+            data: [statusCounts.fresh, statusCounts.progress, statusCounts.paid],
+            backgroundColor: [
+                '#007bff', // Cor para Fresh (azul) - correspondente ao CSS
+                '#ffc107', // Cor para Progress (amarelo) - correspondente ao CSS
+                '#28a745'  // Cor para Paid (verde) - correspondente ao CSS
+            ],
+            borderWidth: 0,
+            hoverBorderWidth: 3,
+            hoverBorderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '60%', // Tamanho do buraco no meio do doughnut
+        plugins: {
+            legend: {
+                position: 'bottom', // Legenda abaixo do gráfico
+                labels: {
+                    padding: 20,
+                    usePointStyle: true,
+                    pointStyle: 'circle', // Bolinhas como indicadores na legenda
+                    font: {
+                        size: 13,
+                        weight: '600'
+                    }
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(26, 32, 44, 0.9)', // Fundo escuro para tooltip
+                titleColor: '#ffffff',
+                bodyColor: '#ffffff',
+                borderColor: '#667eea',
+                borderWidth: 1,
+                cornerRadius: 8,
+                callbacks: {
+                    label: function(context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = ((context.parsed / total) * 100).toFixed(1);
+                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
                     }
                 }
             }
+        }
+    }
+});
+
+
+// --- Formulário de Nova Ordem ---
+document.getElementById('newOrderForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const totalValue = document.getElementById('totalValue').value;
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML; // Guarde o HTML original do botão
+    const orderCreationResult = document.getElementById('orderCreationResult');
+    const orderLinkElement = document.getElementById('orderLink');
+
+    // Validação básica do valor
+    if (isNaN(parseFloat(totalValue)) || parseFloat(totalValue) <= 0) {
+        alert('Por favor, insira um Valor Total válido (número maior que zero).');
+        return;
+    }
+
+    // Carregando estado do botão
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
+    submitButton.disabled = true;
+
+    // Garante que partnerId e partnerApiKey estão disponíveis
+    // Se eles vêm do backend via EJS, certifique-se de que estão no escopo global ou passados via data attributes
+    const localPartnerId = "<%= partnerData.partnerId %>"
+    const localPartnerApiKey = "<%= partnerData.apiKey %>"
+
+    try {
+        const response = await fetch('http://localhost:3000/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                partnerId: localPartnerId, // Usando a variável local
+                totalValue: totalValue, // Converte para float para enviar
+                apiKey: localPartnerApiKey // Usando a variável local
+            })
         });
 
-        // Helper para obter variáveis CSS no JS
-        function var_to_css_var(variable) {
-            return getComputedStyle(document.documentElement).getPropertyValue(variable);
+        // Verifica se a resposta HTTP é OK antes de tentar ler o JSON
+        if (!response.ok) {
+            // Tenta ler o erro do corpo da resposta, se disponível
+            const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido.' }));
+            throw new Error(errorData.message || `Erro HTTP: ${response.status}`);
         }
 
-        // --- Lógica para o Formulário de Nova Ordem e Copiar Link ---
-        const newOrderForm = document.getElementById('newOrderForm');
-        const orderCreationResult = document.getElementById('orderCreationResult');
-        const orderLinkElement = document.getElementById('orderLink');
-        const copyLinkButton = document.getElementById('copyLinkButton');
+        const result = await response.json();
 
-        newOrderForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
+        // O backend retorna apenas o orderId, então construímos a URL completa aqui
+        if (result) {
+            const generatedOrderLink = `http://localhost/${localPartnerId}/${result}`; // Construa a URL completa
 
-            const totalValue = parseFloat(this.totalValue.value);
-
-            if (isNaN(totalValue) || totalValue <= 0) {
-                alert('Por favor, insira um Valor Total válido (maior que zero).');
-                return;
-            }
-
-            // SIMULAÇÃO: Em um sistema real, você faria uma requisição POST para sua API de criação de ordem.
-            // O backend retornaria o ID da ordem e o link de pagamento.
-            console.log('Simulando criação de ordem com Valor Total:', totalValue.toFixed(2));
-
-            // Dados mockados para simular a resposta do backend
-            const mockOrderId = 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-            const mockParterId = "1234"
-            const mockPaymentLink = `https://pagjunto.com/${mockParterId}/${mockOrderId}`;
-
-            // Atualiza a UI com o link
-            orderLinkElement.href = mockPaymentLink;
-            orderLinkElement.textContent = mockPaymentLink;
+            orderLinkElement.href = generatedOrderLink;
+            orderLinkElement.textContent = generatedOrderLink;
             orderCreationResult.style.display = 'flex'; // Exibe o resultado
 
-            // Reseta o formulário
-            this.reset();
-        });
+            // Limpar formulário
+            document.getElementById('totalValue').value = '';
 
-        copyLinkButton.addEventListener('click', function() {
-            const linkToCopy = orderLinkElement.textContent;
-            navigator.clipboard.writeText(linkToCopy)
-        });
+            // Scroll para o resultado
+            orderCreationResult.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Ajuste para melhor visualização
 
-        // --- Exemplo de como você passaria payerIds do backend para o EJS (no controller) ---
-        // Exemplo de um array de ordens do seu backend:
-        // const orders = [
-        //     { orderId: 'ORD-001', totalValue: 150, paidValue: 0, status: 'fresh', payerIds: [] },
-        //     { orderId: 'ORD-002', totalValue: 320.50, paidValue: 160.25, status: 'progress', payerIds: ['payer_xyz', 'payer_abc'] },
-        //     { orderId: 'ORD-003', totalValue: 55.90, paidValue: 55.90, status: 'paid', payerIds: ['payer_123'] },
-        // ];
-        // res.render('dashboard', { orders: orders, ... });
-    </script>
-</body>
-</html>
+            alert('Ordem criada com sucesso! Link gerado: ' + generatedOrderLink);
+
+            // Opcional: Atualizar a lista de ordens ou os dados dos gráficos aqui
+            // updateDashboardData(); // Se você tiver essa função implementada
+            
+        } else {
+            // Se a resposta não contiver orderId, é um erro
+            throw new Error('Resposta inválida do servidor: Order ID não encontrado.');
+        }
+
+    } catch (error) {
+        console.error('Erro ao criar ordem:', error);
+        alert('Erro ao criar ordem: ' + error.message);
+    } finally {
+        // Restaurar botão
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+    }
+});
+
+// --- Botão de Copiar Link ---
+document.getElementById('copyLinkButton').addEventListener('click', function() {
+    const orderLink = document.getElementById('orderLink');
+    const copyButton = this;
+    const originalText = copyButton.innerHTML; // Salva o estado original do botão
+
+    if (!orderLink.href || orderLink.href === '#') {
+        alert('Nenhum link para copiar. Crie uma ordem primeiro.');
+        return;
+    }
+
+    // Copiar para clipboard
+    navigator.clipboard.writeText(orderLink.href)
+        .then(() => {
+            // Feedback visual de sucesso
+            copyButton.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+            copyButton.style.backgroundColor = '#28a745'; // Verde de sucesso
+            copyButton.style.color = '#ffffff';
+
+            setTimeout(() => {
+                // Restaurar estado original
+                copyButton.innerHTML = originalText;
+                // Restaurar cor de fundo para a cor padrão definida no CSS
+                copyButton.style.backgroundColor = var_to_css_var('--secondary-color');
+                copyButton.style.color = '#ffffff'; // Garante que o texto volte a ser branco
+            }, 2000);
+        })
+        .catch(err => {
+            console.error('Erro ao copiar:', err);
+            // Fallback para navegadores mais antigos (usando execCommand)
+            const textArea = document.createElement('textarea');
+            textArea.value = orderLink.href;
+            textArea.style.position = 'fixed'; // Evita que a textarea afete o layout
+            textArea.style.top = '0';
+            textArea.style.left = '0';
+            textArea.style.opacity = '0'; // Torna invisível
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                // Feedback visual de sucesso para o fallback
+                copyButton.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                copyButton.style.backgroundColor = '#28a745';
+                copyButton.style.color = '#ffffff';
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.style.backgroundColor = var_to_css_var('--secondary-color');
+                    copyButton.style.color = '#ffffff';
+                }, 2000);
+            } catch (copyErr) {
+                console.error('Falha ao copiar usando execCommand:', copyErr);
+                alert('Erro ao copiar o link. Por favor, copie-o manualmente: ' + orderLink.href);
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Dashboard PagJunto Corporate carregado');
+
+    const cards = document.querySelectorAll('.summary-cards .card, .section');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 80); 
+    });
+
+    document.getElementById('orderCreationResult').style.display = 'none';
+});
+
+// --- Utilitários (Mantenha estas funções se as usar no EJS para exibir os dados) ---
+function formatCurrency(value) {
+    if (typeof value !== 'number') return 'R$ 0,00'; // Fallback
+    return value.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+}
+
+function formatNumber(value) {
+    if (typeof value !== 'number') return '0'; // Fallback
+    return value.toLocaleString('pt-BR');
+}
+
+// --- Responsividade para gráficos (Mantenha esta parte) ---
+window.addEventListener('resize', function() {
+    if (salesChart) salesChart.resize();
+    if (statusChart) statusChart.resize();
+});
+
+</script>
