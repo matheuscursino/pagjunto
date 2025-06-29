@@ -10,32 +10,40 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* --- Variáveis CSS Modernas --- */
+        /* --- Variáveis CSS - Tema Corporativo --- */
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --primary-color: #667eea;
-            --primary-dark: #5a67d8;
-            --secondary-color: #4c51bf;
-            --accent-color: #48bb78;
-            --accent-hover: #38a169;
-            --danger-color: #f56565;
-            --warning-color: #ed8936;
-            --text-primary: #1a202c;
-            --text-secondary: #4a5568;
-            --text-muted: #718096;
-            --bg-primary: #f7fafc;
-            --bg-secondary: #edf2f7;
+            --primary-color: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --secondary-color: #6c757d;
+            
+            --status-paid-text: #146c43;
+            --status-paid-bg: #d1e7dd;
+            --status-progress-text: #664d03;
+            --status-progress-bg: #fff3cd;
+            --status-fresh-text: #41464b;
+            --status-fresh-bg: #e2e3e5;
+            --status-danger-text: #b02a37;
+            --status-danger-bg: #f8d7da;
+
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6c757d;
+            
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #e9ecef;
             --bg-card: #ffffff;
-            --border-light: #e2e8f0;
-            --border-medium: #cbd5e0;
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
+            
+            --border-light: #dee2e6;
+            --border-medium: #ced4da;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.07);
+            
+            --radius-sm: 4px;
+            --radius-md: 6px;
+            --radius-lg: 8px;
+            --radius-xl: 12px;
         }
 
         /* --- Reset e Base --- */
@@ -46,8 +54,8 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-primary);
             color: var(--text-secondary);
             line-height: 1.6;
             font-size: 14px;
@@ -58,22 +66,22 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* --- Header Moderno --- */
+        /* --- Header Corporativo --- */
         .header {
-            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-            color: white;
+            background: var(--bg-card);
+            color: var(--text-primary);
             padding: 0;
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid var(--border-light);
             position: sticky;
             top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
+            z-index: 1020;
         }
 
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px 32px;
+            padding: 16px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -84,21 +92,21 @@
             align-items: center;
             gap: 12px;
             text-decoration: none;
-            color: white;
+            color: var(--text-primary);
             font-weight: 700;
             font-size: 20px;
-            letter-spacing: -0.025em;
         }
 
         .logo-icon {
             width: 32px;
             height: 32px;
-            background: var(--primary-gradient);
+            background-color: var(--primary-color);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 16px;
+            color: white;
         }
 
         .user-section {
@@ -113,34 +121,37 @@
             gap: 12px;
             font-size: 14px;
             font-weight: 500;
+            color: var(--text-secondary);
         }
 
         .user-avatar {
             width: 36px;
             height: 36px;
-            background: var(--primary-gradient);
+            background-color: var(--bg-secondary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 14px;
             font-weight: 600;
+            color: var(--primary-color);
         }
 
         .logout-btn {
-            color: #a0aec0;
+            color: var(--text-muted);
             text-decoration: none;
             font-size: 13px;
-            padding: 8px 16px;
-            border-radius: var(--radius-sm);
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            transition: color 0.2s ease, background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .logout-btn:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--primary-color);
+            background-color: var(--bg-secondary);
         }
 
         /* --- Container Principal --- */
@@ -154,19 +165,15 @@
 
         /* --- Título Principal --- */
         .page-header {
-            margin-bottom: 48px;
-            text-align: center;
+            margin-bottom: 40px;
         }
 
         .page-title {
-            font-size: 36px;
-            font-weight: 800;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 12px;
-            letter-spacing: -0.025em;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
         }
 
         .page-subtitle {
@@ -175,52 +182,51 @@
             font-weight: 400;
         }
 
-        /* --- Seção de Nova Ordem --- */
-        .create-order-section {
+        /* --- Seções de Conteúdo e Cards --- */
+        .create-order-section, .metric-card, .chart-card, .content-section {
             background: var(--bg-card);
-            border-radius: var(--radius-xl);
-            padding: 32px;
-            margin-bottom: 48px;
+            border-radius: var(--radius-lg);
+            padding: 24px;
             box-shadow: var(--shadow-md);
             border: 1px solid var(--border-light);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .create-order-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--primary-gradient);
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
 
+        /* --- Seção de Nova Ordem --- */
+        .create-order-section {
+            padding: 32px;
+            margin-bottom: 40px;
+        }
+        
         .section-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             margin-bottom: 24px;
         }
 
         .section-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: rgba(13, 110, 253, 0.1); 
+            opacity: 0.9;
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+    color:rgb(0, 0, 0);"; /* A cor do ícone permanece sólida */
             font-size: 18px;
         }
 
         .section-title {
             font-size: 20px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-primary);
-            letter-spacing: -0.025em;
         }
 
         .form-group {
@@ -230,86 +236,88 @@
         .form-label {
             display: block;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-primary);
             margin-bottom: 8px;
         }
 
         .form-input {
             width: 100%;
-            padding: 16px 20px;
-            border: 2px solid var(--border-light);
-            border-radius: var(--radius-lg);
+            padding: 12px 16px;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 400;
             color: var(--text-primary);
-            background: var(--bg-card);
-            transition: all 0.2s ease;
+            background-color: var(--bg-card);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
             outline: none;
         }
 
         .form-input:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
         }
 
         .btn-primary {
-            background: var(--primary-gradient);
+            background-color: var(--primary-color);
             color: white;
-            border: none;
-            padding: 16px 32px;
-            border-radius: var(--radius-lg);
+            border: 1px solid var(--primary-color);
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: var(--shadow-md);
-            letter-spacing: -0.025em;
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(1px);
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
-        }
 
         /* --- Resultado da Ordem --- */
         .order-result {
             margin-top: 24px;
-            padding: 20px 24px;
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            border-radius: var(--radius-lg);
-            color: white;
+            padding: 16px 20px;
+            background-color: var(--status-paid-bg);
+            border-radius: var(--radius-md);
+            color: var(--status-paid-text);
             display: none;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 16px;
+            border: 1px solid rgba(20, 108, 67, 0.2);
         }
 
         .order-result-text {
-            font-weight: 600;
+            font-weight: 500;
             font-size: 14px;
         }
 
         .order-link {
-            color: white;
+            color: var(--status-paid-text);
             word-break: break-all;
             text-decoration: underline;
             font-weight: 500;
         }
 
         .btn-copy {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--status-paid-text);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 6px 12px;
             border-radius: var(--radius-sm);
             font-size: 12px;
             font-weight: 600;
@@ -318,136 +326,96 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            backdrop-filter: blur(10px);
         }
 
         .btn-copy:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.1);
         }
 
         /* --- Cards de Métricas --- */
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 24px;
-            margin-bottom: 48px;
+            margin-bottom: 40px;
         }
-
+        
         .metric-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-xl);
-            padding: 28px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-light);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            padding: 24px;
         }
-
-        .metric-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--primary-gradient);
-        }
-
+        
         .metric-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .metric-title {
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         .metric-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 40px;
+            height: 40px;
+            background-color: var(--bg-secondary);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 14px;
+            color: var(--text-muted);
+            font-size: 16px;
         }
 
         .metric-value {
-            font-size: 32px;
-            font-weight: 800;
+            font-size: 28px;
+            font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 8px;
-            letter-spacing: -0.025em;
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
         }
 
         .metric-subtitle {
             font-size: 13px;
             color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        /* --- Seções de Conteúdo --- */
-        .content-section {
-            background: var(--bg-card);
-            border-radius: var(--radius-xl);
-            padding: 32px;
-            margin-bottom: 32px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border-light);
+            font-weight: 400;
         }
 
         /* --- Grid de Gráficos --- */
         .charts-container {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 32px;
-            margin-bottom: 32px;
+            gap: 24px;
+            margin-bottom: 40px;
         }
 
         .chart-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-xl);
-            padding: 28px;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border-light);
-            position: relative;
+            padding: 24px;
         }
 
         .chart-title {
             font-size: 18px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 24px;
-            letter-spacing: -0.025em;
         }
 
         .chart-wrapper {
-            height: 350px;
+            height: 300px; /* Reduced height for a tighter design */
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         /* --- Tabela Moderna --- */
+        .content-section {
+            padding: 32px;
+        }
+        
         .table-container {
             overflow: hidden;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-light);
-            background: var(--bg-card);
         }
 
         .table {
@@ -456,31 +424,38 @@
             font-size: 14px;
         }
 
+        .table th, .table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
         .table th {
-            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-            color: var(--text-primary);
-            font-weight: 700;
+            background-color: var(--bg-primary);
+            color: var(--text-muted);
+            font-weight: 600;
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            padding: 20px 24px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-light);
         }
 
         .table td {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border-light);
             color: var(--text-secondary);
             font-weight: 500;
         }
+        
+        .table td:first-child {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
 
         .table tbody tr {
-            transition: all 0.2s ease;
+            transition: background-color 0.2s ease;
         }
 
         .table tbody tr:hover {
-            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            background-color: var(--bg-primary);
         }
 
         .table tbody tr:last-child td {
@@ -491,66 +466,67 @@
         .status-badge {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            padding: 4px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
             min-width: 90px;
+            justify-content: center;
         }
 
         .status-badge.fresh {
-            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
-            color: white;
+            background-color: var(--status-fresh-bg);
+            color: var(--status-fresh-text);
         }
 
         .status-badge.progress {
-            background: linear-gradient(135deg, #ed8936 0%, #c05621 100%);
-            color: white;
+            background-color: var(--status-progress-bg);
+            color: var(--status-progress-text);
         }
 
         .status-badge.paid {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            color: white;
+            background-color: var(--status-paid-bg);
+            color: var(--status-paid-text);
         }
 
         /* --- Payer IDs --- */
         .payer-ids {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-muted);
-            font-family: 'Courier New', monospace;
-            background: var(--bg-secondary);
-            padding: 4px 8px;
-            border-radius: var(--radius-sm);
+            font-family: "SF Mono", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
             display: inline-block;
             max-width: 200px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            vertical-align: middle;
         }
 
-        .payer-ids:empty:before {
-            content: "Sem pagadores";
+        .payer-ids:empty::before {
+            content: "N/A";
             color: var(--text-muted);
             font-style: italic;
         }
 
         /* --- Footer --- */
         .footer {
-            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-            color: #a0aec0;
+            background-color: var(--bg-secondary);
+            color: var(--text-muted);
             text-align: center;
-            padding: 32px;
+            padding: 24px 32px;
             margin-top: 48px;
             font-size: 13px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer p {
+            margin: 0;
         }
 
         .footer a {
             color: var(--primary-color);
             text-decoration: none;
-            margin: 0 12px;
             font-weight: 500;
         }
 
@@ -563,66 +539,58 @@
             .main-content {
                 padding: 32px 24px;
             }
-            
             .charts-container {
                 grid-template-columns: 1fr;
                 gap: 24px;
             }
-            
-            .metrics-grid {
-                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-                gap: 20px;
-            }
         }
 
         @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+            }
             .header-content {
                 padding: 16px 24px;
                 flex-direction: column;
                 gap: 16px;
-                align-items: flex-start;
+                align-items: center;
             }
-            
             .main-content {
                 padding: 24px 16px;
             }
-            
             .page-title {
                 font-size: 28px;
             }
-            
             .metrics-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
-            
             .metric-value {
-                font-size: 28px;
+                font-size: 24px;
             }
-            
             .table-container {
                 overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border: 1px solid var(--border-light);
+                border-radius: var(--radius-lg);
             }
-            
             .table {
-                min-width: 600px;
+                min-width: 700px;
             }
-            
-            .create-order-section,
-            .content-section,
-            .chart-card {
+            .create-order-section, .content-section, .chart-card {
                 padding: 24px;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 576px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
             .order-result {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
             .btn-copy {
-                margin-top: 12px;
-                align-self: flex-start;
+                margin-top: 8px;
             }
         }
     </style>
@@ -659,7 +627,7 @@
         <section class="create-order-section">
             <div class="section-header">
                 <div class="section-icon">
-                    <i class="fas fa-plus"></i>
+                    <i class="fa-regular fa-square-plus" style="color: #000000;"></i>
                 </div>
                 <h2 class="section-title">Criar Nova Ordem</h2>
             </div>
@@ -813,8 +781,7 @@
 const mockSalesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'];
 const mockSalesData = [8500, 11000, 9800, 14200, 13000, 17500, 19000];
 
-        const ordersFromBackend = <%- JSON.stringify(orders || []) %>;
-
+const ordersFromBackend = <%- JSON.stringify(orders || []) %>;
 
 // Os dados do gráfico de status devem vir de 'statusCounts', não 'statusData'
 // 'statusCounts' é preenchido pelo EJS com dados do backend ou com mockStatusData
@@ -824,19 +791,60 @@ const mockStatusData = {
     paid: 238
 };
 
-
-
-// Garante que as variáveis existam e sejam arrays/objetos válidos, mesmo que vazios
-const salesLabels = typeof salesLabelsForChart !== 'undefined' && salesLabelsForChart.length > 0 ?
-                      salesLabelsForChart : mockSalesLabels;
-
-const salesData = typeof salesDataForChart !== 'undefined' && salesDataForChart.length > 0 ?
-                    salesDataForChart : mockSalesData;
-
 // **IMPORTANTE:** Obtém o array de ordens que o backend já está passando
 // Se o seu backend não passa um array chamado 'orders' para o EJS, esta parte não funcionará.
 // Assumimos que 'orders' está disponível globalmente no escopo do JavaScript.
 const allOrders = typeof ordersFromBackend !== 'undefined' ? ordersFromBackend : [];
+
+// --- Função para calcular dados de vendas mensais a partir das ordens ---
+function calculateMonthlySalesData(orders) {
+    const monthlyData = {};
+    const currentYear = new Date().getFullYear();
+    
+    // Lista de meses em português
+    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    const currentMonth = new Date().getMonth();
+    const labels = [];
+    
+    // Pegar os últimos 7 meses
+    for (let i = 6; i >= 0; i--) {
+        const monthIndex = (currentMonth - i + 12) % 12;
+        const monthName = months[monthIndex];
+        labels.push(monthName);
+        monthlyData[monthName] = 0;
+    }
+    
+    // Calcular vendas por mês usando a data real das ordens
+    orders.forEach((order) => {
+        if (order.createdAt && order.totalValue) {
+            const orderDate = new Date(order.createdAt);
+            const orderMonth = orderDate.getMonth();
+            const orderYear = orderDate.getFullYear();
+            
+            // Considerar apenas ordens do ano atual
+            if (orderYear === currentYear) {
+                const monthName = months[orderMonth];
+                if (monthlyData.hasOwnProperty(monthName)) {
+                    monthlyData[monthName] += order.totalValue;
+                }
+            }
+        }
+    });
+    
+    const data = labels.map(label => monthlyData[label]);
+    
+    return { labels, data };
+}
+
+// Calcular dados de vendas mensais
+const monthlySalesResult = calculateMonthlySalesData(allOrders);
+
+// Garante que as variáveis existam e sejam arrays/objetos válidos, mesmo que vazios
+const salesLabels = typeof salesLabelsForChart !== 'undefined' && salesLabelsForChart.length > 0 ?
+                      salesLabelsForChart : monthlySalesResult.labels;
+
+const salesData = typeof salesDataForChart !== 'undefined' && salesDataForChart.length > 0 ?
+                    salesDataForChart : monthlySalesResult.data;
 
 // --- Nova Lógica: Calcular Métricas de Resumo no Frontend ---
 function calculateDashboardMetrics(orders) {
@@ -947,7 +955,6 @@ const salesChart = new Chart(salesCtx, {
     }
 });
 
-
 // --- Gráfico de Status de Pedidos (Doughnut Chart) ---
 const statusCtx = document.getElementById('statusChart').getContext('2d');
 let statusChart; // Declare a variável fora do DOMContentLoaded para poder acessá-la globalmente
@@ -1006,8 +1013,6 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
 
             orderCreationResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            alert('Ordem criada com sucesso! Link gerado: ' + generatedOrderLink);
-
             // **NOVA LÓGICA:** Atualizar as métricas e gráficos após uma nova ordem
             // Simular a adição da nova ordem ao array existente (idealmente, você refaria a requisição de ordens)
             allOrders.unshift({ // Adiciona a nova ordem no início do array
@@ -1015,7 +1020,8 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
                 totalValue: parseFloat(totalValue),
                 paidValue: 0, // Novas ordens geralmente começam com 0 pago
                 status: 'fresh', // Nova ordem começa como 'fresh'
-                payersIds: []
+                payersIds: [],
+                createdAt: new Date().toISOString() // Adiciona a data atual
             });
             updateDashboardDisplay(); // Chama a função para recalcular e atualizar o DOM
             
@@ -1097,11 +1103,13 @@ function updateDashboardDisplay() {
     document.getElementById('totalOrdersValue').textContent = formatNumber(metrics.totalOrders);
     document.getElementById('progressOrdersValue').textContent = formatNumber(metrics.progressOrders);
 
-    // Ajustar os seletores para serem mais específicos se o layout mudar
-    // Ou adicione IDs aos elementos de valor se houver ambiguidade:
-    // Ex: <div id="totalSalesValue" class="metric-value">...</div>
-    //    document.getElementById('totalSalesValue').textContent = formatCurrency(metrics.totalSales);
-
+    // Recalcular e atualizar o gráfico de vendas mensais
+    const updatedMonthlySales = calculateMonthlySalesData(allOrders);
+    if (salesChart) {
+        salesChart.data.labels = updatedMonthlySales.labels;
+        salesChart.data.datasets[0].data = updatedMonthlySales.data;
+        salesChart.update();
+    }
 
     // Atualizar o gráfico de status
     if (statusChart) {
@@ -1166,7 +1174,6 @@ function updateDashboardDisplay() {
     }
 }
 
-
 // --- Inicialização ---
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Dashboard PagJunto Corporate carregado');
@@ -1190,7 +1197,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('orderCreationResult').style.display = 'none';
 });
-
 
 // --- Utilitários ---
 function formatCurrency(value) {
