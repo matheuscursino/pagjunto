@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Parceiro - <% if (typeof partnerName !== 'undefined') { %><%= partnerName %><% } else { %>PagJunto Corporativo<% } %></title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* --- Variáveis CSS (Ajustadas para mais profissionalismo) --- */
+        :root {
+            --primary-color: #0056b3; /* Azul corporativo, forte */
+            --secondary-color: #007bff; /* Azul para detalhes */
+            --accent-color: #28a745; /* Verde para sucesso/ações */
+            --danger-color: #dc3545; /* Vermelho para atenção */
+            --text-dark: #212529;
+            --text-light: #495057;
+            --bg-light: #f8f9fa; /* Fundo mais claro */
+            --bg-card: #ffffff;
+            --border-color: #e0e6eb; /* Bordas mais suaves */
+            --shadow-light: rgba(0, 0, 0, 0.04); /* Sombra mais sutil */
+            --shadow-medium: rgba(0, 0, 0, 0.08);
+            --header-bg: #343a40; /* Cinza escuro para o cabeçalho */
+            --header-text: #f8f9fa;
+        }
+
+        /* --- Estilos Gerais --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px 25px; /* Mais padding lateral */
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            padding: 35px; /* Mais padding geral */
+            border-radius: 6px; /* Bordas mais sutis */
+            box-shadow: 0 4px 15px var(--shadow-medium); /* Sombra mais presente */
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 45px;
+            font-size: 2.8em; /* Um pouco maior */
+            font-weight: 700;
+            letter-spacing: -0.8px;
+        }
+
+        h2 {
+            color: var(--text-dark);
+            font-size: 1.8em; /* Um pouco maior */
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+        h2 i {
+            margin-right: 15px;
+            color: var(--primary-color);
+            font-size: 1.2em;
+        }
+
+        /* --- Top Bar (Cabeçalho) --- */
+        .top-bar {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 18px 35px; /* Mais padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            font-weight: 500;
+        }
+        .top-bar .logo {
+            font-size: 1.8em; /* Maior */
+            font-weight: 700;
+            color: var(--header-text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.5px;
+        }
+        .top-bar .logo i {
+            margin-right: 12px;
+            color: var(--secondary-color);
+            font-size: 1.4em;
+        }
+        .top-bar .user-info {
+            display: flex;
+            align-items: center;
+            font-size: 1.05em; /* Um pouco maior */
+        }
+        .top-bar .user-info i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+        .top-bar .user-info a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s ease;
+        }
+        .top-bar .user-info a:hover {
+            color: white;
+        }
+
+        /* --- Formulário de Nova Ordem --- */
+        .order-form-section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-light);
+        }
+        .order-form-section .form-group {
+            margin-bottom: 20px; /* Mais espaçamento */
+        }
+        .order-form-section label {
+            display: block;
+            margin-bottom: 8px; /* Mais espaçamento */
+            font-weight: 600; /* Mais peso */
+            color: var(--text-dark);
+            font-size: 1.05em;
+        }
+        .order-form-section input[type="number"] {
+            width: calc(100% - 24px); /* Ajuste para padding e borda */
+            padding: 12px; /* Mais padding */
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1.1em; /* Maior */
+            color: var(--text-dark);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.06); /* Sombra interna sutil */
+        }
+        .order-form-section input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+        }
+        .order-form-section button {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 30px; /* Mais padding */
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px; /* Mais margem */
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .order-form-section button:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+        }
+        .order-form-section button i {
+            font-size: 1.2em;
+        }
+
+        /* Mensagem de Sucesso e Link para Copiar */
+        #orderCreationResult {
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #e6ffed; /* Fundo verde claro */
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            color: #155724; /* Texto verde escuro */
+            font-size: 0.95em;
+            display: none; /* Escondido por padrão */
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap; /* Para responsividade */
+        }
+        #orderCreationResult p {
+            margin: 0;
+            font-weight: 500;
+        }
+        #orderCreationResult a {
+            color: var(--primary-color);
+            word-break: break-all; /* Quebra a linha se o link for muito longo */
+        }
+        #copyLinkButton {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #copyLinkButton:hover {
+            background-color: #0069d9;
+        }
+        #copyLinkButton i {
+            font-size: 1em;
+        }
+
+        /* --- Cards de Resumo --- */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Maior base */
+            gap: 25px; /* Mais espaçamento */
+            margin-bottom: 55px;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 25px 30px;
+            border-radius: 8px;
+            text-align: left;
+            box-shadow: 0 3px 12px var(--shadow-light); /* Sombra mais definida */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px var(--shadow-medium);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--text-dark); /* Mais escuro */
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .card h3 i {
+            margin-right: 10px;
+            font-size: 1.1em;
+            color: var(--primary-color);
+        }
+
+        .card p {
+            font-size: 2.8em; /* Maior */
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+            line-height: 1;
+        }
+        .card p.sub-info {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-top: 8px;
+        }
+
+        /* --- Seções do Dashboard --- */
+        .section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px var(--shadow-medium);
+        }
+
+        /* --- Gráficos --- */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .chart-container {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-light);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chart-container canvas {
+            max-height: 100%;
+            max-width: 100%;
+        }
+
+        /* --- Tabela de Pedidos --- */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 25px;
+        }
+
+        th, td {
+            padding: 15px 20px; /* Mais padding */
+            text-align: left;
+            font-size: 0.95em;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #e9ecef;
+            color: var(--text-dark);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+        th:first-child { border-top-left-radius: 6px; }
+        th:last-child { border-top-right-radius: 6px; border-right: none; }
+
+        tr:last-child td { border-bottom: none; }
+        td:last-child { border-right: none; }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e2f0ff;
+            cursor: pointer;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 15px; /* Mais padding */
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: white;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .status-badge.fresh { background-color: #007bff; }
+        .status-badge.progress { background-color: #ffc107; color: #333; }
+        .status-badge.paid { background-color: #28a745; }
+
+        /* Estilo para IDs de pagadores */
+        .payer-ids {
+            font-size: 0.85em;
+            color: var(--text-light);
+            word-break: break-all;
+            display: block; /* Garante que o span ocupe a linha */
+            margin-top: 5px;
+        }
+        .payer-ids:empty:before { /* Adiciona texto se não houver pagadores */
+            content: "N/A";
+            color: #adb5bd;
+        }
+
+
+        /* --- Rodapé --- */
+        .footer {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            font-size: 0.9em;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+        }
+        .footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Responsividade --- */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 25px;
+            }
+            .summary-cards, .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 { font-size: 2.4em; }
+            h2 { font-size: 1.6em; }
+            .chart-container { height: 350px; }
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 15px 20px;
+            }
+            .top-bar .user-info {
+                margin-top: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; margin-bottom: 30px; }
+            h2 { font-size: 1.4em; margin-bottom: 20px; }
+            .summary-cards, .charts-grid {
+                gap: 15px;
+            }
+            .card {
+                padding: 20px;
+            }
+            .card p { font-size: 2.2em; }
+            th, td { padding: 10px 15px; font-size: 0.85em; }
+            .status-badge { padding: 6px 12px; font-size: 0.75em; min-width: 80px; }
+            .order-form-section input[type="number"] {
+                width: calc(100% - 20px);
+            }
+            #orderCreationResult {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            #copyLinkButton {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <a href="#" class="logo">
+            <i class="fas fa-chart-line"></i> PagJunto Corporate Dashboard
+        </a>
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i> Olá, <% if (typeof partnerName !== 'undefined') { %><%= partnerName %><% } else { %>Parceiro Corporativo<% } %>
+            <a href="/logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1>Visão Geral do Desempenho</h1>
+
+            <div class="order-form-section section">
+                <h2><i class="fas fa-file-invoice-dollar"></i> Criar Nova Ordem</h2>
+                <form id="newOrderForm">
+                    <div class="form-group">
+                        <label for="totalValue">Valor Total da Ordem</label>
+                        <input type="number" id="totalValue" name="totalValue" step="0.01" min="0.01" required placeholder="Ex: 150.00">
+                    </div>
+                    <button type="submit"><i class="fas fa-plus"></i> Gerar Ordem</button>
+                </form>
+                <div id="orderCreationResult">
+                    <p>Link da Ordem Criada: <a id="orderLink" href="#" target="_blank"></a></p>
+                    <button id="copyLinkButton"><i class="fas fa-copy"></i> Copiar Link</button>
+                </div>
+            </div>
+
+            <div class="summary-cards">
+                <div class="card">
+                    <h3><i class="fas fa-wallet"></i> Saldo da Conta</h3>
+                    <p>R$ <% if (typeof summary !== 'undefined' && summary.accountBalance !== undefined) { %><%= summary.accountBalance.toFixed(2) %><% } else { %>15.234,56<% } %></p>
+                    <p class="sub-info">Disponível para saque</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-chart-line"></i> Vendas Totais</h3>
+                    <p>R$ <% if (typeof summary !== 'undefined' && summary.totalSales !== undefined) { %><%= summary.totalSales.toFixed(2) %><% } else { %>87.654,32<% } %></p>
+                    <p class="sub-info">Valor bruto de todas as ordens</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-money-bill-wave"></i> Valor Recebido</h3>
+                    <p>R$ <% if (typeof summary !== 'undefined' && summary.totalPaidValue !== undefined) { %><%= summary.totalPaidValue.toFixed(2) %><% } else { %>72.110,00<% } %></p>
+                    <p class="sub-info">Valor já pago pelos clientes</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-box"></i> Total de Ordens</h3>
+                    <p><% if (typeof summary !== 'undefined' && summary.totalOrders !== undefined) { %><%= summary.totalOrders %><% } else { %>458<% } %></p>
+                    <p class="sub-info">Total de ordens geradas</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-hourglass-half"></i> Ordens em Progresso</h3>
+                    <p><% if (typeof summary !== 'undefined' && summary.progressOrders !== undefined) { %><%= summary.progressOrders %><% } else { %>35<% } %></p>
+                    <p class="sub-info">Aguardando pagamento ou conclusão</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-chart-pie"></i> Análises de Performance</h2>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-list-alt"></i> Ordens Recentes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID da Ordem</th>
+                            <th>Valor Total</th>
+                            <th>Valor Pago</th>
+                            <th>Status</th>
+                            <th>Pagadores (IDs)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+                            <% orders.forEach(order => { %>
+                                <tr>
+                                    <td><%= order.orderId %></td>
+                                    <td>R$ <%= order.totalValue.toFixed(2) %></td>
+                                    <td>R$ <%= order.paidValue.toFixed(2) %></td>
+                                    <td><span class="status-badge <%= order.status %>"><%= order.status %></span></td>
+                                    <td>
+                                        <span class="payer-ids">
+                                            <% if (order.payerIds && order.payerIds.length > 0) { %>
+                                                <%= order.payerIds.join(', ') %>
+                                            <% } else { %>
+                                                N/A
+                                            <% } %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <% /* Dados mockados para a tabela se 'orders' não for fornecido pelo backend */ %>
+                            <tr><td>ORD-20250628-001</td><td>R$ 150,00</td><td>R$ 0,00</td><td><span class="status-badge fresh">Fresh</span></td><td><span class="payer-ids">N/A</span></td></tr>
+                            <tr><td>ORD-20250628-002</td><td>R$ 320,50</td><td>R$ 160,25</td><td><span class="status-badge progress">Progress</span></td><td><span class="payer-ids">payer_xyz, payer_abc</span></td></tr>
+                            <tr><td>ORD-20250627-015</td><td>R$ 55,90</td><td>R$ 55,90</td><td><span class="status-badge paid">Paid</span></td><td><span class="payer-ids">payer_123</span></td></tr>
+                            <tr><td>ORD-20250627-014</td><td>R$ 890,00</td><td>R$ 0,00</td><td><span class="status-badge fresh">Fresh</span></td><td><span class="payer-ids">N/A</span></td></tr>
+                            <tr><td>ORD-20250626-003</td><td>R$ 250,00</td><td>R$ 250,00</td><td><span class="status-badge paid">Paid</span></td><td><span class="payer-ids">payer_456</span></td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; <%= new Date().getFullYear() %> PagJunto Corporativo. Todos os direitos reservados. | <a href="#">Política de Privacidade</a> | <a href="#">Termos de Serviço</a></p>
+    </footer>
+
+    <script>
+        // --- Dados Mockados (para testar sem backend) ---
+        const mockSalesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'];
+        const mockSalesData = [8500, 11000, 9800, 14200, 13000, 17500, 19000];
+
+        const mockStatusData = {
+            fresh: 150,
+            progress: 70,
+            paid: 238
+        };
+
+        // --- Variáveis injetadas pelo EJS ---
+        const salesLabels = <% if (typeof salesLabelsForChart !== 'undefined' && salesLabelsForChart.length > 0) { %>
+                                <%- JSON.stringify(salesLabelsForChart) %>
+                            <% } else { %>
+                                mockSalesLabels
+                            <% } %>;
+
+        const salesData = <% if (typeof salesDataForChart !== 'undefined' && salesDataForChart.length > 0) { %>
+                                <%- JSON.stringify(salesDataForChart) %>
+                            <% } else { %>
+                                mockSalesData
+                            <% } %>;
+
+        const statusCounts = {
+            fresh: <% if (typeof summary !== 'undefined' && summary.freshOrders !== undefined) { %><%= summary.freshOrders %><% } else { %>mockStatusData.fresh<% } %>,
+            progress: <% if (typeof summary !== 'undefined' && summary.progressOrders !== undefined) { %><%= summary.progressOrders %><% } else { %>mockStatusData.progress<% } %>,
+            paid: <% if (typeof summary !== 'undefined' && summary.paidOrders !== undefined) { %><%= summary.paidOrders %><% } else { %>mockStatusData.paid<% } %>
+        };
+
+
+        // --- Gráfico de Vendas Mensais (Line Chart) ---
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: salesLabels,
+                datasets: [{
+                    label: 'Vendas Totais (R$)',
+                    data: salesData,
+                    borderColor: var_to_css_var('--primary-color'),
+                    backgroundColor: 'rgba(0, 86, 179, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: var_to_css_var('--primary-color'),
+                    pointBorderColor: '#fff',
+                    pointHoverRadius: 6,
+                    pointHoverBorderColor: var_to_css_var('--primary-color')
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { family: 'Inter' } }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Tendência de Vendas Mensais',
+                        font: { size: 18, family: 'Inter', weight: '600' },
+                        color: var_to_css_var('--text-dark')
+                    },
+                    tooltip: {
+                        titleFont: { family: 'Inter' },
+                        bodyFont: { family: 'Inter' },
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.dataset.label}: R$ ${context.parsed.y.toFixed(2)}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: var_to_css_var('--border-color') },
+                        ticks: {
+                            font: { family: 'Inter' },
+                            callback: function(value, index, values) {
+                                return 'R$ ' + value.toLocaleString('pt-BR');
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Inter' } }
+                    }
+                }
+            }
+        });
+
+        // --- Gráfico de Status de Pedidos (Pie Chart) ---
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        new Chart(statusCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Novas Ordens', 'Em Progresso', 'Pagas'],
+                datasets: [{
+                    data: [
+                        statusCounts.fresh,
+                        statusCounts.progress,
+                        statusCounts.paid
+                    ],
+                    backgroundColor: [
+                        '#007bff', /* Fresh (Azul) */
+                        '#ffc107', /* Progress (Amarelo) */
+                        '#28a745'  /* Paid (Verde) */
+                    ],
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { family: 'Inter' } }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Distribuição de Ordens por Status',
+                        font: { size: 18, family: 'Inter', weight: '600' },
+                        color: var_to_css_var('--text-dark')
+                    },
+                    tooltip: {
+                        titleFont: { family: 'Inter' },
+                        bodyFont: { family: 'Inter' }
+                    }
+                }
+            }
+        });
+
+        // Helper para obter variáveis CSS no JS
+        function var_to_css_var(variable) {
+            return getComputedStyle(document.documentElement).getPropertyValue(variable);
+        }
+
+        // --- Lógica para o Formulário de Nova Ordem e Copiar Link ---
+        const newOrderForm = document.getElementById('newOrderForm');
+        const orderCreationResult = document.getElementById('orderCreationResult');
+        const orderLinkElement = document.getElementById('orderLink');
+        const copyLinkButton = document.getElementById('copyLinkButton');
+
+        newOrderForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const totalValue = parseFloat(this.totalValue.value);
+
+            if (isNaN(totalValue) || totalValue <= 0) {
+                alert('Por favor, insira um Valor Total válido (maior que zero).');
+                return;
+            }
+
+            // SIMULAÇÃO: Em um sistema real, você faria uma requisição POST para sua API de criação de ordem.
+            // O backend retornaria o ID da ordem e o link de pagamento.
+            console.log('Simulando criação de ordem com Valor Total:', totalValue.toFixed(2));
+
+            // Dados mockados para simular a resposta do backend
+            const mockOrderId = 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            const mockParterId = "1234"
+            const mockPaymentLink = `https://pagjunto.com/${mockParterId}/${mockOrderId}`;
+
+            // Atualiza a UI com o link
+            orderLinkElement.href = mockPaymentLink;
+            orderLinkElement.textContent = mockPaymentLink;
+            orderCreationResult.style.display = 'flex'; // Exibe o resultado
+
+            // Reseta o formulário
+            this.reset();
+        });
+
+        copyLinkButton.addEventListener('click', function() {
+            const linkToCopy = orderLinkElement.textContent;
+            navigator.clipboard.writeText(linkToCopy)
+        });
+
+        // --- Exemplo de como você passaria payerIds do backend para o EJS (no controller) ---
+        // Exemplo de um array de ordens do seu backend:
+        // const orders = [
+        //     { orderId: 'ORD-001', totalValue: 150, paidValue: 0, status: 'fresh', payerIds: [] },
+        //     { orderId: 'ORD-002', totalValue: 320.50, paidValue: 160.25, status: 'progress', payerIds: ['payer_xyz', 'payer_abc'] },
+        //     { orderId: 'ORD-003', totalValue: 55.90, paidValue: 55.90, status: 'paid', payerIds: ['payer_123'] },
+        // ];
+        // res.render('dashboard', { orders: orders, ... });
+    </script>
+</body>
+</html>

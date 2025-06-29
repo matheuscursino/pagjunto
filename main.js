@@ -2,6 +2,11 @@ import express from 'express'
 import axios from 'axios'
 import bodyParser from 'body-parser'
 import dotenv  from 'dotenv'
+import signinRouter from './route/signin.route.js'
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import cookieParser from 'cookie-parser'
+
 
 const app = express()
 const port = 80
@@ -21,12 +26,25 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json())
 app.set('view engine', 'ejs')
 
+app.use(cookieParser())
+
+
 app.get('/', (req, res) =>  {
     res.send('index')
 })
 
 app.get('/login', (req, res) => {
     res.render('login')
+})
+
+app.get('/dashboard', (req, res) => {
+    if (req.cookies.access_token == undefined){
+        res
+            .redirect('/login')
+    } else {
+        res
+            .render('dashboard')
+    }
 })
 
 app.get('/:partnerId/:orderId', (req, res) => {
@@ -49,6 +67,8 @@ app.get('/:partnerId/:orderId', (req, res) => {
         res.send("partner doesnt exist")
     })
 })
+
+app.use('/signin', signinRouter)
 
 
 app.listen(port, () => {
