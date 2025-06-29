@@ -593,6 +593,55 @@
                 margin-top: 8px;
             }
         }
+
+        .copy-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.copy-btn:active {
+    transform: translateY(0);
+}
+
+.copy-btn.copied {
+    background: #28a745;
+}
+
+.copy-btn i {
+    font-size: 0.9em;
+}
+
+.toast {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.toast.show {
+    transform: translateX(0);
+}
     </style>
 </head>
 <body>
@@ -724,52 +773,55 @@
             </div>
         </div>
 
-        <section class="content-section">
-            <div class="section-header">
-                <div class="section-icon">
-                    <i class="fas fa-list-alt"></i>
-                </div>
-                <h2 class="section-title">Ordens Recentes</h2>
-            </div>
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID da Ordem</th>
-                            <th>Valor Total</th>
-                            <th>Valor Pago</th>
-                            <th>Status</th>
-                            <th>Pagadores</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
-                            <% orders.forEach(order => { %>
-                                <tr>
-                                    <td><%= order.orderId %></td>
-                                    <td>R$ <%= order.totalValue.toFixed(2) %></td>
-                                    <td>R$ <%= order.paidValue.toFixed(2) %></td>
-                                    <td><span class="status-badge <%= order.status %>"><%= order.status %></span></td>
-                                    <td>
-                                        <span class="payer-ids">
-                                            <% if (order.payersIds && order.payersIds.length > 0) { %>
-                                                <%= order.payersIds.join(', ') %>
-                                            <% } %>
-                                        </span>
-                                    </td>
-                                </tr>
-                            <% }) %>
-                        <% } else { %>
-                            <tr><td>ORD-20250628-001</td><td>R$ 150,00</td><td>R$ 0,00</td><td><span class="status-badge fresh">Fresh</span></td><td><span class="payer-ids"></span></td></tr>
-                            <tr><td>ORD-20250628-002</td><td>R$ 320,50</td><td>R$ 160,25</td><td><span class="status-badge progress">Progress</span></td><td><span class="payer-ids">payer_xyz, payer_abc</span></td></tr>
-                            <tr><td>ORD-20250627-015</td><td>R$ 55,90</td><td>R$ 55,90</td><td><span class="status-badge paid">Paid</span></td><td><span class="payer-ids">payer_123</span></td></tr>
-                            <tr><td>ORD-20250627-014</td><td>R$ 890,00</td><td>R$ 0,00</td><td><span class="status-badge fresh">Fresh</span></td><td><span class="payer-ids"></span></td></tr>
-                            <tr><td>ORD-20250626-003</td><td>R$ 250,00</td><td>R$ 250,00</td><td><span class="status-badge paid">Paid</span></td><td><span class="payer-ids">payer_456</span></td></tr>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+<section class="content-section">
+    <div class="section-header">
+        <div class="section-icon">
+            <i class="fas fa-list-alt"></i>
+        </div>
+        <h2 class="section-title">Ordens Recentes</h2>
+    </div>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID da Ordem</th>
+                    <th>Valor Total</th>
+                    <th>Valor Pago</th>
+                    <th>Status</th>
+                    <th>Pagadores</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach(order => { %>
+                    <tr>
+                        <td><%= order.orderId %></td>
+                        <td>R$ <%= order.totalValue.toFixed(2) %></td>
+                        <td>R$ <%= order.paidValue.toFixed(2) %></td>
+                        <td><span class="status-badge <%= order.status %>"><%= order.status %></span></td>
+                        <td>
+                            <span class="payer-ids">
+                                <% if (order.payersIds && order.payersIds.length > 0) { %>
+                                    <%= order.payersIds.join(', ') %>
+                                <% } %>
+                            </span>
+                        </td>
+                        <td>
+                            <button class="copy-btn" onclick="copyOrderLink('<%= order.orderId %>')">
+                                <i class="fas fa-copy"></i>
+                                Copiar Link
+                            </button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div id="copyToast" class="toast">
+    Link copiado para a área de transferência!
+</div>
     </main>
 
     <footer class="footer">
@@ -777,6 +829,7 @@
     </footer>
 
 <script>
+const localPartnerId = "<%= partnerData.partnerId %>";
 // --- Dados Mockados (para testar sem backend) ---
 const mockSalesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'];
 const mockSalesData = [8500, 11000, 9800, 14200, 13000, 17500, 19000];
@@ -979,7 +1032,7 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
 
     // Garante que partnerId e partnerApiKey estão disponíveis
     // Se eles vêm do backend via EJS, certifique-se de que estão no escopo global ou passados via data attributes
-    const localPartnerId = "<%= partnerData.partnerId %>"; // Ou use uma variável JS global como `partnerId` se for injetada assim
+     // Ou use uma variável JS global como `partnerId` se for injetada assim
     const localPartnerApiKey = "<%= partnerData.apiKey %>"; // Ou use uma variável JS global como `partnerApiKey`
 
     try {
@@ -1060,6 +1113,8 @@ document.getElementById('copyLinkButton').addEventListener('click', function() {
                 copyButton.style.backgroundColor = var_to_css_var('--secondary-color');
                 copyButton.style.color = '#ffffff';
             }, 2000);
+
+            showToast()
         })
         .catch(err => {
             console.error('Erro ao copiar:', err);
@@ -1157,21 +1212,27 @@ function updateDashboardDisplay() {
     }
 
     // Atualizar a tabela de ordens (se você quiser que as novas ordens apareçam sem recarregar a página)
-    const tableBody = document.querySelector('.table tbody');
-    if (tableBody) {
-        tableBody.innerHTML = ''; // Limpa as linhas existentes
-        allOrders.forEach(order => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${order.orderId}</td>
-                <td>R$ ${order.totalValue.toFixed(2)}</td>
-                <td>R$ ${(order.paidValue || 0).toFixed(2)}</td>
-                <td><span class="status-badge ${order.status}">${order.status}</span></td>
-                <td><span class="payer-ids">${(order.payersIds && order.payersIds.length > 0) ? order.payersIds.join(', ') : ''}</span></td>
-            `;
-            tableBody.appendChild(row);
-        });
-    }
+const tableBody = document.querySelector('.table tbody');
+if (tableBody) {
+    tableBody.innerHTML = ''; // Limpa as linhas existentes
+    allOrders.forEach(order => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${order.orderId}</td>
+            <td>R$ ${order.totalValue.toFixed(2)}</td>
+            <td>R$ ${(order.paidValue || 0).toFixed(2)}</td>
+            <td><span class="status-badge ${order.status}">${order.status}</span></td>
+            <td><span class="payer-ids">${(order.payersIds && order.payersIds.length > 0) ? order.payersIds.join(', ') : ''}</span></td>
+            <td>
+                <button class="copy-btn" onclick="copyOrderLink(event, '${order.orderId}')">
+                    <i class="fas fa-copy"></i>
+                    Copiar Link
+                </button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
 }
 
 // --- Inicialização ---
@@ -1217,4 +1278,58 @@ window.addEventListener('resize', function() {
     if (salesChart) salesChart.resize();
     if (statusChart) statusChart.resize();
 });
+
+
+function copyOrderLink(event, orderId) {
+    // Ajuste a URL base conforme sua aplicação
+    const orderLink = `http://localhost/${localPartnerId}/${orderId}`;
+    
+    navigator.clipboard.writeText(orderLink).then(() => {
+        const button = event.target.closest('.copy-btn');
+        const originalText = button.innerHTML;
+        
+        button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+        button.classList.add('copied');
+        
+        showToast();
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    }).catch(err => {
+        console.error('Erro ao copiar link:', err);
+        fallbackCopyTextToClipboard(orderLink);
+    });
+}
+
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showToast();
+    } catch (err) {
+        console.error('Fallback: Erro ao copiar', err);
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+function showToast() {
+    const toast = document.getElementById('copyToast');
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
 </script>
