@@ -1016,7 +1016,7 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
             // **NOVA LÓGICA:** Atualizar as métricas e gráficos após uma nova ordem
             // Simular a adição da nova ordem ao array existente (idealmente, você refaria a requisição de ordens)
             allOrders.unshift({ // Adiciona a nova ordem no início do array
-                orderId: result.orderId,
+                orderId: result,
                 totalValue: parseFloat(totalValue),
                 paidValue: 0, // Novas ordens geralmente começam com 0 pago
                 status: 'fresh', // Nova ordem começa como 'fresh'
