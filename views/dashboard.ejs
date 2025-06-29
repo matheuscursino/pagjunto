@@ -784,8 +784,8 @@
                                     <td><span class="status-badge <%= order.status %>"><%= order.status %></span></td>
                                     <td>
                                         <span class="payer-ids">
-                                            <% if (order.payerIds && order.payerIds.length > 0) { %>
-                                                <%= order.payerIds.join(', ') %>
+                                            <% if (order.payersIds && order.payersIds.length > 0) { %>
+                                                <%= order.payersIds.join(', ') %>
                                             <% } %>
                                         </span>
                                     </td>

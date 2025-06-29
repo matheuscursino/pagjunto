@@ -45,11 +45,18 @@ app.get('/dashboard', (req, res) => {
         jwt.verify(req.cookies.access_token, process.env.SEGREDO, function(err, decoded){
             axios.get('http://127.0.0.1:3000/partner', {
                 data: {
-                    'partnerId': decoded.partnerId
+                    partnerId: decoded.partnerId
                 }
             }, axiosConfig).then((response) => {
                 var partnerData = response.data
-                res.render('dashboard', {partnerData})
+                axios.get('http://127.0.0.1:3000/order/by-partner', {
+                    data: {
+                        partnerId: decoded.partnerId
+                    }
+                }, axiosConfig).then((response2) => {
+                    var orders = response2.data
+                    res.render('dashboard', {partnerData, orders})
+                })
             })
         })
     }
@@ -64,7 +71,7 @@ app.get('/:partnerId/:orderId', (req, res) => {
         var partnerData = response.data
         axios.get('http://127.0.0.1:3000/order', {
             data: {
-                'orderId': req.params.orderId
+                orderId: req.params.orderId
             }
         }, axiosConfig).then((response2) => {
             res.render('order', {orderData: response2.data, partnerData})
