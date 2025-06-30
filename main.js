@@ -21,7 +21,14 @@ const axiosConfig = {
 
 dotenv.config()
 
-app.use(cors());
+const corsOptions = {
+  origin: ['https://www.pagjunto.com', 'https://pagjunto.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({
     extended: true
