@@ -101,6 +101,4 @@ app.get('/logout', (req, res) => {
 app.use('/signin', signinRouter)
 
 
-app.listen(port, () => {
-    console.log(`server started on port: ${port}`)
-})
+export default serverless(app);
