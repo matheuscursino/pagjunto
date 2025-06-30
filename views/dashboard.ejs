@@ -1035,7 +1035,7 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
     const localPartnerApiKey = "<%= partnerData.apiKey %>"; // Ou use uma variável JS global como `partnerApiKey`
 
     try {
-        const response = await fetch('https://pagjunto.com:3000/order', {
+        const response = await fetch('https://api.pagjunto.com/order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

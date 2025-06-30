@@ -533,7 +533,7 @@
                     if (tentativas > 30) clearInterval(pollingInterval); // Limite: 5 minutos
 
                     try {
-                        const response = await fetch(`https://pagjunto.com:3000/payment/status/${chargeId}/${id2}/${cpfInput.value}/${valueInput.value}`);
+                        const response = await fetch(`https://api.pagjunto.com/payment/status/${chargeId}/${id2}/${cpfInput.value}/${valueInput.value}`);
                         const data = await response.json();
 
                         if (data.status === 'paid') {
@@ -590,7 +590,7 @@
 
                 try {
                     var recipient_id = "<%=partnerData.recipient_id%>"
-                    const response = await fetch('https://pagjunto.com:3000/payment/create-pix', {
+                    const response = await fetch('https://api.pagjunto.com/payment/create-pix', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
