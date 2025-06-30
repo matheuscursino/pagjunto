@@ -606,6 +606,8 @@
                         throw new Error(data.error || 'Erro ao criar pagamento Pix.');
                     } else {
                         iniciarPolling(data.data.id)
+                        console.log(data)
+                        console.log(data.data)
                     }
                     
                     document.querySelector('#qrBox img').src = data.data.last_transaction.qr_code_url;
