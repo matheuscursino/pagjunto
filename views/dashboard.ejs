@@ -1151,7 +1151,7 @@ function updateDashboardDisplay() {
     const metrics = calculateDashboardMetrics(allOrders);
 
     // Atualizar os cartões de métricas usando os IDs
-    document.getElementById('accountBalanceValue').textContent = formatCurrency(metrics.accountBalance);
+    document.getElementById('accountBalanceValue').textContent = formatCurrencyFromCents(metrics.accountBalance);
     document.getElementById('totalSalesValue').textContent = formatCurrency(metrics.totalSales);
     document.getElementById('totalPaidValue').textContent = formatCurrency(metrics.totalPaidValue);
     document.getElementById('totalOrdersValue').textContent = formatNumber(metrics.totalOrders);
@@ -1258,7 +1258,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('orderCreationResult').style.display = 'none';
 });
 
-// --- Utilitários ---
 function formatCurrency(value) {
     // Garantir que o valor é um número
     const numValue = typeof value === 'string' ? parseFloat(value) : value;
@@ -1278,6 +1277,12 @@ function formatCurrency(value) {
     return 'R$ ' + parts.join(',');
 }
 
+// Função para formatar valores que vêm em centavos
+function formatCurrencyFromCents(cents) {
+    // Converter centavos para reais (dividir por 100)
+    const reais = cents / 100;
+    return formatCurrency(reais);
+}
 
 function formatNumber(value) {
     if (typeof value !== 'number') return '0';
