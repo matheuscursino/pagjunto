@@ -55,7 +55,15 @@ app.get('/dashboard', (req, res) => {
                     }
                 }, axiosConfig).then((response2) => {
                     var orders = response2.data
-                    res.render('dashboard', {partnerData, orders})
+                    axios.get('http://127.0.0.1:3000/partner/balance', {
+                        data: {
+                            recipient_id: partnerData.recipient_id
+                        }
+                    }, axiosConfig).then((response3)=> {
+                        var balance = response3.data
+                        res.render('dashboard', {partnerData, orders, balance})
+
+                    })
                 })
             })
         })
@@ -81,6 +89,13 @@ app.get('/:partnerId/:orderId', (req, res) => {
     }).catch((error) => {
         res.send("partner doesnt exist")
     })
+})
+
+app.get('/logout', (req, res) => {
+    res
+    .clearCookie('access_token', {path:'/'})
+    .status(200)
+    .redirect('/login')
 })
 
 app.use('/signin', signinRouter)

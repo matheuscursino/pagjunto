@@ -910,8 +910,7 @@ function calculateDashboardMetrics(orders) {
     // O saldo da conta geralmente não é calculado apenas a partir das ordens,
     // mas sim de um registro de transações financeiras.
     // Por isso, manteremos um valor mockado ou buscado de outra forma.
-    let accountBalance = typeof summaryFromBackend !== 'undefined' && summaryFromBackend.accountBalance !== undefined
-                         ? summaryFromBackend.accountBalance : 15234.56; // Valor inicial ou mockado
+    let accountBalance = "<%= balance.data.available_amount %>";
 
     orders.forEach(order => {
         totalSales += order.totalValue || 0;
