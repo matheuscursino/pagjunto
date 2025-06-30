@@ -5,7 +5,9 @@ import dotenv  from 'dotenv'
 import signinRouter from './route/signin.route.js'
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import cookieParser from 'cookie-parser'
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+
 
 
 const app = express()
@@ -18,6 +20,8 @@ const axiosConfig = {
 }
 
 dotenv.config()
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({
     extended: true
