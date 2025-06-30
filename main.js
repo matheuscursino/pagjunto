@@ -7,7 +7,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser'
 
+
 const app = express()
+const port = 80
 
 const axiosConfig = {
   headers: {
@@ -26,6 +28,7 @@ app.set('view engine', 'ejs')
 
 app.use(cookieParser())
 
+
 app.get('/', (req, res) =>  {
     res.render('lp')
 })
@@ -40,28 +43,26 @@ app.get('/dashboard', (req, res) => {
             .redirect('/login')
     } else {
         jwt.verify(req.cookies.access_token, process.env.SEGREDO, function(err, decoded){
-            // Replace localhost URLs with your API base URL
-            const API_BASE = process.env.API_BASE_URL || 'http://127.0.0.1:3000'
-            
-            axios.get(`${API_BASE}/partner`, {
+            axios.get('http://127.0.0.1:3000/partner', {
                 data: {
                     partnerId: decoded.partnerId
                 }
             }, axiosConfig).then((response) => {
                 var partnerData = response.data
-                axios.get(`${API_BASE}/order/by-partner`, {
+                axios.get('http://127.0.0.1:3000/order/by-partner', {
                     data: {
                         partnerId: decoded.partnerId
                     }
                 }, axiosConfig).then((response2) => {
                     var orders = response2.data
-                    axios.get(`${API_BASE}/partner/balance`, {
+                    axios.get('http://127.0.0.1:3000/partner/balance', {
                         data: {
                             recipient_id: partnerData.recipient_id
                         }
                     }, axiosConfig).then((response3)=> {
                         var balance = response3.data
                         res.render('dashboard', {partnerData, orders, balance})
+
                     })
                 })
             })
@@ -70,15 +71,13 @@ app.get('/dashboard', (req, res) => {
 })
 
 app.get('/:partnerId/:orderId', (req, res) => {
-    const API_BASE = process.env.API_BASE_URL || 'http://127.0.0.1:3000'
-    
-    axios.get(`${API_BASE}/partner`, {
+    axios.get('http://127.0.0.1:3000/partner', {
         data: {
             'partnerId': req.params.partnerId
         }
     }, axiosConfig).then((response) => {
         var partnerData = response.data
-        axios.get(`${API_BASE}/order`, {
+        axios.get('http://127.0.0.1:3000/order', {
             data: {
                 orderId: req.params.orderId
             }
@@ -101,5 +100,7 @@ app.get('/logout', (req, res) => {
 
 app.use('/signin', signinRouter)
 
-// Export the Express app as a serverless function
-export default app
+
+app.listen(port, () => {
+    console.log(`server started on port: ${port}`)
+})
