@@ -1260,11 +1260,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // --- Utilitários ---
 function formatCurrency(value) {
-    return value.toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    });
+    // Garantir que o valor é um número
+    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+    
+    // Verificar se é um número válido
+    if (isNaN(numValue)) {
+        return 'R$ 0,00';
+    }
+    
+    // Formatação manual mais confiável
+    const formatted = numValue.toFixed(2).replace('.', ',');
+    const parts = formatted.split(',');
+    
+    // Adicionar separadores de milhares
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    
+    return 'R$ ' + parts.join(',');
 }
+
 
 function formatNumber(value) {
     if (typeof value !== 'number') return '0';
