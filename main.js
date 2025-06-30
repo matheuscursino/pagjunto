@@ -43,19 +43,19 @@ app.get('/dashboard', (req, res) => {
             .redirect('/login')
     } else {
         jwt.verify(req.cookies.access_token, process.env.SEGREDO, function(err, decoded){
-            axios.get('http://127.0.0.1:3000/partner', {
+            axios.get('https://pagjunto.com:3000/partner', {
                 data: {
                     partnerId: decoded.partnerId
                 }
             }, axiosConfig).then((response) => {
                 var partnerData = response.data
-                axios.get('http://127.0.0.1:3000/order/by-partner', {
+                axios.get('https://pagjunto.com:3000/order/by-partner', {
                     data: {
                         partnerId: decoded.partnerId
                     }
                 }, axiosConfig).then((response2) => {
                     var orders = response2.data
-                    axios.get('http://127.0.0.1:3000/partner/balance', {
+                    axios.get('https://pagjunto.com:3000/partner/balance', {
                         data: {
                             recipient_id: partnerData.recipient_id
                         }
@@ -71,13 +71,13 @@ app.get('/dashboard', (req, res) => {
 })
 
 app.get('/:partnerId/:orderId', (req, res) => {
-    axios.get('http://127.0.0.1:3000/partner', {
+    axios.get('https://pagjunto.com:3000/partner', {
         data: {
             'partnerId': req.params.partnerId
         }
     }, axiosConfig).then((response) => {
         var partnerData = response.data
-        axios.get('http://127.0.0.1:3000/order', {
+        axios.get('https://pagjunto.com:3000/order', {
             data: {
                 orderId: req.params.orderId
             }

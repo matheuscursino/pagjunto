@@ -1035,7 +1035,7 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
     const localPartnerApiKey = "<%= partnerData.apiKey %>"; // Ou use uma variável JS global como `partnerApiKey`
 
     try {
-        const response = await fetch('http://localhost:3000/order', {
+        const response = await fetch('https://pagjunto.com:3000/order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1055,7 +1055,7 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
         const result = await response.json();
 
         if (result) { // Assumindo que o backend retorna { orderId: "..." }
-            const generatedOrderLink = `http://localhost/${localPartnerId}/${result}`;
+            const generatedOrderLink = `https://pagjunto.com/${localPartnerId}/${result}`;
 
             orderLinkElement.href = generatedOrderLink;
             orderLinkElement.textContent = generatedOrderLink;
@@ -1281,7 +1281,7 @@ window.addEventListener('resize', function() {
 
 function copyOrderLink(event, orderId) {
     // Ajuste a URL base conforme sua aplicação
-    const orderLink = `http://localhost/${localPartnerId}/${orderId}`;
+    const orderLink = `https://pagjunto.com/${localPartnerId}/${orderId}`;
     
     navigator.clipboard.writeText(orderLink).then(() => {
         const button = event.target.closest('.copy-btn');
