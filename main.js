@@ -7,7 +7,11 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 
 const app = express()
@@ -41,6 +45,9 @@ app.use(bodyParser.json())
 app.set('view engine', 'ejs')
 
 app.use(cookieParser())
+
+app.use(express.static(join(__dirname, 'public')));
+
 
 
 app.get('/', (req, res) =>  {

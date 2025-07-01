@@ -8,6 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
 
     <style>
         /* --- Variáveis CSS - Tema Corporativo --- */
@@ -213,13 +219,13 @@
         .section-icon {
             width: 40px;
             height: 40px;
-    background-color: rgba(13, 110, 253, 0.1); 
+            background-color: rgba(13, 110, 253, 0.1); 
             opacity: 0.9;
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-    color:rgb(0, 0, 0);"; /* A cor do ícone permanece sólida */
+            color:rgb(0, 0, 0);"; /* A cor do ícone permanece sólida */
             font-size: 18px;
         }
 
@@ -285,7 +291,6 @@
             transform: translateY(1px);
         }
 
-
         /* --- Resultado da Ordem --- */
         .order-result {
             margin-top: 24px;
@@ -335,7 +340,7 @@
         /* --- Cards de Métricas --- */
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 24px;
             margin-bottom: 40px;
         }
@@ -403,7 +408,7 @@
         }
 
         .chart-wrapper {
-            height: 300px; /* Reduced height for a tighter design */
+            height: 300px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -648,9 +653,6 @@
     <header class="header">
         <div class="header-content">
             <a href="/" class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
                 <span>pagjunto</span>
             </a>
             <div class="user-section">
@@ -745,7 +747,28 @@
                 <div class="metric-value" id="totalOrdersValue">0</div>
                 <div class="metric-subtitle">Total de ordens geradas</div>
             </div>
-            
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Ordens Pagas</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="paidOrdersValue">0</div>
+                <div class="metric-subtitle">Ordens finalizadas com sucesso</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Ordens Novas</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-file-circle-plus"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="newOrdersValue">0</div>
+                <div class="metric-subtitle">Ordens recém-criadas</div>
+            </div>
             <div class="metric-card">
                 <div class="metric-header">
                     <span class="metric-title">Em Progresso</span>
@@ -894,10 +917,10 @@ const monthlySalesResult = calculateMonthlySalesData(allOrders);
 
 // Garante que as variáveis existam e sejam arrays/objetos válidos, mesmo que vazios
 const salesLabels = typeof salesLabelsForChart !== 'undefined' && salesLabelsForChart.length > 0 ?
-                      salesLabelsForChart : monthlySalesResult.labels;
+                                salesLabelsForChart : monthlySalesResult.labels;
 
 const salesData = typeof salesDataForChart !== 'undefined' && salesDataForChart.length > 0 ?
-                    salesDataForChart : monthlySalesResult.data;
+                                salesDataForChart : monthlySalesResult.data;
 
 // --- Nova Lógica: Calcular Métricas de Resumo no Frontend ---
 function calculateDashboardMetrics(orders) {
@@ -973,10 +996,7 @@ const salesChart = new Chart(salesCtx, {
                 labels: { font: { family: 'Inter' } }
             },
             title: {
-                display: true,
-                text: 'Tendência de Vendas Mensais',
-                font: { size: 18, family: 'Inter', weight: '600' },
-                color: var_to_css_var('--text-dark')
+                display: false,
             },
             tooltip: {
                 titleFont: { family: 'Inter' },
@@ -1031,7 +1051,7 @@ document.getElementById('newOrderForm').addEventListener('submit', async functio
 
     // Garante que partnerId e partnerApiKey estão disponíveis
     // Se eles vêm do backend via EJS, certifique-se de que estão no escopo global ou passados via data attributes
-     // Ou use uma variável JS global como `partnerId` se for injetada assim
+      // Ou use uma variável JS global como `partnerId` se for injetada assim
     const localPartnerApiKey = "<%= partnerData.apiKey %>"; // Ou use uma variável JS global como `partnerApiKey`
 
     try {
@@ -1156,6 +1176,11 @@ function updateDashboardDisplay() {
     document.getElementById('totalPaidValue').textContent = formatCurrency(metrics.totalPaidValue);
     document.getElementById('totalOrdersValue').textContent = formatNumber(metrics.totalOrders);
     document.getElementById('progressOrdersValue').textContent = formatNumber(metrics.progressOrders);
+    
+    // LINHAS ADICIONADAS PARA OS NOVOS CARDS
+    document.getElementById('paidOrdersValue').textContent = formatNumber(metrics.paidOrders);
+    document.getElementById('newOrdersValue').textContent = formatNumber(metrics.freshOrders);
+
 
     // Recalcular e atualizar o gráfico de vendas mensais
     const updatedMonthlySales = calculateMonthlySalesData(allOrders);
@@ -1171,7 +1196,6 @@ function updateDashboardDisplay() {
         statusChart.update();
     } else {
         // Se o gráfico ainda não foi inicializado (primeira carga da página)
-        // Isso pode acontecer se o script for executado antes do DOMContentLoaded
         statusChart = new Chart(statusCtx, {
             type: 'doughnut',
             data: {
@@ -1200,7 +1224,7 @@ function updateDashboardDisplay() {
                         callbacks: {
                             label: function(context) {
                                 const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                const percentage = total > 0 ? ((context.parsed / total) * 100).toFixed(1) : 0;
                                 return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
                             }
                         }
@@ -1214,7 +1238,7 @@ function updateDashboardDisplay() {
 const tableBody = document.querySelector('.table tbody');
 if (tableBody) {
     tableBody.innerHTML = ''; // Limpa as linhas existentes
-    allOrders.forEach(order => {
+    allOrders.slice(0, 10).forEach(order => { // Mostra apenas as 10 ordens mais recentes
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${order.orderId}</td>
@@ -1243,7 +1267,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateDashboardDisplay();
 
     // Animações de entrada (mantidas)
-    const cards = document.querySelectorAll('.summary-cards .card, .section');
+    const cards = document.querySelectorAll('.metrics-grid .metric-card, .section, .chart-card');
     cards.forEach((card, index) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
@@ -1259,28 +1283,16 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function formatCurrency(value) {
-    // Garantir que o valor é um número
     const numValue = typeof value === 'string' ? parseFloat(value) : value;
-    
-    // Verificar se é um número válido
-    if (isNaN(numValue)) {
-        return 'R$ 0,00';
-    }
-    
-    // Formatação manual mais confiável
+    if (isNaN(numValue)) return 'R$ 0,00';
     const formatted = numValue.toFixed(2).replace('.', ',');
     const parts = formatted.split(',');
-    
-    // Adicionar separadores de milhares
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    
     return 'R$ ' + parts.join(',');
 }
 
-// Função para formatar valores que vêm em centavos
 function formatCurrencyFromCents(cents) {
-    // Converter centavos para reais (dividir por 100)
-    const reais = cents / 100;
+    const reais = (Number(cents) || 0) / 100;
     return formatCurrency(reais);
 }
 
@@ -1297,12 +1309,11 @@ window.addEventListener('resize', function() {
 
 
 function copyOrderLink(event, orderId) {
-    // Ajuste a URL base conforme sua aplicação
     const orderLink = `https://pagjunto.com/${localPartnerId}/${orderId}`;
     
     navigator.clipboard.writeText(orderLink).then(() => {
         const button = event.target.closest('.copy-btn');
-        const originalText = button.innerHTML;
+        const originalContent = button.innerHTML;
         
         button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
         button.classList.add('copied');
@@ -1310,7 +1321,7 @@ function copyOrderLink(event, orderId) {
         showToast();
         
         setTimeout(() => {
-            button.innerHTML = originalText;
+            button.innerHTML = originalContent;
             button.classList.remove('copied');
         }, 2000);
     }).catch(err => {
@@ -1349,3 +1360,5 @@ function showToast() {
     }, 3000);
 }
 </script>
+</body>
+</html>
