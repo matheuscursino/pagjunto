@@ -235,7 +235,7 @@
             font-size: 14px;
             margin-top: -10px;
             margin-bottom: 15px;
-            height: 16px;
+            height: 25px;
         }
         .btn {
             background-color: var(--primary);
@@ -251,6 +251,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            margin-top: 5px;
             transition: background-color 0.2s, transform 0.2s;
         }
         .btn:hover {
@@ -348,9 +349,171 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        /* Estilos para o consentimento aos termos */
+        .terms-consent {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: var(--primary-light);
+            border-radius: 10px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-body);
+            cursor: pointer;
+        }
+
+        .terms-link {
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .terms-link:hover {
+            color: var(--primary-hover);
+        }
+
+        /* Estilos para o modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card);
+            margin: 20px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-header);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .close-btn:hover {
+            background-color: var(--bg);
+            color: var(--text-body);
+        }
+
+        .modal-body {
+            line-height: 1.6;
+            color: var(--text-body);
+        }
+
+        .modal-body h3 {
+            color: var(--text-header);
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .modal-body h3:first-child {
+            margin-top: 0;
+        }
+
+        .modal-body p {
+            margin-bottom: 15px;
+        }
+
+        .modal-body ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        .modal-body li {
+            margin-bottom: 8px;
+        }
+
         @media (max-width: 900px) {
             main {
                 flex-direction: column;
+            }
+            
+            .modal-content {
+                margin: 10px;
+                padding: 20px;
             }
         }
         .logo:hover{
@@ -430,6 +593,15 @@
                     <input type="number" id="valor" placeholder="Ex: 50.00" min="1" step="0.01" required />
                 </div>
 
+                <div class="terms-consent">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="termsCheckbox" required />
+                        <label for="termsCheckbox" class="checkbox-label">
+                            Concordo com os <span class="terms-link" id="openTermsModal">Termos e Condições de Uso.</span>
+                        </label>
+                    </div>
+                </div>
+
                 <div id="errorMessage" class="error-message"></div>
 
                 <button type="submit" id="generateBtn" class="btn">
@@ -450,6 +622,74 @@
         </div>
         <% } %>
     </main>
+
+    <!-- Modal dos Termos e Condições -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Termos e Condições de Uso</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>1. Aceitação dos Termos</h3>
+                <p>Ao utilizar a plataforma Pagjunto, você concorda em ficar vinculado a estes Termos e Condições de Uso. Se você não concordar com algum destes termos, não deverá usar nossos serviços.</p>
+
+                <h3>2. Descrição do Serviço</h3>
+                <p>A Pagjunto é uma plataforma digital que facilita transações de pagamento através do sistema PIX, permitindo que usuários realizem e recebam pagamentos de forma segura e eficiente.</p>
+
+                <h3>3. Cadastro e Conta do Usuário</h3>
+                <p>Para utilizar nossos serviços, você deve:</p>
+                <ul>
+                    <li>Fornecer informações verdadeiras, precisas e completas</li>
+                    <li>Manter suas informações atualizadas</li>
+                    <li>Ser responsável pela segurança de sua conta</li>
+                    <li>Notificar-nos imediatamente sobre qualquer uso não autorizado</li>
+                </ul>
+
+                <h3>4. Uso Aceitável</h3>
+                <p>Você concorda em não usar a plataforma para:</p>
+                <ul>
+                    <li>Atividades ilegais ou fraudulentas</li>
+                    <li>Lavagem de dinheiro ou financiamento de atividades ilícitas</li>
+                    <li>Violar direitos de terceiros</li>
+                    <li>Transmitir vírus ou códigos maliciosos</li>
+                    <li>Interferir no funcionamento da plataforma</li>
+                </ul>
+
+                <h3>5. Transações e Pagamentos</h3>
+                <p>Todas as transações realizadas através da plataforma são processadas através do sistema PIX do Banco Central do Brasil. A Pagjunto atua como facilitadora, mas não é responsável por disputas entre as partes envolvidas nas transações.</p>
+
+                <h3>6. Taxas e Comissões</h3>
+                <p>As taxas aplicáveis serão informadas claramente antes da confirmação de qualquer transação. A Pagjunto reserva-se o direito de alterar suas taxas mediante aviso prévio de 30 dias.</p>
+
+                <h3>7. Proteção de Dados</h3>
+                <p>Levamos a privacidade dos seus dados a sério. Todas as informações pessoais são tratadas de acordo com nossa Política de Privacidade e a Lei Geral de Proteção de Dados (LGPD).</p>
+
+                <h3>8. Limitação de Responsabilidade</h3>
+                <p>A Pagjunto não se responsabiliza por:</p>
+                <ul>
+                    <li>Perdas indiretas ou danos consequenciais</li>
+                    <li>Interrupções no serviço devido a manutenção ou falhas técnicas</li>
+                    <li>Ações de terceiros que afetem nossos serviços</li>
+                    <li>Decisões das instituições financeiras parceiras</li>
+                </ul>
+
+                <h3>9. Suspensão e Encerramento</h3>
+                <p>Reservamos o direito de suspender ou encerrar contas que violem estes termos, apresentem atividade suspeita ou por determinação legal ou regulatória.</p>
+
+                <h3>10. Alterações nos Termos</h3>
+                <p>Podemos modificar estes termos a qualquer momento. As alterações serão comunicadas através da plataforma e entrarão em vigor 30 dias após a notificação.</p>
+
+                <h3>11. Lei Aplicável</h3>
+                <p>Estes termos são regidos pelas leis brasileiras. Qualquer disputa será resolvida no foro da comarca de São Paulo, SP.</p>
+
+                <h3>12. Contato</h3>
+                <p>Para dúvidas sobre estes termos, entre em contato conosco através do e-mail: <strong>suporte@pagjunto.com</strong></p>
+
+                <p><strong>Última atualização:</strong> Janeiro de 2025</p>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="container footer-content">
@@ -481,6 +721,37 @@
             });
         }
 
+        // --- SCRIPT PARA O MODAL DOS TERMOS ---
+        const termsModal = document.getElementById('termsModal');
+        const openTermsModal = document.getElementById('openTermsModal');
+        const closeModal = document.getElementById('closeModal');
+
+        openTermsModal.addEventListener('click', (e) => {
+            e.preventDefault();
+            termsModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeModal.addEventListener('click', () => {
+            termsModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Fechar modal clicando fora dele
+        termsModal.addEventListener('click', (e) => {
+            if (e.target === termsModal) {
+                termsModal.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && termsModal.classList.contains('show')) {
+                termsModal.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        });
 
         // Verifica se o formulário de pagamento existe na página antes de adicionar os listeners
         if (document.getElementById('paymentForm')) {
@@ -494,6 +765,7 @@
             const errorMessage = document.getElementById('errorMessage');
             const copyBtn = document.getElementById('copyBtn');
             const pixKeyInput = document.getElementById('pixKey');
+            const termsCheckbox = document.getElementById('termsCheckbox');
 
             function getLastIdsFromCurrentUrl() {
                 const parts = window.location.href.split("/").filter(Boolean);
@@ -587,6 +859,12 @@
                 if (valor > restante) {
                     mostrarErro(`O valor excede o restante da cobrança (R$ ${restante.toFixed(2)}).`);
                     valueInput.focus();
+                    return;
+                }
+
+                if (!termsCheckbox.checked) {
+                    mostrarErro("Você deve concordar com os Termos e Condições de Uso para continuar.");
+                    termsCheckbox.focus();
                     return;
                 }
                 

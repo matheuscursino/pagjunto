@@ -600,53 +600,53 @@
         }
 
         .copy-btn {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8em;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    transition: all 0.2s;
-}
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
 
-.copy-btn:hover {
-    background: #0056b3;
-    transform: translateY(-1px);
-}
+        .copy-btn:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
 
-.copy-btn:active {
-    transform: translateY(0);
-}
+        .copy-btn:active {
+            transform: translateY(0);
+        }
 
-.copy-btn.copied {
-    background: #28a745;
-}
+        .copy-btn.copied {
+            background: #28a745;
+        }
 
-.copy-btn i {
-    font-size: 0.9em;
-}
+        .copy-btn i {
+            font-size: 0.9em;
+        }
 
-.toast {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    background: #28a745;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    transform: translateX(120%);
-    transition: transform 0.3s ease;
-    z-index: 1000;
-}
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
 
-.toast.show {
-    transform: translateX(0);
-}
+        .toast.show {
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body>
@@ -699,6 +699,23 @@
                 </div>
                 <button id="copyLinkButton" class="btn-copy">
                     <i class="fas fa-copy"></i> Copiar
+                </button>
+            </div>
+        </section>
+
+        <section class="content-section" style="margin-bottom: 40px; padding: 32px;">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-key"></i>
+                </div>
+                <h2 class="section-title">Sua Chave de API (API Key)</h2>
+            </div>
+            <p class="page-subtitle" style="margin-top: -16px; margin-bottom: 24px; font-weight: 400;">Use esta chave para integrar seus sistemas com a nossa plataforma. Mantenha-a segura.</p>
+            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                <input type="text" id="apiKeyInput" class="form-input" value="<%= partnerData.apiKey %>" readonly style="font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace; background-color: var(--bg-secondary); flex-grow: 1;">
+                <button id="copyApiKeyButton" class="btn-primary" style="flex-shrink: 0;">
+                    <i class="fas fa-copy"></i>
+                    <span class="btn-text">Copiar Chave</span>
                 </button>
             </div>
         </section>
@@ -780,37 +797,37 @@
                 <div class="metric-subtitle">Aguardando pagamento</div>
             </div>
             <div class="metric-card">
-    <div class="metric-header">
-        <span class="metric-title">Ticket Médio</span>
-        <div class="metric-icon">
-            <i class="fas fa-receipt"></i>
-        </div>
-    </div>
-    <div class="metric-value" id="averageTicketValue">R$ 0,00</div>
-    <div class="metric-subtitle">Valor médio por ordem</div>
-</div>
+                <div class="metric-header">
+                    <span class="metric-title">Ticket Médio</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="averageTicketValue">R$ 0,00</div>
+                <div class="metric-subtitle">Valor médio por ordem</div>
+            </div>
 
-<div class="metric-card">
-    <div class="metric-header">
-        <span class="metric-title">Taxa de Conversão</span>
-        <div class="metric-icon">
-            <i class="fas fa-bullseye"></i>
-        </div>
-    </div>
-    <div class="metric-value" id="conversionRateValue">0%</div>
-    <div class="metric-subtitle">% de ordens pagas</div>
-</div>
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Taxa de Conversão</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="conversionRateValue">0%</div>
+                <div class="metric-subtitle">% de ordens pagas</div>
+            </div>
 
-<div class="metric-card">
-    <div class="metric-header">
-        <span class="metric-title">Total de Pagadores</span>
-        <div class="metric-icon">
-            <i class="fas fa-users"></i>
-        </div>
-    </div>
-    <div class="metric-value" id="totalPayersValue">0</div>
-    <div class="metric-subtitle">Pagamentos individuais recebidos</div>
-</div>
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Total de Pagadores</span>
+                    <div class="metric-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="metric-value" id="totalPayersValue">0</div>
+                <div class="metric-subtitle">Pagamentos individuais recebidos</div>
+            </div>
         </div>
 
         <div class="charts-container">
@@ -828,55 +845,53 @@
             </div>
         </div>
 
-<section class="content-section">
-    <div class="section-header">
-        <div class="section-icon">
-            <i class="fas fa-list-alt"></i>
-        </div>
-        <h2 class="section-title">Ordens Recentes</h2>
-    </div>
-    <div class="table-container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID da Ordem</th>
-                    <th>Valor Total</th>
-                    <th>Valor Pago</th>
-                    <th>Status</th>
-                    <th>Pagadores</th>
-                    <th>Link</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% orders.forEach(order => { %>
-                    <tr>
-                        <td><%= order.orderId %></td>
-                        <td>R$ <%= order.totalValue.toFixed(2) %></td>
-                        <td>R$ <%= order.paidValue.toFixed(2) %></td>
-                        <td><span class="status-badge <%= order.status %>"><%= order.status %></span></td>
-                        <td>
-                            <span class="payer-ids">
-                                <% if (order.payersIds && order.payersIds.length > 0) { %>
-                                    <%= order.payersIds.join(', ') %>
-                                <% } %>
-                            </span>
-                        </td>
-                        <td>
-                            <button class="copy-btn" onclick="copyOrderLink('<%= order.orderId %>')">
-                                <i class="fas fa-copy"></i>
-                                Copiar Link
-                            </button>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
-    </div>
-</section>
+        <section class="content-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-list-alt"></i>
+                </div>
+                <h2 class="section-title">Ordens Recentes</h2>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID da Ordem</th>
+                            <th>Valor Total</th>
+                            <th>Valor Pago</th>
+                            <th>Status</th>
+                            <th>Pagadores</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orders.forEach(order => { %>
+                            <tr>
+                                <td><%= order.orderId %></td>
+                                <td>R$ <%= order.totalValue.toFixed(2) %></td>
+                                <td>R$ <%= order.paidValue.toFixed(2) %></td>
+                                <td><span class="status-badge <%= order.status %>"><%= order.status %></span></td>
+                                <td>
+                                    <span class="payer-ids">
+                                        <% if (order.payersIds && order.payersIds.length > 0) { %>
+                                            <%= order.payersIds.join(', ') %>
+                                        <% } %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="copy-btn" onclick="copyOrderLink('<%= order.orderId %>')">
+                                        <i class="fas fa-copy"></i>
+                                        Copiar Link
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-<div id="copyToast" class="toast">
-    Link copiado para a área de transferência!
-</div>
+        <div id="copyToast" class="toast"></div>
     </main>
 
     <footer class="footer">
@@ -949,10 +964,10 @@ const monthlySalesResult = calculateMonthlySalesData(allOrders);
 
 // Garante que as variáveis existam e sejam arrays/objetos válidos, mesmo que vazios
 const salesLabels = typeof salesLabelsForChart !== 'undefined' && salesLabelsForChart.length > 0 ?
-                                salesLabelsForChart : monthlySalesResult.labels;
+                                        salesLabelsForChart : monthlySalesResult.labels;
 
 const salesData = typeof salesDataForChart !== 'undefined' && salesDataForChart.length > 0 ?
-                                salesDataForChart : monthlySalesResult.data;
+                                        salesDataForChart : monthlySalesResult.data;
 
 // --- Nova Lógica: Calcular Métricas de Resumo no Frontend ---
 function calculateDashboardMetrics(orders) {
@@ -1215,8 +1230,8 @@ function updateDashboardDisplay() {
     document.getElementById('totalOrdersValue').textContent = formatNumber(metrics.totalOrders);
     document.getElementById('progressOrdersValue').textContent = formatNumber(metrics.progressOrders);
     document.getElementById('averageTicketValue').textContent = formatCurrency(metrics.averageTicket);
-document.getElementById('conversionRateValue').textContent = metrics.conversionRate.toFixed(1).replace('.', ',') + '%';
-document.getElementById('totalPayersValue').textContent = formatNumber(metrics.totalPayers);
+    document.getElementById('conversionRateValue').textContent = metrics.conversionRate.toFixed(1).replace('.', ',') + '%';
+    document.getElementById('totalPayersValue').textContent = formatNumber(metrics.totalPayers);
     
     // LINHAS ADICIONADAS PARA OS NOVOS CARDS
     document.getElementById('paidOrdersValue').textContent = formatNumber(metrics.paidOrders);
@@ -1278,8 +1293,8 @@ document.getElementById('totalPayersValue').textContent = formatNumber(metrics.t
     // Atualizar a tabela de ordens (se você quiser que as novas ordens apareçam sem recarregar a página)
     const tableBody = document.querySelector('.table tbody');
     if (tableBody) {
-    tableBody.innerHTML = ''; // Limpa as linhas existentes
-    allOrders.slice(0, 10).forEach(order => { // Mostra apenas as 10 ordens mais recentes
+        tableBody.innerHTML = ''; // Limpa as linhas existentes
+        allOrders.slice(0, 10).forEach(order => { // Mostra apenas as 10 ordens mais recentes
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${order.orderId}</td>
@@ -1294,8 +1309,8 @@ document.getElementById('totalPayersValue').textContent = formatNumber(metrics.t
                 </button>
             </td>
         `;
-        tableBody.appendChild(row);
-    });
+            tableBody.appendChild(row);
+        });
     }
 }
 
@@ -1303,16 +1318,36 @@ document.getElementById('totalPayersValue').textContent = formatNumber(metrics.t
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Dashboard PagJunto Corporate carregado');
 
-    // Remove as condições EJS nos cartões de métricas no HTML
-    // E chama updateDashboardDisplay para preencher os valores iniciais
     updateDashboardDisplay();
 
-    // Animações de entrada (mantidas)
-    const cards = document.querySelectorAll('.metrics-grid .metric-card, .section, .chart-card');
+    // Lógica para o botão de copiar a API Key
+    const copyApiKeyButton = document.getElementById('copyApiKeyButton');
+    if (copyApiKeyButton) {
+        copyApiKeyButton.addEventListener('click', function() {
+            const apiKeyInput = document.getElementById('apiKeyInput');
+            const button = this;
+            const buttonTextSpan = button.querySelector('.btn-text');
+            const originalText = buttonTextSpan.textContent;
+
+            navigator.clipboard.writeText(apiKeyInput.value).then(() => {
+                buttonTextSpan.textContent = 'Copiada!';
+                showToast('Chave de API copiada com sucesso!');
+                setTimeout(() => {
+                    buttonTextSpan.textContent = originalText;
+                }, 2500);
+            }).catch(err => {
+                console.error('Erro ao copiar a chave de API:', err);
+                fallbackCopyTextToClipboard(apiKeyInput.value);
+                showToast('Chave de API copiada com sucesso!');
+            });
+        });
+    }
+
+    // Animações de entrada
+    const cards = document.querySelectorAll('.metrics-grid .metric-card, .section, .chart-card, .content-section');
     cards.forEach((card, index) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
-
         setTimeout(() => {
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             card.style.opacity = '1';
@@ -1359,7 +1394,7 @@ function copyOrderLink(event, orderId) {
         button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
         button.classList.add('copied');
         
-        showToast();
+        showToast('Link da ordem copiado!');
         
         setTimeout(() => {
             button.innerHTML = originalContent;
@@ -1384,7 +1419,7 @@ function fallbackCopyTextToClipboard(text) {
     
     try {
         document.execCommand('copy');
-        showToast();
+        showToast('Copiado para a área de transferência!');
     } catch (err) {
         console.error('Fallback: Erro ao copiar', err);
     }
@@ -1392,8 +1427,10 @@ function fallbackCopyTextToClipboard(text) {
     document.body.removeChild(textArea);
 }
 
-function showToast() {
+function showToast(message = 'Copiado para a área de transferência!') {
     const toast = document.getElementById('copyToast');
+    if (!toast) return;
+    toast.textContent = message;
     toast.classList.add('show');
     
     setTimeout(() => {
