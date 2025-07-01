@@ -779,6 +779,38 @@
                 <div class="metric-value" id="progressOrdersValue">0</div>
                 <div class="metric-subtitle">Aguardando pagamento</div>
             </div>
+            <div class="metric-card">
+    <div class="metric-header">
+        <span class="metric-title">Ticket Médio</span>
+        <div class="metric-icon">
+            <i class="fas fa-receipt"></i>
+        </div>
+    </div>
+    <div class="metric-value" id="averageTicketValue">R$ 0,00</div>
+    <div class="metric-subtitle">Valor médio por ordem</div>
+</div>
+
+<div class="metric-card">
+    <div class="metric-header">
+        <span class="metric-title">Taxa de Conversão</span>
+        <div class="metric-icon">
+            <i class="fas fa-bullseye"></i>
+        </div>
+    </div>
+    <div class="metric-value" id="conversionRateValue">0%</div>
+    <div class="metric-subtitle">% de ordens pagas</div>
+</div>
+
+<div class="metric-card">
+    <div class="metric-header">
+        <span class="metric-title">Total de Pagadores</span>
+        <div class="metric-icon">
+            <i class="fas fa-users"></i>
+        </div>
+    </div>
+    <div class="metric-value" id="totalPayersValue">0</div>
+    <div class="metric-subtitle">Pagamentos individuais recebidos</div>
+</div>
         </div>
 
         <div class="charts-container">
@@ -930,14 +962,13 @@ function calculateDashboardMetrics(orders) {
     let freshOrders = 0;
     let progressOrders = 0;
     let paidOrders = 0;
-    // O saldo da conta geralmente não é calculado apenas a partir das ordens,
-    // mas sim de um registro de transações financeiras.
-    // Por isso, manteremos um valor mockado ou buscado de outra forma.
+    let totalPayers = 0; // Nova métrica
     let accountBalance = "<%= Number(balance.data.available_amount) + Number(balance.data.waiting_funds_amount)  %>";
 
     orders.forEach(order => {
         totalSales += order.totalValue || 0;
-        totalPaidValue += order.paidValue || 0; // Use || 0 para garantir que não haja NaN se o campo estiver faltando
+        totalPaidValue += order.paidValue || 0;
+        totalPayers += (order.payersIds ? order.payersIds.length : 0); // Soma o número de pagadores de cada ordem
 
         switch (order.status) {
             case 'fresh':
@@ -952,6 +983,10 @@ function calculateDashboardMetrics(orders) {
         }
     });
 
+    // Novos cálculos
+    const averageTicket = totalOrders > 0 ? totalSales / totalOrders : 0;
+    const conversionRate = totalOrders > 0 ? (paidOrders / totalOrders) * 100 : 0;
+
     return {
         accountBalance: accountBalance,
         totalSales: totalSales,
@@ -959,7 +994,10 @@ function calculateDashboardMetrics(orders) {
         totalOrders: totalOrders,
         freshOrders: freshOrders,
         progressOrders: progressOrders,
-        paidOrders: paidOrders
+        paidOrders: paidOrders,
+        averageTicket: averageTicket, // Novo
+        conversionRate: conversionRate, // Novo
+        totalPayers: totalPayers // Novo
     };
 }
 
@@ -1235,8 +1273,8 @@ function updateDashboardDisplay() {
     }
 
     // Atualizar a tabela de ordens (se você quiser que as novas ordens apareçam sem recarregar a página)
-const tableBody = document.querySelector('.table tbody');
-if (tableBody) {
+    const tableBody = document.querySelector('.table tbody');
+    if (tableBody) {
     tableBody.innerHTML = ''; // Limpa as linhas existentes
     allOrders.slice(0, 10).forEach(order => { // Mostra apenas as 10 ordens mais recentes
         const row = document.createElement('tr');
@@ -1255,7 +1293,7 @@ if (tableBody) {
         `;
         tableBody.appendChild(row);
     });
-}
+    }
 }
 
 // --- Inicialização ---
