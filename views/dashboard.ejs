@@ -1214,6 +1214,9 @@ function updateDashboardDisplay() {
     document.getElementById('totalPaidValue').textContent = formatCurrency(metrics.totalPaidValue);
     document.getElementById('totalOrdersValue').textContent = formatNumber(metrics.totalOrders);
     document.getElementById('progressOrdersValue').textContent = formatNumber(metrics.progressOrders);
+    document.getElementById('averageTicketValue').textContent = formatCurrency(metrics.averageTicket);
+document.getElementById('conversionRateValue').textContent = metrics.conversionRate.toFixed(1).replace('.', ',') + '%';
+document.getElementById('totalPayersValue').textContent = formatNumber(metrics.totalPayers);
     
     // LINHAS ADICIONADAS PARA OS NOVOS CARDS
     document.getElementById('paidOrdersValue').textContent = formatNumber(metrics.paidOrders);
