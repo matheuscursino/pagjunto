@@ -75,14 +75,18 @@ app.get('/dashboard', (req, res) => {
                         partnerId: decoded.partnerId
                     }
                 }, axiosConfig).then((response2) => {
-                    var orders = response2.data
+                    var dashboardData = response2.data
                     axios.get('https://api.pagjunto.com/partner/balance', {
                         data: {
                             recipient_id: partnerData.recipient_id
                         }
                     }, axiosConfig).then((response3)=> {
                         var balance = response3.data
-                        res.render('dashboard', {partnerData, orders, balance})
+                        res.render('dashboard', {
+                            partnerData:partnerData,
+                            balance: balance,
+                            stats: dashboardData.stats, 
+                            orders: dashboardData.recentOrders})
 
                     })
                 })
