@@ -513,10 +513,10 @@
 
         try {
             const payload = {
+                name: orderName || '', 
                 partnerId: localPartnerId,
                 totalValue: totalValue,
                 apiKey: localPartnerApiKey,
-                name: orderName || undefined 
             };
 
             const response = await fetch('https://api.pagjunto.com/order', {
