@@ -118,7 +118,6 @@
         .btn-secondary:hover:not(:disabled) { background-color: var(--bg-secondary); border-color: var(--border-light); }
         .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        /* --- NOVOS ESTILOS PARA MODAL E BOTÃO QR --- */
         .qr-btn {
             background-color: var(--bg-card);
             color: var(--text-primary);
@@ -167,7 +166,7 @@
             margin-bottom: 20px;
             text-align: center;
         }
-        #qrcode {
+        #qrcode-container {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -190,7 +189,6 @@
         }
         @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
         @keyframes slideIn { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
-        /* --- FIM DOS NOVOS ESTILOS --- */
 
         @media (max-width: 1024px) { .main-content { padding: 32px 24px; } .charts-container { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { body { font-size: 13px; } .header-content { padding: 16px 24px; flex-direction: column; gap: 16px; align-items: center; } .main-content { padding: 24px 16px; } .page-title { font-size: 28px; } .metrics-grid { grid-template-columns: 1fr 1fr; } .metric-value { font-size: 24px; } .table-container { border: 1px solid var(--border-light); border-radius: var(--radius-lg); } .table { min-width: 700px; } .create-order-section, .content-section, .chart-card { padding: 24px; } }
@@ -232,7 +230,10 @@
                     <p class="order-result-text">Link da Ordem Criada:</p>
                     <a id="orderLink" href="#" target="_blank" class="order-link"></a>
                 </div>
-                <button id="copyLinkButton" class="btn-copy"><i class="fas fa-copy"></i> Copiar</button>
+                <div class="order-result-actions" style="display: flex; gap: 8px;">
+                    <button id="copyLinkButton" class="btn-copy"><i class="fas fa-copy"></i> Copiar</button>
+                    <button id="qrCodeNewOrderButton" class="btn-copy"><i class="fas fa-qrcode"></i> QR Code</button>
+                </div>
             </div>
         </section>
         <div class="metrics-grid">
@@ -342,7 +343,7 @@
     </div>
     
     <footer class="footer">
-        <p>&copy; 2024 PagJunto. Todos os direitos reservados. | <a href="#">Política de Privacidade</a> | <a href="#">Termos de Serviço</a></p>
+        <p>&copy; 2025 PagJunto. Todos os direitos reservados. | <a href="#">Política de Privacidade</a> | <a href="#">Termos de Serviço</a></p>
     </footer>
 
 <script>
@@ -365,7 +366,6 @@
     const prevPageBtn = document.getElementById('prevPageBtn');
     const nextPageBtn = document.getElementById('nextPageBtn');
     const pageIndicator = document.getElementById('pageIndicator');
-    // --- NOVOS Seletores para o Modal ---
     const qrCodeModal = document.getElementById('qrCodeModal');
     const qrCodeContainer = document.getElementById('qrcode-container');
     const qrCodeModalCloseBtn = document.querySelector('.modal-close-btn');
@@ -413,7 +413,7 @@
         return { labels, data };
     }
 
-    // --- Lógica de Paginação (ATUALIZADA com novo botão) ---
+    // --- Lógica de Paginação (sem mudanças) ---
     function displayOrdersForPage(page) {
         currentPage = page;
         tableBody.innerHTML = '';
@@ -547,29 +547,30 @@
         const orderLink = `https://pagjunto.com/${localPartnerId}/${orderId}`; 
         copyToClipboard(orderLink, 'Link da ordem copiado!'); 
         const button = event.target.closest('.copy-btn'); 
-        if (button) { const originalText = button.innerHTML; button.innerHTML = '<i class="fas fa-check"></i> Copiado!'; button.classList.add('copied'); setTimeout(() => { button.innerHTML = originalText; button.classList.remove('copied'); }, 2000); } 
+        if (button) { const originalHTML = button.innerHTML; button.innerHTML = '<i class="fas fa-check"></i> Copiado!'; button.classList.add('copied'); setTimeout(() => { button.innerHTML = originalHTML; button.classList.remove('copied'); }, 2000); } 
     }
     document.getElementById('copyApiKeyButton').addEventListener('click', function() { copyToClipboard(localPartnerApiKey, 'Chave de API copiada!'); });
     function showToast(message) { const toast = document.getElementById('copyToast'); if (!toast) return; toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
 
-    // --- NOVAS FUNÇÕES PARA O MODAL ---
+    // --- FUNÇÕES DO MODAL E QR CODE (Refatorado) ---
+    function generateAndShowQrModal(link) {
+        qrCodeContainer.innerHTML = ''; // Limpa o QR code anterior
+        new QRCode(qrCodeContainer, {
+            text: link,
+            width: 256,
+            height: 256,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        qrLinkText.textContent = link;
+        qrCodeModal.style.display = 'block';
+    }
+
     function showQrCode(event, orderId) {
         event.stopPropagation();
         const orderLink = `https://pagjunto.com/${localPartnerId}/${orderId}`;
-        
-        qrCodeContainer.innerHTML = ''; // Limpa o QR code anterior
-
-        new QRCode(qrCodeContainer, {
-            text: orderLink,
-            width: 256,
-            height: 256,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-        
-        qrLinkText.textContent = orderLink;
-        qrCodeModal.style.display = 'block';
+        generateAndShowQrModal(orderLink);
     }
 
     function setupModalListeners() {
@@ -585,11 +586,29 @@
 
     // --- Inicialização do Dashboard ---
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('Dashboard PagJunto Corporate carregado.');
         updateDashboardDisplay();
         setupPaginationListeners();
-        setupModalListeners(); // <--- Adicionado listener do modal
+        setupModalListeners();
         displayOrdersForPage(1);
+
+        // --- ADICIONADO: Listeners para os botões de Nova Ordem ---
+        document.getElementById('copyLinkButton').addEventListener('click', (event) => {
+            const link = document.getElementById('orderLink').href;
+            copyToClipboard(link, 'Link da ordem copiado!');
+            const button = event.currentTarget;
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+            }, 2000);
+        });
+
+        document.getElementById('qrCodeNewOrderButton').addEventListener('click', () => {
+            const link = document.getElementById('orderLink').href;
+            generateAndShowQrModal(link);
+        });
+        
+        // Animação de entrada dos elementos
         const animatedElements = document.querySelectorAll('.metric-card, .chart-card, .content-section, .create-order-section');
         animatedElements.forEach((el, index) => {
             el.style.opacity = '0';
