@@ -17,7 +17,6 @@
     <link rel="manifest" href="/site.webmanifest">
 
     <style>
-        /* CSS (com adições para o modal e botão de QR) */
         :root {
             --primary-color: #0d6efd;
             --primary-dark: #0b5ed7;
@@ -193,6 +192,71 @@
         @media (max-width: 1024px) { .main-content { padding: 32px 24px; } .charts-container { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { body { font-size: 13px; } .header-content { padding: 16px 24px; flex-direction: column; gap: 16px; align-items: center; } .main-content { padding: 24px 16px; } .page-title { font-size: 28px; } .metrics-grid { grid-template-columns: 1fr 1fr; } .metric-value { font-size: 24px; } .table-container { border: 1px solid var(--border-light); border-radius: var(--radius-lg); } .table { min-width: 700px; } .create-order-section, .content-section, .chart-card { padding: 24px; } }
         @media (max-width: 576px) { .metrics-grid { grid-template-columns: 1fr; } .order-result { flex-direction: column; align-items: flex-start; } .btn-copy { margin-top: 8px; } }
+
+        /* --- NOVOS ESTILOS APENAS PARA O DROPDOWN --- */
+        .details-btn-table {
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .details-btn-table:hover {
+            background-color: var(--bg-secondary);
+        }
+        .details-btn-table[aria-expanded="true"] {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .details-row td {
+            background-color: #fafbfd;
+            box-shadow: inset 0 5px 6px -5px rgba(0,0,0,0.08);
+            padding: 24px 30px 24px 80px !important;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .details-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        .details-content .detail-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            align-items: flex-start;
+            font-size: 14px;
+        }
+        .details-content strong {
+            font-weight: 500;
+            color: var(--text-primary);
+            width: 120px;
+            flex-shrink: 0;
+        }
+        .details-content ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .details-content ul li {
+            font-family: 'SF Mono', monospace;
+            background-color: var(--bg-secondary);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -305,7 +369,6 @@
                             <th>Valor Total</th>
                             <th>Valor Pago</th>
                             <th>Status</th>
-                            <th>Pagadores</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -371,7 +434,7 @@
     const qrCodeModalCloseBtn = document.querySelector('.modal-close-btn');
     const qrLinkText = document.getElementById('qrLinkText');
 
-    // --- Funções de Formatação (sem mudanças) ---
+    // --- Funções de Formatação ---
     function formatCurrency(value) {
         const numValue = typeof value === 'string' ? parseFloat(value) : value;
         if (isNaN(numValue)) return 'R$ 0,00';
@@ -387,7 +450,7 @@
         return numValue.toLocaleString('pt-BR');
     }
 
-    // --- Função de Cálculo para Gráfico (sem mudanças) ---
+    // --- Função de Cálculo para Gráfico ---
     function calculateMonthlySalesData(orders) {
         const monthlyData = {};
         const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
@@ -413,33 +476,61 @@
         return { labels, data };
     }
 
-    // --- Lógica de Paginação (sem mudanças) ---
-    function displayOrdersForPage(page) {
+    // --- Lógica de Paginação (com correção da borda) ---
+function displayOrdersForPage(page) {
         currentPage = page;
         tableBody.innerHTML = '';
         if (recentOrders.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Nenhuma ordem encontrada.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Nenhuma ordem encontrada.</td></tr>`;
             updatePaginationControls();
             return;
         }
         const start = (page - 1) * ORDERS_PER_PAGE;
         const end = start + ORDERS_PER_PAGE;
         const paginatedOrders = recentOrders.slice(start, end);
+
         paginatedOrders.forEach(order => {
-            const payersList = (order.payersIds && order.payersIds.length > 0) ? order.payersIds.join(', ') : '';
-            const row = `
-                <tr>
+            const mainRow = `
+                <tr class="main-row">
                     <td>${order.orderId}</td>
                     <td>${formatCurrency(order.totalValue || 0)}</td>
                     <td>${formatCurrency(order.paidValue || 0)}</td>
                     <td><span class="status-badge ${order.status}">${order.status}</span></td>
-                    <td><span class="payer-ids" title="${payersList}">${payersList}</span></td>
-                    <td style="display: flex; gap: 8px; align-items: center;">
-                        <button class="copy-btn" onclick="copyOrderLink(event, '${order.orderId}')"><i class="fas fa-copy"></i> Copiar</button>
-                        <button class="qr-btn" onclick="showQrCode(event, '${order.orderId}')"><i class="fas fa-qrcode"></i> QR Code</button>
+                    <td>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button class="details-btn-table" title="Ver Detalhes" aria-expanded="false" onclick="toggleOrderDetails(event, '${order.orderId}')"><i class="fas fa-chevron-down"></i> Detalhes</button>
+                            <button class="copy-btn" onclick="copyOrderLink(event, '${order.orderId}')"><i class="fas fa-copy"></i> Copiar</button>
+                            <button class="qr-btn" onclick="showQrCode(event, '${order.orderId}')"><i class="fas fa-qrcode"></i> QR Code</button>
+                        </div>
                     </td>
                 </tr>`;
-            tableBody.innerHTML += row;
+
+            const payersListHTML = (order.payersIds && order.payersIds.length > 0)
+                ? `<ul>${order.payersIds.map(id => `<li>${id}</li>`).join('')}</ul>`
+                : '<span>Nenhum pagador identificado.</span>';
+
+            const detailsRow = `
+                <tr class="details-row" id="details-row-${order.orderId}" style="display: none;">
+                    <td colspan="5">
+                        <div class="details-content">
+                            <h4>Detalhes da Ordem</h4>
+                            <div class="detail-item">
+                                <strong>ID da Ordem:</strong>
+                                <span>${order.orderId}</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Data de Criação:</strong>
+                                <span>${new Date(order.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Pagadores:</strong>
+                                ${payersListHTML}
+                            </div>
+                        </div>
+                    </td>
+                </tr>`;
+
+            tableBody.innerHTML += mainRow + detailsRow;
         });
         updatePaginationControls();
     }
@@ -470,7 +561,7 @@
         });
     }
 
-    // --- Funções do Dashboard (sem mudanças) ---
+    // --- Funções do Dashboard ---
     function updateDashboardDisplay() {
         const totalBalanceCents = (balance.data.available_amount || 0) + (balance.data.waiting_funds_amount || 0);
         document.getElementById('accountBalanceValue').textContent = formatCurrencyFromCents(totalBalanceCents);
@@ -500,7 +591,7 @@
         displayOrdersForPage(1); 
     }
 
-    // --- Lógica de Formulário (sem mudanças) ---
+    // --- Lógica de Formulário ---
     document.getElementById('newOrderForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const totalValueInput = document.getElementById('totalValue');
@@ -540,7 +631,7 @@
         }
     });
 
-    // --- Funções de Copiar e Toast (sem mudanças) ---
+    // --- Funções de Copiar e Toast ---
     function copyToClipboard(text, successMessage) { navigator.clipboard.writeText(text).then(() => { showToast(successMessage); }).catch(err => { console.error('Falha ao copiar:', err); const textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed"; document.body.appendChild(textArea); textArea.focus(); textArea.select(); try { document.execCommand('copy'); showToast(successMessage); } catch (e) { console.error('Fallback falhou:', e); alert('Não foi possível copiar.'); } document.body.removeChild(textArea); }); }
     function copyOrderLink(event, orderId) { 
         event.stopPropagation();
@@ -552,9 +643,9 @@
     document.getElementById('copyApiKeyButton').addEventListener('click', function() { copyToClipboard(localPartnerApiKey, 'Chave de API copiada!'); });
     function showToast(message) { const toast = document.getElementById('copyToast'); if (!toast) return; toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
 
-    // --- FUNÇÕES DO MODAL E QR CODE (Refatorado) ---
+    // --- FUNÇÕES DO MODAL E QR CODE ---
     function generateAndShowQrModal(link) {
-        qrCodeContainer.innerHTML = ''; // Limpa o QR code anterior
+        qrCodeContainer.innerHTML = ''; 
         new QRCode(qrCodeContainer, {
             text: link,
             width: 256,
@@ -588,11 +679,11 @@
     document.addEventListener('DOMContentLoaded', function() {
         updateDashboardDisplay();
         setupPaginationListeners();
-        setupModalListeners();
+        setupModalListeners(); 
         displayOrdersForPage(1);
 
-        // --- ADICIONADO: Listeners para os botões de Nova Ordem ---
         document.getElementById('copyLinkButton').addEventListener('click', (event) => {
+            event.stopPropagation();
             const link = document.getElementById('orderLink').href;
             copyToClipboard(link, 'Link da ordem copiado!');
             const button = event.currentTarget;
@@ -603,12 +694,12 @@
             }, 2000);
         });
 
-        document.getElementById('qrCodeNewOrderButton').addEventListener('click', () => {
+        document.getElementById('qrCodeNewOrderButton').addEventListener('click', (event) => {
+            event.stopPropagation();
             const link = document.getElementById('orderLink').href;
             generateAndShowQrModal(link);
         });
         
-        // Animação de entrada dos elementos
         const animatedElements = document.querySelectorAll('.metric-card, .chart-card, .content-section, .create-order-section');
         animatedElements.forEach((el, index) => {
             el.style.opacity = '0';
@@ -620,6 +711,25 @@
             }, index * 60);
         });
     });
+
+    function toggleOrderDetails(event, orderId) {
+        event.stopPropagation();
+        const detailsRow = document.getElementById('details-row-' + orderId);
+        const button = event.currentTarget;
+        const icon = button.querySelector('i');
+
+        if (detailsRow.style.display === 'none') {
+            detailsRow.style.display = 'table-row';
+            icon.classList.remove('fa-chevron-down');
+            icon.classList.add('fa-chevron-up');
+            button.setAttribute('aria-expanded', 'true');
+        } else {
+            detailsRow.style.display = 'none';
+            icon.classList.remove('fa-chevron-up');
+            icon.classList.add('fa-chevron-down');
+            button.setAttribute('aria-expanded', 'false');
+        }
+    }
 </script>
 </body>
 </html>
