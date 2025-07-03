@@ -506,7 +506,7 @@
         const orderNameInput = document.getElementById('orderName');
         const totalValueInput = document.getElementById('totalValue');
         const totalValue = parseFloat(totalValueInput.value);
-        const orderName = orderNameInput.value.trim();
+        const orderName = orderNameInput.value;
         const submitButton = e.target.querySelector('button[type="submit"]');
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
         submitButton.disabled = true;
@@ -540,6 +540,7 @@
             showToast('Ordem criada com sucesso!');
             
             const newOrder = {
+                name: name,
                 orderId: orderId,
                 orderName: orderName,
                 totalValue: totalValue,
