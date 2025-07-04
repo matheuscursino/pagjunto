@@ -880,7 +880,7 @@
                             body: JSON.stringify({
                                 name: name,
                                 cpf: cpf.replace(/\D/g, ''),
-                                amount: valor,
+                                amount: Math.round(valor * 100),
                                 recipient_id: recipient_id
                             })
                         });
