@@ -812,7 +812,7 @@
                         if (tentativas > 30) clearInterval(pollingInterval);
 
                         try {
-                            const response = await fetch(`https://api.pagjunto.com/payment/status/${chargeId}/${id2}/${cpfInput.value}/${valueInput.value}`);
+                            const response = await fetch(`https://api.pagjunto.com/payment/status/${chargeId}/${id2}/${cpfInput.value}/${valueInput.value}/${nameInput.value}`);
                             const data = await response.json();
 
                             if (data.status === 'paid') {
