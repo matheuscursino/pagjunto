@@ -117,9 +117,11 @@
         .details-content .detail-item { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; font-size: 14px; }
         .details-content strong { font-weight: 500; color: var(--text-muted); margin-bottom: 2px; }
         .details-content ul { list-style-type: none; padding-left: 0; margin: 0; }
-        .details-content ul li { background-color: var(--bg-secondary); padding: 6px 10px; border-radius: var(--radius-md); font-size: 13px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .details-content ul li strong { color: var(--text-body); font-weight: 500; margin: 0; }
-        .details-content ul li span { font-family: 'SF Mono', monospace; }
+        .details-content .payer-details-list li { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background-color: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: 6px; }
+        .details-content .payer-info { display: flex; flex-direction: column; align-items: flex-start; }
+        .details-content .payer-info strong { font-weight: 600; color: var(--text-primary); }
+        .details-content .payer-id { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--text-muted); }
+        .details-content .payer-amount { font-weight: 600; font-size: 14px; color: var(--primary-color); }
         .modal { display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); animation: fadeIn 0.3s; }
         .modal-content { background-color: #fefefe; margin: 15% auto; padding: 24px; border: 1px solid #888; width: 90%; max-width: 320px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); position: relative; animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
         .modal-content h2 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 20px; text-align: center; }
@@ -405,10 +407,17 @@
 
             let payersListHTML = '<span>Nenhum pagador identificado.</span>';
             if (order.payersIds && order.payersIds.length > 0) {
-                payersListHTML = `<ul>${
+                payersListHTML = `<ul class="payer-details-list">${
                     order.payersIds.map((id, index) => {
                         const name = (order.payersNames && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
-                        return `<li><strong>${name}</strong> <span>(${id})</span></li>`;
+                        const value = (order.payersValues && order.payersValues[index]) ? formatCurrency(order.payersValues[index]) : '';
+                        return `<li>
+                                    <div class="payer-info">
+                                        <strong>${name}</strong>
+                                        <span class="payer-id">(${id})</span>
+                                    </div>
+                                    <span class="payer-amount">${value}</span>
+                                </li>`;
                     }).join('')
                 }</ul>`;
             }
@@ -548,8 +557,9 @@
             showToast('Ordem criada com sucesso!');
             
             const newOrder = {
-                name: orderName,
+                name: name,
                 orderId: orderId,
+                orderName: orderName,
                 totalValue: totalValue,
                 paidValue: 0,
                 status: 'fresh',
