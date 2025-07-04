@@ -845,7 +845,7 @@
                     const paidValue = <%= orderData.paidValue %>;
                     const restante = totalValue - paidValue;
                     
-                    if (!name) {
+                    if (!fullName) {
                         mostrarErro("Por favor, informe seu nome completo.");
                         nameInput.focus();
                         return;
