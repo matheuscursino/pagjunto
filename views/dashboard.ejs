@@ -96,7 +96,7 @@
         .status-badge.progress { background-color: var(--status-progress-bg); color: var(--status-progress-text); }
         .status-badge.paid { background-color: var(--status-paid-bg); color: var(--status-paid-text); }
         .footer { background-color: var(--bg-secondary); color: var(--text-muted); text-align: center; padding: 24px 32px; margin-top: 48px; font-size: 13px; border-top: 1px solid var(--border-light); }
-        .toast { position: fixed; top: 80px; right: 20px; background: #28a745; color: white; padding: 12px 20px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transform: translateX(120%); transition: transform 0.3s ease; z-index: 1000; }
+        .toast { position: fixed; top: 150px; right: 20px; background: #28a745; color: white; padding: 12px 20px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transform: translateX(120%); transition: transform 0.3s ease; z-index: 1000; }
         .toast.show { transform: translateX(0); }
         .pagination-controls { display: flex; justify-content: center; align-items: center; margin-top: 24px; gap: 12px; }
         .page-indicator { font-size: 14px; font-weight: 500; color: var(--text-secondary); padding: 0 12px; }
@@ -112,33 +112,46 @@
         .actions-cell { display: flex; gap: 6px; align-items: center; }
         .details-row { display: none; }
         .details-row.is-expanded { display: table-row; }
-        .details-row td { background-color: #fafbfd; box-shadow: inset 0 5px 6px -5px rgba(0,0,0,0.08); padding: 24px !important; }
+        .details-row td { background-color: #fafbfd; box-shadow: inset 0 5px 6px -5px rgba(0,0,0,0.08); padding: 24px 30px 24px 80px !important; }
         .details-content h4 { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
         .details-content .detail-item { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; font-size: 14px; }
         .details-content strong { font-weight: 500; color: var(--text-muted); margin-bottom: 2px; }
         .details-content ul { list-style-type: none; padding-left: 0; margin: 0; }
-        .details-content .payer-details-list li { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background-color: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: 6px; }
-        .details-content .payer-info { display: flex; flex-direction: column; align-items: flex-start; }
-        .details-content .payer-info strong { font-weight: 600; color: var(--text-primary); }
+        .details-content .payer-details-list li { padding: 8px 12px; background-color: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: 8px; }
+        .details-content .payer-details-list li strong { display: block; font-weight: 600; color: var(--text-primary); }
         .details-content .payer-id { font-family: 'SF Mono', monospace; font-size: 12px; color: var(--text-muted); }
-        .details-content .payer-amount { font-weight: 600; font-size: 14px; color: var(--primary-color); }
-        .modal { display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); animation: fadeIn 0.3s; }
-        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 24px; border: 1px solid #888; width: 90%; max-width: 320px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); position: relative; animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .details-content .payer-amount { font-weight: 600; font-size: 14px; color: var(--primary-color); display: block; margin-top: 4px; }
+        
+        /* Estilos do Modal Corrigidos */
+        .modal { display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); animation: fadeIn 0.3s; }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background-color: #fefefe; margin: 20px; padding: 24px; border: 1px solid #888; width: 90%; max-width: 320px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); position: relative; animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
         .modal-content h2 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 20px; text-align: center; }
         #qrcode-container { display: flex; justify-content: center; align-items: center; padding: 10px; margin-bottom: 10px; }
+        #qrcode-container img, #qrcode-container canvas { max-width: 100%; height: auto !important; }
         .modal-close-btn { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
         .modal-close-btn:hover, .modal-close-btn:focus { color: black; text-decoration: none; }
+        
         @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
         @keyframes slideIn { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+        
+        /* Estilos Responsivos Corrigidos */
+        @media (max-width: 1024px) {
+            .charts-container { grid-template-columns: 1fr; }
+        }
         @media (max-width: 768px) {
             .table-container { overflow-x: hidden; }
             .table thead { display: none; }
-            .table, .table tbody, .table tr, .table td { display: block; width: 100%; }
+            .table, .table tbody, .table tr.main-row { display: block; width: 100%; }
             .table tr.main-row { margin-bottom: 16px; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 12px; box-shadow: var(--shadow-sm); background-color: var(--bg-card); }
-            .table tr.details-row.is-expanded { display: block; border: 1px solid var(--border-light); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); margin-top: -17px; margin-bottom: 16px; background-color: var(--bg-card); padding-bottom: 16px; }
-            .table td { display: flex; justify-content: space-between; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--border-light) !important; text-align: right; }
-            .table tr.main-row td:last-of-type { border-bottom: none !important; }
-            .table td::before { content: attr(data-label); font-weight: 600; color: var(--text-primary); text-align: left; padding-right: 16px; }
+            .table tr.details-row { display: none !important; }
+            .table tr.details-row.is-expanded { display: block !important; border: 1px solid var(--border-light); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); margin-top: -17px; margin-bottom: 16px; background-color: #fafbfd; }
+            .table tr.details-row.is-expanded td { padding: 20px !important; text-align: left; }
+            .table td { display: flex; justify-content: space-between; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--border-light); }
+            .table tr.main-row td { border-bottom: none !important; }
+            .table td::before { content: attr(data-label); font-weight: 600; color: var(--text-primary); text-align: left; padding-right: 16px; flex-shrink: 0; }
+            .order-identity { display: flex; flex-direction: column; align-items: flex-end; }
+            .actions-cell { justify-content: flex-end; }
             .actions-cell .btn-text { display: none; }
             .actions-cell button { padding: 8px; width: 40px; height: 40px; justify-content: center; gap: 0; }
             .actions-cell button .fas { margin: 0; font-size: 1.1em; }
@@ -294,10 +307,14 @@
 
     <div id="qrCodeModal" class="modal">
         <div class="modal-content">
-            <span class="modal-close-btn">&times;</span>
-            <h2>QR Code da Ordem</h2>
-            <div id="qrcode-container"></div>
-            <p id="qrLinkText" style="text-align: center; word-break: break-all; font-size: 12px; color: var(--text-muted); margin-top: 10px;"></p>
+            <div class="modal-header">
+                <h2 class="modal-title">QR Code da Ordem</h2>
+<button class="modal-close-btn" id="closeQrModal">&times;</button>
+            </div>
+            <div class="modal-body centered">
+                <div id="qrcode-container"></div>
+                <p id="qrLinkText" style="text-align: center; word-break: break-all; font-size: 12px; color: var(--text-muted); margin-top: 10px;"></p>
+            </div>
         </div>
     </div>
     
@@ -386,12 +403,14 @@
         const paginatedOrders = recentOrders.slice(start, end);
 
         paginatedOrders.forEach(order => {
-            const orderNameHTML = order.name ? `<span class="order-name-cell">${order.name}</span>` : '';
+            const orderNameHTML = (order.name || order.orderName) ? `<span class="order-name-cell">${order.name || order.orderName}</span>` : '';
             const mainRow = `
                 <tr class="main-row">
                     <td data-label="Ordem">
-                        ${orderNameHTML}
-                        <span class="order-id-cell">${order.orderId}</span>
+                        <div class="order-identity">
+                            ${orderNameHTML}
+                            <span class="order-id-cell">${order.orderId}</span>
+                        </div>
                     </td>
                     <td data-label="Valor Total">${formatCurrency(order.totalValue || 0)}</td>
                     <td data-label="Valor Pago">${formatCurrency(order.paidValue || 0)}</td>
@@ -406,17 +425,16 @@
                 </tr>`;
 
             let payersListHTML = '<span>Nenhum pagador identificado.</span>';
-            if (order.payersIds && order.payersIds.length > 0) {
+            if (Array.isArray(order.payersIds) && order.payersIds.length > 0) {
                 payersListHTML = `<ul class="payer-details-list">${
                     order.payersIds.map((id, index) => {
-                        const name = (order.payersNames && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
-                        const value = (order.payersValues && order.payersValues[index]) ? formatCurrency(order.payersValues[index]) : '';
+                        const name = (Array.isArray(order.payersNames) && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
+                        const value = (Array.isArray(order.payersValues) && typeof order.payersValues[index] !== 'undefined') ? formatCurrency(order.payersValues[index]) : '';
+                        
                         return `<li>
-                                    <div class="payer-info">
-                                        <strong>${name}</strong>
-                                        <span class="payer-id">(${id})</span>
-                                    </div>
-                                    <span class="payer-amount">${value}</span>
+                                    <strong>${name}</strong>
+                                    <span class="payer-id">CPF: ${id}</span>
+                                    <span class="payer-amount">Valor Pago: ${value}</span>
                                 </li>`;
                     }).join('')
                 }</ul>`;
@@ -429,7 +447,7 @@
                             <h4>Detalhes da Ordem</h4>
                             <div class="detail-item">
                                 <strong>Nome:</strong>
-                                <span>${order.name || 'Não especificado'}</span>
+                                <span>${order.name || order.orderName || 'Não especificado'}</span>
                             </div>
                             <div class="detail-item">
                                 <strong>ID da Ordem:</strong>
@@ -557,14 +575,14 @@
             showToast('Ordem criada com sucesso!');
             
             const newOrder = {
-                name: name,
+                name: orderName,
                 orderId: orderId,
-                orderName: orderName,
                 totalValue: totalValue,
                 paidValue: 0,
                 status: 'fresh',
                 payersIds: [],
                 payersNames: [],
+                payersValues: [],
                 createdAt: new Date().toISOString()
             };
             updateDashboardWithNewOrder(newOrder);
@@ -590,19 +608,29 @@
     document.getElementById('copyApiKeyButton').addEventListener('click', function() { copyToClipboard(localPartnerApiKey, 'Chave de API copiada!'); });
     function showToast(message) { const toast = document.getElementById('copyToast'); if (!toast) return; toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
 
-    function generateAndShowQrModal(link) {
-        qrCodeContainer.innerHTML = ''; 
-        new QRCode(qrCodeContainer, {
-            text: link,
-            width: 256,
-            height: 256,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-        qrLinkText.textContent = link;
-        qrCodeModal.style.display = 'block';
-    }
+function generateAndShowQrModal(link) {
+    if (!qrCodeModal || !qrCodeContainer) return;
+
+    // 1. Limpa o contêiner e torna o modal visível ANTES de calcular o tamanho.
+    qrCodeContainer.innerHTML = ''; 
+    qrCodeModal.classList.add('show'); 
+
+    // 2. AGORA, com o modal visível, ele tem uma largura (clientWidth) válida.
+    const modalContent = qrCodeModal.querySelector('.modal-content');
+    const size = Math.min(modalContent.clientWidth * 0.8, 256); // O cálculo do tamanho agora funcionará.
+
+    // 3. Gere o QR Code com o tamanho correto.
+    new QRCode(qrCodeContainer, {
+        text: link,
+        width: size,
+        height: size,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    qrLinkText.textContent = link;
+}
 
     function showQrCode(event, orderId) {
         event.stopPropagation();
@@ -611,14 +639,23 @@
     }
 
     function setupModalListeners() {
-        qrCodeModalCloseBtn.onclick = function() {
-            qrCodeModal.style.display = "none";
+        if (qrCodeModalCloseBtn) {
+            qrCodeModalCloseBtn.addEventListener('click', () => {
+                qrCodeModal.classList.remove('show');
+            });
         }
-        window.onclick = function(event) {
-            if (event.target == qrCodeModal) {
-                qrCodeModal.style.display = "none";
+        if (qrCodeModal) {
+            qrCodeModal.addEventListener('click', (event) => {
+                if (event.target === qrCodeModal) {
+                    qrCodeModal.classList.remove('show');
+                }
+            });
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && qrCodeModal && qrCodeModal.classList.contains('show')) {
+                qrCodeModal.classList.remove('show');
             }
-        }
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -627,23 +664,29 @@
         setupModalListeners(); 
         displayOrdersForPage(1);
 
-        document.getElementById('copyLinkButton').addEventListener('click', (event) => {
-            event.stopPropagation();
-            const link = document.getElementById('orderLink').href;
-            copyToClipboard(link, 'Link da ordem copiado!');
-            const button = event.currentTarget;
-            const originalHTML = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
-            setTimeout(() => {
-                button.innerHTML = originalHTML;
-            }, 2000);
-        });
+        const copyButton = document.getElementById('copyLinkButton');
+        if(copyButton) {
+            copyButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const link = document.getElementById('orderLink').href;
+                copyToClipboard(link, 'Link da ordem copiado!');
+                const button = event.currentTarget;
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            });
+        }
 
-        document.getElementById('qrCodeNewOrderButton').addEventListener('click', (event) => {
-            event.stopPropagation();
-            const link = document.getElementById('orderLink').href;
-            generateAndShowQrModal(link);
-        });
+        const qrButton = document.getElementById('qrCodeNewOrderButton');
+        if(qrButton) {
+            qrButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const link = document.getElementById('orderLink').href;
+                generateAndShowQrModal(link);
+            });
+        }
         
         const animatedElements = document.querySelectorAll('.metric-card, .chart-card, .content-section, .create-order-section');
         animatedElements.forEach((el, index) => {
