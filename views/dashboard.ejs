@@ -382,7 +382,7 @@
         const paginatedOrders = recentOrders.slice(start, end);
 
         paginatedOrders.forEach(order => {
-            const orderNameHTML = order.orderName ? `<span class="order-name-cell">${order.orderName}</span>` : '';
+            const orderNameHTML = order.name ? `<span class="order-name-cell">${order.name}</span>` : '';
             const mainRow = `
                 <tr class="main-row">
                     <td data-label="Ordem">
@@ -412,7 +412,7 @@
                             <h4>Detalhes da Ordem</h4>
                             <div class="detail-item">
                                 <strong>Nome:</strong>
-                                <span>${order.orderName || 'Não especificado'}</span>
+                                <span>${order.name || 'Não especificado'}</span>
                             </div>
                             <div class="detail-item">
                                 <strong>ID da Ordem:</strong>
