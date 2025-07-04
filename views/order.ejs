@@ -811,9 +811,8 @@
 
                         try {
                             const fullName = nameInput.value.trim();
-                            const name = fullName.split(' ')[0];
                             const valorPago = valueInput.value.replace(',', '.');
-                            const response = await fetch(`https://api.pagjunto.com/payment/status/${chargeId}/${id2}/${cpfInput.value}/${valorPago}/${name}`);
+                            const response = await fetch(`https://api.pagjunto.com/payment/status/${chargeId}/${id2}/${cpfInput.value}/${valorPago}/${fullName}`);
                             const data = await response.json();
 
                             if (data.status === 'paid') {
@@ -839,7 +838,6 @@
                 async function gerarPix() {
                     limparEstado();
                     const fullName = nameInput.value.trim();
-                    const name = fullName.split(' ')[0];
                     const valorString = valueInput.value.replace(',', '.');
                     const valor = parseFloat(valorString);
                     const cpf = cpfInput.value;
@@ -882,7 +880,7 @@
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                name: name,
+                                name: fullName,
                                 cpf: cpf.replace(/\D/g, ''),
                                 amount: Math.round(valor * 100),
                                 recipient_id: recipient_id
