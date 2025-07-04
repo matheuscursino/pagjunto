@@ -495,16 +495,56 @@
                 transform: translateY(0) scale(1);
             }
         }
-        @media (max-width: 900px) {
+@media (max-width: 900px) {
             main {
                 flex-direction: column;
             }
+
+            /* --- Início da regra final e definitiva --- */
+
+            .card:not(.paid-card-message) > .section-title {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px 12px;
+            }
+            
+            /* 1. Espaçador para empurrar os botões/flag para a direita */
+            .card:not(.paid-card-message) > .section-title::before {
+                content: '';
+                order: 1;
+                flex-grow: 1;
+            }
+
+            /* 2. Grupo de botões e flag na primeira linha (topo) */
+            .card:not(.paid-card-message) > .section-title > .card-header-actions,
+            .card:not(.paid-card-message) > .section-title > .paid-flag {
+                order: 1;
+                margin-left: 0;
+            }
+            
+            /* 3. Quebra-linha invisível */
+            .card:not(.paid-card-message) > .section-title::after {
+                content: '';
+                order: 2; /* Fica entre o grupo de cima e o de baixo */
+                flex-basis: 100%; /* Força a quebra de linha */
+            }
+
+            /* 4. Grupo do ícone e texto na segunda linha (embaixo) */
+            .card:not(.paid-card-message) > .section-title > .fas,
+            .card:not(.paid-card-message) > .section-title > span:not(.paid-flag) {
+                order: 3; /* Renderiza este grupo por último */
+                /* Removemos o flex-basis: 100% daqui para que fiquem na mesma linha */
+            }
+
+            /* --- Fim da regra final e definitiva --- */
+
             .modal-content {
                 margin: 10px;
                 padding: 0;
             }
             .modal-header, .modal-body {
-                 padding: 20px;
+                padding: 20px;
             }
         }
         .logo:hover{
@@ -525,7 +565,7 @@
         <div class="card">
             <div class="section-title">
                 <i class="fas fa-file-invoice-dollar"></i>
-                <span>Resumo da Cobrança de <%= partnerData.partnerName %></span>
+                <span>Cobrança de <%= partnerData.partnerName %></span>
                 <div class="card-header-actions">
                     <button class="copy-link-btn" id="copyLinkBtn" title="Copiar link da cobrança">
                         <i class="fas fa-link"></i>

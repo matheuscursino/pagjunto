@@ -129,8 +129,32 @@
         .modal-content h2 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 20px; text-align: center; }
         #qrcode-container { display: flex; justify-content: center; align-items: center; padding: 10px; margin-bottom: 10px; }
         #qrcode-container img, #qrcode-container canvas { max-width: 100%; height: auto !important; }
-        .modal-close-btn { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .modal-close-btn:hover, .modal-close-btn:focus { color: black; text-decoration: none; }
+.modal-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.modal-close-btn:hover, .modal-close-btn:focus {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    text-decoration: none;
+    outline: none;
+}
         
         @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
         @keyframes slideIn { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
@@ -309,7 +333,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">QR Code da Ordem</h2>
-<button class="modal-close-btn" id="closeQrModal">&times;</button>
+                    <button class="modal-close-btn" id="closeQrModal">&times;</button>
             </div>
             <div class="modal-body centered">
                 <div id="qrcode-container"></div>
