@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-AR-SA" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pagamento Seguro - Pagjunto</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -17,38 +17,76 @@
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
             --primary-light: #dbeafe;
-            --accent: #059669;
+            --accent: #059669; /* Verde para sucesso */
             --accent-light: #d1fae5;
             --accent-hover: #a7f3d0;
             --error: #dc2626;
-            --bg: #f9fafb;
-            --card: #ffffff;
-            --text-header: #111827;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-header: #0f172a;
             --text-body: #374151;
             --text-muted: #6b7280;
-            --border: #e5e7eb;
-            --shadow: 0 8px 25px rgba(37, 99, 235, 0.08);
+            --border: #e2e8f0;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 32px rgba(37, 99, 235, 0.12);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            --gradient-accent: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
         }
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
         }
         body {
             font-family: 'Inter', sans-serif;
-            margin: 0;
-            background-color: var(--bg);
+            background: var(--bg-secondary);
             color: var(--text-body);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .bg-decoration {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(96, 165, 250, 0.05));
+            animation: float 20s ease-in-out infinite;
+        }
+        .bg-circle:nth-child(1) { width: 300px; height: 300px; top: 10%; left: -150px; }
+        .bg-circle:nth-child(2) { width: 200px; height: 200px; top: 60%; right: -100px; animation-delay: -7s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
         }
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
         }
         header {
-            background: var(--card);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
             padding: 20px 0;
             border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         .header-content {
             display: flex;
@@ -58,10 +96,15 @@
         header .logo {
             font-weight: 700;
             font-size: 24px;
-            color: var(--primary);
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
-        header .logo i {
-            margin-right: 8px;
+        header .logo:hover {
+            opacity: 0.8;
         }
         header .secure-badge {
             font-size: 14px;
@@ -81,19 +124,20 @@
             align-items: flex-start;
         }
         .card {
-            background: var(--card);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            padding: 30px;
+            margin-top: 50px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            padding: 30px 35px;
             flex: 1;
             min-width: 350px;
             transition: all 0.3s ease;
             position: relative;
-            margin-top: 40px
         }
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.1);
+            box-shadow: var(--shadow-lg);
         }
         .section-title {
             font-size: 20px;
@@ -120,12 +164,12 @@
             gap: 6px;
         }
         .copy-link-btn {
-            background: none;
+            background: var(--bg-secondary);
             border: 1px solid var(--border);
             color: var(--text-muted);
             width: 36px;
             height: 36px;
-            border-radius: 8px;
+            border-radius: var(--radius);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -138,13 +182,14 @@
             gap: 10px;
         }
         .copy-link-btn:hover {
-            background: var(--bg);
+            background: var(--bg-secondary);
             color: var(--primary);
-            border-color: var(--primary-light);
+            border-color: var(--primary);
+            transform: translateY(-2px);
         }
         .copy-link-btn.copied {
             color: var(--accent);
-            border-color: var(--accent-light);
+            border-color: var(--accent);
             background-color: var(--accent-light);
         }
         .copy-link-btn:disabled {
@@ -175,7 +220,7 @@
         }
         .info-group .value {
             font-size: 22px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-header);
         }
         .info-group .value.primary {
@@ -195,7 +240,7 @@
             margin-bottom: 8px;
         }
         .progress {
-            background-color: #e5e7eb;
+            background-color: #e2e8f0;
             height: 12px;
             border-radius: 6px;
             overflow: hidden;
@@ -205,6 +250,7 @@
             background: <%= (orderData.paidValue >= orderData.totalValue) ? 'var(--accent)' : 'var(--primary)' %>;
             width: <%= (orderData.paidValue / orderData.totalValue) * 100 %>%;
             transition: width 0.5s ease-in-out;
+            border-radius: 6px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -216,22 +262,23 @@
             font-size: 15px;
             color: var(--text-body);
         }
-        input[type="number"],
-        input[type="text"] {
+        input[type="text"],
+        input[type="number"] {
             width: 100%;
-            padding: 14px;
-            font-size: 16px;
+            padding: 16px;
+            font-size: 1rem;
             color: var(--text-body);
-            background-color: #fff;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), var(--bg-secondary));
             border: 1px solid var(--border);
-            border-radius: 10px;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            border-radius: var(--radius);
+            transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
         }
-        input[type="number"]:focus,
-        input[type="text"]:focus {
+        input[type="text"]:focus,
+        input[type="number"]:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px var(--primary-light);
+            background-color: var(--bg-primary);
         }
         .error-message {
             color: var(--error);
@@ -241,13 +288,13 @@
             height: 25px;
         }
         .btn {
-            background-color: var(--primary);
+            background: var(--gradient-accent);
             color: white;
             font-size: 16px;
-            padding: 15px;
+            padding: 16px;
             width: 100%;
             border: none;
-            border-radius: 10px;
+            border-radius: var(--radius);
             font-weight: 600;
             cursor: pointer;
             display: flex;
@@ -255,16 +302,18 @@
             justify-content: center;
             gap: 10px;
             margin-top: 5px;
-            transition: background-color 0.2s, transform 0.2s;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
         }
         .btn:hover {
-            background-color: var(--primary-hover);
             transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
         }
         .btn:disabled {
-            background-color: var(--text-muted);
+            background: var(--text-muted);
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
         .loader {
             width: 18px;
@@ -294,15 +343,16 @@
         }
         .qr-container img {
             max-width: 200px;
-            margin-bottom: 15px;
-            border-radius: 8px;
+            margin: 10px auto 15px;
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
         }
         .pix-key-wrapper {
             display: flex;
-            background-color: var(--bg);
+            background-color: var(--bg-secondary);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: var(--radius);
             padding: 4px;
             margin-top: 15px;
             align-items: center;
@@ -314,21 +364,22 @@
             color: var(--text-muted);
             font-size: 14px;
             outline: none;
-            padding: 0 8px;
+            padding: 8px;
         }
         .copy-btn {
-            background: var(--accent-light);
-            color: var(--accent);
+            background: var(--primary);
+            color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 10px 16px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.2s;
         }
         .copy-btn:hover {
-            background-color: var(--accent-hover);
+            background-color: var(--primary-hover);
+            transform: scale(1.05);
         }
         footer {
             text-align: center;
@@ -351,10 +402,10 @@
             text-decoration: underline;
         }
         .terms-consent {
-            margin-bottom: 15px;
-            padding: 10px;
+            margin-bottom: 20px;
+            padding: 12px;
             background-color: var(--primary-light);
-            border-radius: 10px;
+            border-radius: var(--radius);
             border: 1px solid rgba(37, 99, 235, 0.2);
         }
         .checkbox-container {
@@ -368,6 +419,7 @@
             height: 18px;
             accent-color: var(--primary);
             cursor: pointer;
+            flex-shrink: 0;
         }
         .checkbox-label {
             font-size: 14px;
@@ -379,7 +431,7 @@
             color: var(--primary);
             text-decoration: underline;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
         }
         .terms-link:hover {
             color: var(--primary-hover);
@@ -402,11 +454,11 @@
             justify-content: center;
         }
         .modal-content {
-            background-color: var(--card);
+            background-color: var(--bg-primary);
             margin: 20px;
             padding: 0;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
             width: 90%;
             max-width: 700px;
             max-height: 85vh;
@@ -441,10 +493,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, color 0.2s;
         }
         .close-btn:hover {
-            background-color: var(--bg);
+            background-color: var(--bg-secondary);
             color: var(--text-body);
         }
         .modal-body {
@@ -453,14 +505,8 @@
             padding: 25px 30px;
             overflow-y: auto;
         }
-        .modal-body.centered {
-            text-align: center;
-        }
-        #pageQrcodeContainer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        .modal-body.centered { text-align: center; }
+        #pageQrcodeContainer { display: flex; justify-content: center; align-items: center; }
         .modal-body h3 {
             color: var(--text-header);
             font-size: 18px;
@@ -468,91 +514,51 @@
             margin-top: 25px;
             margin-bottom: 15px;
         }
-        .modal-body h3:first-child {
-            margin-top: 0;
-        }
-        .modal-body p {
-            margin-bottom: 15px;
-        }
-        .modal-body ul {
-            margin-bottom: 15px;
-            padding-left: 20px;
-        }
-        .modal-body li {
-            margin-bottom: 8px;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        .modal-body h3:first-child { margin-top: 0; }
+        .modal-body p { margin-bottom: 15px; }
+        .modal-body ul { margin-bottom: 15px; padding-left: 20px; }
+        .modal-body li { margin-bottom: 8px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn {
-            from { 
-                opacity: 0;
-                transform: translateY(-30px) scale(0.95);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-@media (max-width: 900px) {
-            main {
-                flex-direction: column;
+
+        @media (max-width: 900px) {
+            main { flex-direction: column; }
+            .card {
+                padding: 25px;
             }
-
-            /* --- Início da regra final e definitiva --- */
-
+            /* Regra para reordenar o título do card em telas menores */
             .card:not(.paid-card-message) > .section-title {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                gap: 10px 12px;
+                display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px;
             }
-            
-            /* 1. Espaçador para empurrar os botões/flag para a direita */
             .card:not(.paid-card-message) > .section-title::before {
-                content: '';
-                order: 1;
-                flex-grow: 1;
+                content: ''; order: 1; flex-grow: 1;
             }
-
-            /* 2. Grupo de botões e flag na primeira linha (topo) */
             .card:not(.paid-card-message) > .section-title > .card-header-actions,
             .card:not(.paid-card-message) > .section-title > .paid-flag {
-                order: 1;
-                margin-left: 0;
+                order: 1; margin-left: 0;
             }
-            
-            /* 3. Quebra-linha invisível */
             .card:not(.paid-card-message) > .section-title::after {
-                content: '';
-                order: 2; /* Fica entre o grupo de cima e o de baixo */
-                flex-basis: 100%; /* Força a quebra de linha */
+                content: ''; order: 2; flex-basis: 100%;
             }
-
-            /* 4. Grupo do ícone e texto na segunda linha (embaixo) */
             .card:not(.paid-card-message) > .section-title > .fas,
             .card:not(.paid-card-message) > .section-title > span:not(.paid-flag) {
-                order: 3; /* Renderiza este grupo por último */
-                /* Removemos o flex-basis: 100% daqui para que fiquem na mesma linha */
+                order: 3;
             }
-
-            /* --- Fim da regra final e definitiva --- */
-
-            .modal-content {
-                margin: 10px;
-                padding: 0;
-            }
-            .modal-header, .modal-body {
-                padding: 20px;
-            }
-        }
-        .logo:hover{
-            cursor: pointer;
+            .modal-content { margin: 10px; padding: 0; }
+            .modal-header, .modal-body { padding: 20px; }
         }
     </style>
 </head>
 <body>
+    <div class="bg-decoration">
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+    </div>
+
     <header>
         <div class="container header-content">
             <div class="logo" onclick="window.location.href='/'">pagjunto</div>
@@ -561,6 +567,7 @@
             </div>
         </div>
     </header>
+
     <main class="container">
         <div class="card">
             <div class="section-title">
@@ -744,7 +751,7 @@
                     }
                 });
             }
-           
+            
             const termsModal = document.getElementById('termsModal');
             const openTermsModal = document.getElementById('openTermsModal');
             const closeModal = document.getElementById('closeModal');
@@ -953,6 +960,5 @@
             }
         });
     </script>
-
 </body>
 </html>
