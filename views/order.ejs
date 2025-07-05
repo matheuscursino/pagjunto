@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-AR-SA" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pagamento Seguro - Pagjunto</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -530,24 +530,6 @@
             .card {
                 padding: 25px;
             }
-            /* Regra para reordenar o título do card em telas menores */
-            .card:not(.paid-card-message) > .section-title {
-                display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px;
-            }
-            .card:not(.paid-card-message) > .section-title::before {
-                content: ''; order: 1; flex-grow: 1;
-            }
-            .card:not(.paid-card-message) > .section-title > .card-header-actions,
-            .card:not(.paid-card-message) > .section-title > .paid-flag {
-                order: 1; margin-left: 0;
-            }
-            .card:not(.paid-card-message) > .section-title::after {
-                content: ''; order: 2; flex-basis: 100%;
-            }
-            .card:not(.paid-card-message) > .section-title > .fas,
-            .card:not(.paid-card-message) > .section-title > span:not(.paid-flag) {
-                order: 3;
-            }
             .modal-content { margin: 10px; padding: 0; }
             .modal-header, .modal-body { padding: 20px; }
         }
@@ -646,7 +628,7 @@
                 </button>
             </form>
             <div class="qr-container" id="qrBox">
-                <p><strong>Tudo pronto!</strong> Escaneie o código abaixo:</p>
+                <p><strong>Tudo pronto!</strong> Escaneie o código abaixo para pagar:</p>
                 <img src="" alt="QR Code Pix" />
                 <p>Ou copie a chave Pix:</p>
                 <div class="pix-key-wrapper">
@@ -838,40 +820,6 @@
                     btnText.style.display = 'inline';
                 }
 
-                let pollingInterval;
-                let tentativas = 0;
-                function iniciarPolling(chargeId) {
-                    pollingInterval = setInterval(async () => {
-                        tentativas++;
-                        if (tentativas > 30) clearInterval(pollingInterval);
-
-                        try {
-                            const fullName = nameInput.value.trim();
-                            const firstName = fullName.split(' ')[0];
-                            const valorPago = valueInput.value.replace(',', '.');
-                            const response = await fetch(`https://api.pagjunto.com/payment/status/${chargeId}/${id2}/${cpfInput.value.replace(/\D/g, '')}/${valorPago}/${encodeURIComponent(firstName)}`);
-                            const data = await response.json();
-
-                            if (data.status === 'paid') {
-                                clearInterval(pollingInterval);
-                                document.querySelector('.card:last-of-type').innerHTML = `
-                                    <div class="paid-card-message">
-                                        <div class="section-title">
-                                            <i class="fas fa-check-circle" style="color: var(--accent);"></i>
-                                            Pagamento Recebido!
-                                        </div>
-                                        <p>A página será atualizada em alguns segundos.</p>
-                                    </div>`;
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 5000);
-                            }
-                        } catch (err) {
-                            console.error('Erro no polling:', err);
-                        }
-                    }, 10000);
-                }
-
                 async function gerarPix() {
                     limparEstado();
                     const fullName = nameInput.value.trim();
@@ -924,14 +872,20 @@
                                 name: firstName,
                                 cpf: cpf.replace(/\D/g, ''),
                                 amount: valueToPayInCents,
-                                recipient_id: recipient_id
+                                recipient_id: recipient_id,
+                                orderId: id2 // <<< ENVIANDO O ID DA ORDEM PARA O BACKEND
                             })
                         });
                         const data = await response.json();
                         if (!response.ok) {
                             throw new Error(data.error || 'Erro ao criar pagamento Pix.');
                         } else {
-                            iniciarPolling(data.data.id)
+                             // A LÓGICA DE POLLING FOI REMOVIDA DAQUI
+                            btnText.textContent = "QR Code Gerado!";
+                            btnText.style.display = 'inline';
+                            loader.style.display = 'none';
+                            generateBtn.style.background = 'var(--accent)';
+                            // O botão continuará desabilitado para evitar múltiplas cobranças
                         }
                         document.querySelector('#qrBox img').src = data.data.last_transaction.qr_code_url;
                         pixKeyInput.value = data.data.last_transaction.qr_code;
@@ -940,7 +894,7 @@
                     } catch (error) {
                         console.error(error);
                         mostrarErro("Erro ao gerar o Pix. Tente novamente.");
-                    } finally {
+                        // Reabilita o botão apenas em caso de erro
                         generateBtn.disabled = false;
                         btnText.style.display = 'inline';
                         loader.style.display = 'none';
