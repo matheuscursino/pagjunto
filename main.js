@@ -64,19 +64,19 @@ app.get('/dashboard', (req, res) => {
             .redirect('/login')
     } else {
         jwt.verify(req.cookies.access_token, process.env.SEGREDO, function(err, decoded){
-            axios.get('https://api.pagjunto.com/partner', {
+            axios.get(`${process.env.API_SITE_URL}/partner`, {
                 data: {
                     partnerId: decoded.partnerId
                 }
             }, axiosConfig).then((response) => {
                 var partnerData = response.data
-                axios.get('https://api.pagjunto.com/order/by-partner', {
+                axios.get(`${process.env.API_SITE_URL}/order/by-partner`, {
                     data: {
                         partnerId: decoded.partnerId
                     }
                 }, axiosConfig).then((response2) => {
                     var dashboardData = response2.data
-                    axios.get('https://api.pagjunto.com/partner/balance', {
+                    axios.get(`${process.env.API_SITE_URL}/partner/balance`, {
                         data: {
                             recipient_id: partnerData.recipient_id
                         }

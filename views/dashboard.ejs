@@ -2034,12 +2034,12 @@ function toggleOrderDetails(orderId) {
 
         // Order Actions
         function copyOrderLink(orderId) {
-            const orderLink = `https://pagjunto.com/${localPartnerId}/${orderId}`;
+            const orderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
             copyToClipboard(orderLink, 'Link da ordem copiado!');
         }
 
         function showQrCode(orderId) {
-            const orderLink = `https://pagjunto.com/${localPartnerId}/${orderId}`;
+            const orderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
             generateAndShowQrModal(orderLink);
         }
 
@@ -2117,7 +2117,7 @@ function toggleOrderDetails(orderId) {
                         apiKey: localPartnerApiKey,
                     };
 
-                    const response = await fetch('https://api.pagjunto.com/order', {
+                    const response = await fetch(`<%=process.env.API_SITE_URL%>/order`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -2132,7 +2132,7 @@ function toggleOrderDetails(orderId) {
                     
                     const orderLinkElement = document.getElementById('orderLink');
                     const orderCreationResult = document.getElementById('orderCreationResult');
-                    const generatedOrderLink = `https://pagjunto.com/${localPartnerId}/${orderId}`;
+                    const generatedOrderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
                     orderLinkElement.href = generatedOrderLink;
                     orderLinkElement.textContent = generatedOrderLink;
                     orderCreationResult.classList.add('show');

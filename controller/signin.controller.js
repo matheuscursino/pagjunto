@@ -12,7 +12,7 @@ export async function login(req, res) {
 
     try {
         // 🔗 Consulta a API com Axios
-        const response = await axios.get('https://api.pagjunto.com/partner/by-email', { data:{ 'email': email }});
+        const response = await axios.get(`${process.env.API_SITE_URL}/partner/by-email`, { data:{ 'email': email }});
 
         // Destructure directly and handle cases where data might be missing
         const { password: senhaCriptografada, partnerId } = response.data || {};
