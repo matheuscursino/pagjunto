@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-AR-SA" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pagamento Seguro - Pagjunto</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -12,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
-    <style>
+<script src="<%=process.env.API_SITE_URL%>/socket.io/socket.io.js"></script>    <style>
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
@@ -249,7 +248,7 @@
             height: 100%;
             background: <%= (orderData.paidValue >= orderData.totalValue) ? 'var(--accent)' : 'var(--primary)' %>;
             width: <%= (orderData.paidValue / orderData.totalValue) * 100 %>%;
-            transition: width 0.5s ease-in-out;
+            transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out; /* ATUALIZAÇÃO: Adicionado transition para cor */
             border-radius: 6px;
         }
         .form-group {
@@ -506,7 +505,7 @@
             overflow-y: auto;
         }
         .modal-body.centered { text-align: center; }
-        #pageQrcodeContainer { display: flex; justify-content: center; align-items: center; }
+        #pageQrcodeContainer { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
         .modal-body h3 {
             color: var(--text-header);
             font-size: 18px;
@@ -552,7 +551,7 @@
 
     <main class="container">
         <div class="card">
-            <div class="section-title">
+            <div class="section-title" id="summaryCardTitle">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <span>Cobrança de <%= partnerData.partnerName %></span>
                 <div class="card-header-actions">
@@ -575,16 +574,16 @@
             </div>
             <div class="info-group">
                 <label>Valor já pago</label>
-                <span class="value <%= (orderData.paidValue >= orderData.totalValue) ? 'paid' : 'primary' %>">R$ <%= orderData.paidValue.toFixed(2).replace('.', ',') %></span>
+                <span id="paidValueSpan" class="value <%= (orderData.paidValue >= orderData.totalValue) ? 'paid' : 'primary' %>">R$ <%= orderData.paidValue.toFixed(2).replace('.', ',') %></span>
             </div>
             <div class="info-group">
                 <label>Pagamentos recebidos</label>
-                <span class="value"><%= orderData.paymentsNumber %></span>
+                <span id="paymentsNumberSpan" class="value"><%= orderData.paymentsNumber %></span>
             </div>
             <div class="progress-container">
                 <label>Progresso do Pagamento</label>
                 <div class="progress">
-                    <div class="progress-fill"></div>
+                    <div id="progressFill" class="progress-fill"></div>
                 </div>
             </div>
         </div>
@@ -598,7 +597,7 @@
             <p>Este pagamento já foi totalmente finalizado. Obrigado!</p>
         </div>
         <% } else { %>
-        <div class="card">
+        <div class="card" id="paymentCard">
             <div class="section-title"><i class="fas fa-qrcode"></i> Pague com Pix</div>
             <form id="paymentForm" novalidate>
                 <div class="form-group">
@@ -644,7 +643,22 @@
         </div>
     
     <div id="pageQrModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h2 class="modal-title">Compartilhar Link da Cobrança</h2>
+                <button id="closeQrModal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body centered">
+                <p>Escaneie para abrir esta página em outro dispositivo.</p>
+                <div id="pageQrcodeContainer"></div>
+                <p style="margin-top: 15px; font-size: 14px; word-break: break-all;">Ou copie o link:</p>
+                <div class="pix-key-wrapper" style="max-width: 400px; margin: 10px auto 0;">
+                    <input type="text" readonly id="pageQrLinkText" value="" />
+                    <button class="copy-btn" id="copyPageLinkBtn">Copiar</button>
+                </div>
+            </div>
         </div>
+    </div>
 
     <footer>
         <div class="container footer-content">
@@ -653,141 +667,256 @@
     </footer>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // ... (A lógica dos modais e botões de copiar permanece a mesma)
+document.addEventListener('DOMContentLoaded', function () {
 
-            if (document.getElementById('paymentForm')) {
-                const paymentForm = document.getElementById('paymentForm');
-                const nameInput = document.getElementById('name');
-                const cpfInput = document.getElementById('cpf');
-                const valueInput = document.getElementById('valor');
-                const generateBtn = document.getElementById('generateBtn');
-                const btnText = document.getElementById('btnText');
-                const loader = document.getElementById('loader');
-                const qrBox = document.getElementById('qrBox');
-                const errorMessage = document.getElementById('errorMessage');
-                const copyBtn = document.getElementById('copyBtn');
-                const pixKeyInput = document.getElementById('pixKey');
-                const termsCheckbox = document.getElementById('termsCheckbox');
+    // Funções e lógicas existentes (sem alteração)
+    function getLastIdsFromCurrentUrl() {
+        const parts = window.location.href.split("/").filter(Boolean);
+        const id2 = parts[parts.length - 1];
+        return { id2 };
+    }
 
-                function getLastIdsFromCurrentUrl() {
-                    const parts = window.location.href.split("/").filter(Boolean);
-                    const id2 = parts[parts.length - 1];
-                    return { id2 };
-                }
-                const { id2 } = getLastIdsFromCurrentUrl();
+    const copyLinkBtn = document.getElementById('copyLinkBtn');
+    if (copyLinkBtn) {
+        copyLinkBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const originalIcon = copyLinkBtn.innerHTML;
+                copyLinkBtn.innerHTML = '<i class="fas fa-check"></i>';
+                copyLinkBtn.classList.add('copied');
+                copyLinkBtn.disabled = true;
 
-                cpfInput.addEventListener('input', (e) => {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length > 11) value = value.slice(0, 11);
-                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                    e.target.value = value;
-                });
-
-                paymentForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    gerarPix();
-                });
-
-                function mostrarErro(mensagem) {
-                    errorMessage.textContent = mensagem;
-                }
-
-                function limparEstado() {
-                    mostrarErro('');
-                    qrBox.classList.remove('visible');
-                    generateBtn.disabled = false;
-                    loader.style.display = 'none';
-                    btnText.textContent = 'Gerar QR Code Pix';
-                    generateBtn.style.background = ''; // Reseta a cor do botão
-                    btnText.style.display = 'inline';
-                }
-                
-                // >>>>> A FUNÇÃO iniciarPolling FOI REMOVIDA DAQUI <<<<<
-
-                async function gerarPix() {
-                    limparEstado();
-                    const fullName = nameInput.value.trim();
-                    const firstName = fullName.split(' ')[0];
-                    const valorString = valueInput.value.replace(',', '.');
-                    const valorFloat = parseFloat(valorString);
-                    const cpf = cpfInput.value;
-                    
-                    const totalValueInCents = Math.round(<%= orderData.totalValue %> * 100);
-                    const paidValueInCents = Math.round(<%= orderData.paidValue %> * 100);
-                    const valueToPayInCents = Math.round(valorFloat * 100);
-                    const remainingInCents = totalValueInCents - paidValueInCents;
-                    
-                    // Validação do formulário
-                    if (!fullName || cpf.length !== 14 || isNaN(valueToPayInCents) || valueToPayInCents <= 0 || !termsCheckbox.checked || valueToPayInCents > remainingInCents) {
-                        if (!fullName) { mostrarErro("Por favor, informe seu nome completo."); nameInput.focus(); }
-                        else if (cpf.length !== 14) { mostrarErro("Por favor, informe um CPF válido."); cpfInput.focus(); }
-                        else if (isNaN(valueToPayInCents) || valueToPayInCents <= 0) { mostrarErro("Por favor, insira um valor de pagamento válido."); valueInput.focus(); }
-                        else if (valueToPayInCents > remainingInCents) { const restanteEmReais = (remainingInCents / 100).toFixed(2).replace('.', ','); mostrarErro(`O valor excede o restante da cobrança (R$ ${restanteEmReais}).`); valueInput.focus(); }
-                        else if (!termsCheckbox.checked) { mostrarErro("Você deve concordar com os Termos e Condições de Uso."); termsCheckbox.focus(); }
-                        return;
-                    }
-                    
-                    generateBtn.disabled = true;
-                    btnText.style.display = 'none';
-                    loader.style.display = 'block';
-
-                    try {
-                        var recipient_id = "<%=partnerData.recipient_id%>";
-                        const response = await fetch(`<%=process.env.API_SITE_URL%>/payment/create-pix`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                name: firstName,
-                                cpf: cpf.replace(/\D/g, ''),
-                                amount: valueToPayInCents,
-                                recipient_id: recipient_id,
-                                orderId: id2 // <<< ENVIANDO O ID DA ORDEM PARA O BACKEND
-                            })
-                        });
-                        const data = await response.json();
-                        if (!response.ok) {
-                            throw new Error(data.error || 'Erro ao criar pagamento Pix.');
-                        } 
-                        
-                        // Atualiza a UI para estado de sucesso
-                        btnText.textContent = "QR Code Gerado!";
-                        btnText.style.display = 'inline';
-                        loader.style.display = 'none';
-                        generateBtn.style.background = 'var(--accent)';
-                        // O botão permanece desabilitado para evitar múltiplas cobranças
-
-                        document.querySelector('#qrBox img').src = data.data.last_transaction.qr_code_url;
-                        pixKeyInput.value = data.data.last_transaction.qr_code;
-                        qrBox.classList.add('visible');
-                        qrBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-                    } catch (error) {
-                        console.error(error);
-                        mostrarErro("Erro ao gerar o Pix. Tente novamente.");
-                        // Reabilita o botão apenas em caso de erro
-                        generateBtn.disabled = false;
-                        btnText.textContent = 'Gerar QR Code Pix';
-                        btnText.style.display = 'inline';
-                        loader.style.display = 'none';
-                    }
-                }
-                
-                copyBtn.addEventListener('click', () => {
-                    navigator.clipboard.writeText(pixKeyInput.value).then(() => {
-                        copyBtn.textContent = 'Copiado!';
-                        setTimeout(() => {
-                            copyBtn.textContent = 'Copiar';
-                        }, 2000);
-                    }).catch(err => {
-                        console.error('Falha ao copiar texto: ', err);
-                    });
-                });
-            }
+                setTimeout(() => {
+                    copyLinkBtn.innerHTML = originalIcon;
+                    copyLinkBtn.classList.remove('copied');
+                    copyLinkBtn.disabled = false;
+                }, 2000);
+            }).catch(err => {
+                console.error('Falha ao copiar o link: ', err);
+                alert('Não foi possível copiar o link.');
+            });
         });
+    }
+
+    const showQrBtn = document.getElementById('showQrBtn');
+    const pageQrModal = document.getElementById('pageQrModal');
+    const closeQrModalBtn = document.getElementById('closeQrModal');
+    const pageQrcodeContainer = document.getElementById('pageQrcodeContainer');
+    const pageQrLinkText = document.getElementById('pageQrLinkText');
+    const copyPageLinkBtn = document.getElementById('copyPageLinkBtn');
+
+    if (showQrBtn) {
+        showQrBtn.addEventListener('click', () => {
+            const pageUrl = window.location.href;
+            pageQrcodeContainer.innerHTML = '';
+            new QRCode(pageQrcodeContainer, {
+                text: pageUrl, width: 256, height: 256,
+                colorDark: "#000000", colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            pageQrLinkText.value = pageUrl;
+            pageQrModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (closeQrModalBtn) {
+        closeQrModalBtn.addEventListener('click', () => {
+            pageQrModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        });
+    }
+
+    if (copyPageLinkBtn) {
+        copyPageLinkBtn.addEventListener('click', () => {
+             navigator.clipboard.writeText(pageQrLinkText.value).then(() => {
+                copyPageLinkBtn.textContent = 'Copiado!';
+                setTimeout(() => { copyPageLinkBtn.textContent = 'Copiar'; }, 2000);
+            });
+        });
+    }
+    
+    [pageQrModal, document.getElementById('termsModal')].forEach(modal => {
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.show').forEach(modal => {
+                modal.classList.remove('show');
+            });
+            document.body.style.overflow = 'auto';
+        }
+    });
+    
+    // --- INÍCIO DA ÁREA CORRIGIDA ---
+
+    // A configuração do Socket.IO permanece a mesma, como solicitado.
+    let socket;
+    function initializeSocket() {
+        try {
+            const { id2 } = getLastIdsFromCurrentUrl();
+            socket = io("<%=process.env.API_SITE_URL%>", { transports: ['websocket', 'polling'] });
+
+            socket.on('connect', () => {
+                console.log('✅ Conectado ao WebSocket. Socket ID:', socket.id);
+                socket.emit('joinRoom', id2);
+            });
+
+            socket.on('disconnect', (reason) => console.log('❌ Desconectado do WebSocket. Motivo:', reason));
+            socket.on('connect_error', (err) => console.error('❌ Falha na conexão com o WebSocket:', err.message));
+
+            // CORREÇÃO: O manipulador do evento 'paymentConfirmed' foi simplificado para evitar erros.
+            socket.on('paymentConfirmed', (data) => {
+                console.log('🎉 Evento de confirmação de pagamento recebido:', data);
+
+                try {
+                    // Ação principal: Substituir o formulário de pagamento por uma mensagem de sucesso.
+                    // Esta abordagem é mais segura e não depende de uma estrutura complexa de dados.
+                    const paymentCard = document.getElementById('paymentCard');
+
+                    if (paymentCard) {
+                        // Monta a mensagem de forma segura, com valores padrão caso 'data' seja inesperado.
+                        const paidAmount = (data && typeof data.paidValue === 'number') ? data.paidValue.toFixed(2).replace('.', ',') : 'um valor';
+                        const payer = (data && data.payerName) ? `de <strong>${data.payerName}</strong>` : '';
+
+                        paymentCard.innerHTML = `
+                            <div class="paid-card-message">
+                                <div class="section-title">
+                                    <i class="fas fa-check-circle" style="color: var(--accent);"></i>
+                                    Pagamento Recebido!
+                                </div>
+                                <p>O pagamento de <strong>R$ ${paidAmount}</strong> ${payer} foi confirmado com sucesso.</p>
+                                <p style="font-size: 14px; margin-top: 10px;">Aguarde, a página será atualizada para refletir o novo saldo.</p>
+                            </div>`;
+                    }
+                    
+                    // O recarregamento da página é mantido, pois é a forma mais confiável de
+                    // garantir que todos os dados (resumo, progresso, etc.) fiquem 100% sincronizados.
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 5000);
+
+                } catch (error) {
+                    // Este bloco de erro é uma segurança. Se algo inesperado ainda ocorrer,
+                    // a melhor ação é recarregar a página para obter o estado mais recente do servidor.
+                    console.error('❌ Erro ao processar o evento de pagamento. Recarregando a página como segurança.', error);
+                    window.location.reload();
+                }
+            });
+
+        } catch (error) {
+            console.error("❌ Erro ao inicializar Socket.IO:", error);
+        }
+    }
+
+    initializeSocket();
+
+    // --- FIM DA ÁREA CORRIGIDA ---
+
+
+    if (document.getElementById('paymentForm')) {
+        const paymentForm = document.getElementById('paymentForm');
+        const nameInput = document.getElementById('name');
+        const cpfInput = document.getElementById('cpf');
+        const valueInput = document.getElementById('valor');
+        const generateBtn = document.getElementById('generateBtn');
+        const btnText = document.getElementById('btnText');
+        const loader = document.getElementById('loader');
+        const qrBox = document.getElementById('qrBox');
+        const errorMessage = document.getElementById('errorMessage');
+        const copyBtn = document.getElementById('copyBtn');
+        const pixKeyInput = document.getElementById('pixKey');
+        const termsCheckbox = document.getElementById('termsCheckbox');
+
+        cpfInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '').slice(0, 11);
+            value = value.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            e.target.value = value;
+        });
+
+        paymentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            gerarPix();
+        });
+        
+        async function gerarPix() {
+            errorMessage.textContent = '';
+            const fullName = nameInput.value.trim();
+            const valorString = valueInput.value.replace(',', '.');
+            const valorFloat = parseFloat(valorString);
+            const cpf = cpfInput.value;
+
+            const totalValue = <%= orderData.totalValue %>;
+            const paidValue = <%= orderData.paidValue %>;
+            const remainingValue = totalValue - paidValue;
+            
+            if (!fullName || fullName.split(' ').length < 2) { return errorMessage.textContent = "Informe seu nome completo."; }
+            if (cpf.length !== 14) { return errorMessage.textContent = "Informe um CPF válido."; }
+            if (isNaN(valorFloat) || valorFloat <= 0) { return errorMessage.textContent = "Insira um valor de pagamento válido."; }
+            if (valorFloat > remainingValue + 0.001) {
+                 return errorMessage.textContent = `O valor excede o restante (R$ ${remainingValue.toFixed(2).replace('.',',')}).`;
+            }
+            if (!termsCheckbox.checked) { return errorMessage.textContent = "Você deve concordar com os Termos."; }
+            
+            generateBtn.disabled = true;
+            btnText.style.display = 'none';
+            loader.style.display = 'block';
+
+            try {
+                const { id2 } = getLastIdsFromCurrentUrl();
+                const response = await fetch(`<%=process.env.API_SITE_URL%>/payment/create-pix`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: fullName.split(' ')[0],
+                        cpf: cpf.replace(/\D/g, ''),
+                        amount: Math.round(valorFloat * 100),
+                        recipient_id: "<%=partnerData.recipient_id%>",
+                        orderId: id2
+                    })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Erro desconhecido.');
+
+                btnText.textContent = "QR Code Gerado!";
+                generateBtn.style.background = 'var(--accent)';
+                document.querySelector('#qrBox img').src = data.data.last_transaction.qr_code_url;
+                pixKeyInput.value = data.data.last_transaction.qr_code;
+                qrBox.classList.add('visible');
+                qrBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            } catch (error) {
+                errorMessage.textContent = `Erro: ${error.message}`;
+                generateBtn.disabled = false;
+                btnText.textContent = 'Gerar QR Code Pix';
+            } finally {
+                btnText.style.display = 'inline';
+                loader.style.display = 'none';
+            }
+        }
+        
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(pixKeyInput.value).then(() => {
+                copyBtn.textContent = 'Copiado!';
+                setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 2000);
+            });
+        });
+    }
+
+    window.addEventListener('beforeunload', () => {
+        if (socket) socket.disconnect();
+    });
+});
     </script>
 </body>
 </html>
