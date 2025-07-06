@@ -48,8 +48,8 @@
     /* Blue-ish Gradient Variables */
     --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
     --gradient-accent: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    --gradient-hero: radial-gradient(ellipse at top, rgba(37, 99, 235, 0.08) 0%, transparent 50%), 
-                     radial-gradient(ellipse at bottom right, rgba(30, 64, 175, 0.06) 0%, transparent 50%);
+    --gradient-hero: radial-gradient(ellipse at top, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+                      radial-gradient(ellipse at bottom right, rgba(30, 64, 175, 0.06) 0%, transparent 50%);
     --gradient-features: linear-gradient(135deg, rgba(37, 99, 235, 0.04) 0%, rgba(30, 64, 175, 0.04) 100%);
     --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
     --gradient-card-hover: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
@@ -810,119 +810,147 @@ p {
     line-height: 1.6;
 }
 
-/* Benefits Section */
-.benefits {
+/* Small Business Section */
+.small-business {
     background: linear-gradient(180deg, #ffffff 0%, rgba(248, 250, 252, 0.5) 100%);
     position: relative;
+    overflow: hidden;
 }
 
-.benefits::before {
+.small-business::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(ellipse at bottom left, rgba(30, 64, 175, 0.03) 0%, transparent 70%);
+    background: radial-gradient(ellipse at top left, rgba(34, 197, 94, 0.03) 0%, transparent 70%);
     pointer-events: none;
 }
 
-.benefit-item {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: 80px;
-    margin-bottom: 120px;
+.business-header {
+    text-align: center;
+    margin-bottom: 80px;
     position: relative;
     z-index: 2;
 }
 
-.benefit-item:last-child {
-    margin-bottom: 0;
+.business-header .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+    color: #059669;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
-.benefit-item:nth-child(even) .benefit-image {
-    grid-column: 2;
-}
-
-.benefit-item:nth-child(even) .benefit-content {
-    grid-column: 1;
-}
-
-.benefit-image {
-    background: linear-gradient(145deg, rgba(248, 250, 252, 0.8), rgba(255, 255, 255, 0.9));
-    border-radius: var(--radius-lg);
-    padding: 80px 40px;
-    text-align: center;
-    border: 1px solid rgba(226, 232, 240, 0.3);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 300px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(30, 64, 175, 0.08);
-}
-
-.benefit-image:hover {
-    transform: scale(1.02) rotate(1deg);
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
-    box-shadow: 0 20px 40px rgba(30, 64, 175, 0.15);
-}
-
-.benefit-image i {
-    font-size: 5rem;
-    background: var(--gradient-accent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    opacity: 0.8;
-    animation: bounce 3s ease-in-out infinite;
-}
-
-.benefit-content ul {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 32px;
-}
-
-.benefit-content li {
+.business-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
     position: relative;
-    padding-left: 32px;
-    margin-bottom: 16px;
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    transition: all 0.2s ease;
+    z-index: 2;
 }
 
-.benefit-content li:hover {
-    transform: translateX(5px);
-    color: var(--text-primary);
-}
-
-.benefit-content li::before {
-    content: '✓';
-    background: var(--gradient-accent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-weight: 700;
-    font-size: 1.25rem;
-}
-
-/* Testimonials */
-.testimonials {
-    background: var(--gradient-testimonial);
-    color: white;
-    text-align: center;
+.business-card {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px;
+    border: 1px solid rgba(226, 232, 240, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.08);
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
 
-.testimonials::before {
+.business-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+.business-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+.business-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+}
+
+.business-card:hover .business-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.business-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+.business-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.business-metric {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.02));
+    border-radius: var(--radius);
+    border: 1px solid rgba(34, 197, 94, 0.1);
+}
+
+.metric-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+.metric-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #059669;
+}
+
+/* Large Business Section */
+.large-business {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 58, 138, 0.95) 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.large-business::before {
     content: '';
     position: absolute;
     top: 0;
@@ -934,50 +962,108 @@ p {
     animation: pulse 6s ease-in-out infinite;
 }
 
-.testimonials h2 {
+.large-business .business-header {
     color: white;
-    margin-bottom: 48px;
+}
+
+.large-business .business-header .badge {
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.1));
+    color: #c084fc;
+    border-color: rgba(147, 51, 234, 0.3);
+}
+
+.enterprise-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
     position: relative;
     z-index: 2;
 }
 
-.testimonial-card {
-    max-width: 800px;
-    margin: 0 auto;
+.enterprise-content h3 {
+    font-size: 2rem;
+    margin-bottom: 24px;
+    color: white;
+}
+
+.enterprise-content p {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+.enterprise-features {
+    list-style: none;
+    margin-bottom: 40px;
+}
+
+.enterprise-features li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.enterprise-features li::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #9333ea, #7c3aed);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.enterprise-features li::after {
+    content: '✓';
+    position: absolute;
+    margin-left: -14px;
+    color: white;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+.enterprise-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+}
+
+.stat-card {
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
     backdrop-filter: blur(20px);
     border-radius: var(--radius-lg);
-    padding: 64px 48px;
+    padding: 32px 24px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    text-align: center;
     transition: all 0.3s ease;
 }
 
-.testimonial-card:hover {
+.stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-.testimonial-text {
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
-    font-weight: 500;
-    line-height: 1.5;
-    margin-bottom: 32px;
-    color: rgba(255, 255, 255, 0.95);
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #9333ea, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
 }
 
-.testimonial-author {
-    font-weight: 600;
-    color: white;
-}
-
-.testimonial-author span {
-    font-weight: 400;
+.stat-label {
+    font-size: 0.875rem;
     color: rgba(255, 255, 255, 0.7);
-    display: block;
-    margin-top: 8px;
+    font-weight: 500;
 }
 
 /* Contact Section */
@@ -1298,21 +1384,11 @@ p {
 
 /* Responsive Design */
 @media(max-width: 1024px) {
-    .benefit-item, .benefit-item:nth-child(even) {
+    .enterprise-grid {
         grid-template-columns: 1fr;
         gap: 60px;
     }
-
-    .benefit-item:nth-child(even) .benefit-image {
-        grid-row: 1;
-        grid-column: 1;
-    }
-
-    .benefit-item:nth-child(even) .benefit-content {
-        grid-row: 2;
-        grid-column: 1;
-    }
-
+    
     .contact-grid {
         grid-template-columns: 1fr;
         gap: 60px;
@@ -1323,11 +1399,11 @@ p {
     section {
         padding: 80px 0;
     }
-
+    
     .mobile-nav-toggle {
         display: block;
     }
-
+    
     .nav-links {
         position: fixed;
         top: 0;
@@ -1344,75 +1420,545 @@ p {
         transition: transform 0.3s ease-in-out;
         z-index: 1000;
     }
-
+    
     .nav-open .nav-links {
         transform: translateX(0);
     }
-
+    
     .nav-links a {
         font-size: 1.5rem;
     }
-
+    
     .hero {
         padding-top: 120px;
         min-height: auto;
         padding-bottom: 80px;
     }
-
+    
     .hero-buttons {
         flex-direction: column;
         align-items: center;
         gap: 16px;
     }
-
+    
     .hero-buttons .btn {
         width: 100%;
         max-width: 320px;
     }
-
+    
     .features-grid {
         grid-template-columns: 1fr;
         gap: 32px;
     }
-
-    .testimonial-card {
-        padding: 48px 24px;
+    
+    .business-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
     }
-
+    
+    .enterprise-stats {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
     .contact-form {
         padding: 32px 24px;
     }
-
+    
     .cta-section {
         padding: 60px 32px;
         margin: 0 16px;
     }
-
+    
     .footer {
         margin-top: 80px;
     }
-
+    
     .desktop-only {
         display: none !important;
     }
-
+    
     .mobile-only {
         display: inline-flex !important;
         width: auto;
         padding: 16px 48px;
     }
-
+    
     .bg-circle, .bg-square, .bg-triangle {
         display: none;
     }
+}
+
+/* Mobile Payment Form Styles */
+.back-button {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    position: absolute;
+    left: -8px;
+    top: -4px;
+}
+
+.back-button:hover {
+    background: #f1f5f9;
+    color: #2563eb;
+}
+
+.checkout-header {
+    position: relative;
+}
+
+.payment-form {
+    margin-top: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group input.error,
+.terms-consent-mobile input[type="checkbox"].error {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.error-message {
+    color: #dc2626;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    margin-bottom: 0;
+    display: none;
+    font-weight: 500;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.terms-consent-mobile .error-message {
+    margin-top: 8px;
+    margin-left: 24px;
+}
+
+.terms-consent-mobile {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: rgba(37, 99, 235, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(37, 99, 235, 0.1);
+}
+
+.terms-consent-mobile input[type="checkbox"] {
+    margin-top: 2px;
+    width: 16px;
+    height: 16px;
+    accent-color: #2563eb;
+}
+
+.terms-consent-mobile label {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #374151;
+    cursor: pointer;
+}
+
+.generate-pix-btn {
+    width: 100%;
+    background: var(--gradient-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.generate-pix-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+}
+
+.generate-pix-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Progress Bar Styles */
+.payment-progress {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    border: 1px solid #e2e8f0;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.progress-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.progress-amount {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2563eb;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 12px;
+    background: #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+    border-radius: 6px;
+    transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+}
+
+.progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.progress-percentage {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.contributors-list {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.contributors-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.contributor-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(34, 197, 94, 0.05);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    border-left: 3px solid #22c55e;
+}
+
+.contributor-name {
+    font-size: 0.8rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+.contributor-amount {
+    font-size: 0.8rem;
+    color: #059669;
+    font-weight: 600;
+}
+
+.quick-amount-btn {
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quick-amount-btn:hover {
+    background: rgba(37, 99, 235, 0.15);
+    border-color: rgba(37, 99, 235, 0.3);
+    transform: translateY(-1px);
+}
+
+/* PIX Page Styles */
+.pix-container {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.pix-qr-code {
+    margin-bottom: 24px;
+}
+
+.qr-code-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 12px;
+    margin: 0 auto;
+    display: block;
+    border: 2px solid #e5e7eb;
+}
+
+.pix-info {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.pix-info p {
+    margin: 4px 0;
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.pix-key-section {
+    margin-bottom: 24px;
+}
+
+.pix-key-section label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.pix-key-wrapper-mobile {
+    display: flex;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.pix-key-wrapper-mobile input {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.copy-btn-mobile {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn-mobile:hover {
+    background: #1d4ed8;
+}
+
+.payment-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    background: rgba(251, 191, 36, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.payment-status i {
+    color: #f59e0b;
+    animation: pulse 2s infinite;
+}
+
+.payment-status p {
+    color: #92400e;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.payment-status.processing {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.payment-status.processing i {
+    color: #3b82f6;
+    animation: spin 1s linear infinite;
+}
+
+.payment-status.processing p {
+    color: #1e40af;
+}
+
+.payment-status.success {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+.payment-status.success i {
+    color: #22c55e;
+    animation: none;
+}
+
+.payment-status.success p {
+    color: #15803d;
+}
+
+/* Success Page Styles */
+.success-container {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    animation: successPulse 2s ease-in-out;
+}
+
+.success-icon i {
+    font-size: 2.5rem;
+    color: white;
+}
+
+.success-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #15803d;
+    margin-bottom: 12px;
+}
+
+.success-message {
+    font-size: 0.95rem;
+    color: #374151;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.success-details {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.success-details p {
+    margin: 4px 0;
+    font-size: 0.875rem;
+    color: #15803d;
+}
+
+.new-payment-btn {
+    background: var(--gradient-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.new-payment-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+}
+
+@keyframes successPulse {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 #pagjunto-logo {
     font-family: 'Inter', sans-serif;
     color: #2563eb;
 }
-    </style>
 
+.escale {
+    color: white
+}
+    </style>
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -1427,7 +1973,6 @@ p {
     }
     </script>
 </head>
-
 <body>
     <!-- Animated Background Elements -->
     <div class="bg-decoration">
@@ -1463,9 +2008,9 @@ p {
     <main>
         <section class="hero" id="home">
             <div class="container">
-                <h1 id="hero-title">Simplifique pagamentos compartilhados.</h1>
+                <h1 id="hero-title">Simplifique pagamentos compartilhados</h1>
                 <p class="lead fade-in" style="transition-delay: 200ms;">
-                    Facilitamos cobranças em grupo: um link, múltiplos pagadores, sem dor de cabeça.
+                    Facilitamos cobranças em grupo: um link, múltiplos pagadores, sem dor de cabeça
                 </p>
                 <div class="hero-buttons fade-in" style="transition-delay: 300ms;">
                     <a href="#contact" class="btn btn-primary">
@@ -1537,7 +2082,7 @@ p {
                                     </div>
                                 </div>
 
-                                <button class="checkout-button">
+                                <button class="checkout-button" onclick="showPaymentPage()">
                                     Continuar com pagjunto
                                 </button>
                             </div>
@@ -1550,61 +2095,123 @@ p {
         <section class="features" id="features">
             <div class="container">
                 <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                    <h2 class="fade-in">Pagamentos complexos, em 3 passos simples.</h2>
+                    <h2 class="fade-in">Pagamentos complexos, em 3 passos simples</h2>
                     <p class="lead fade-in" style="transition-delay: 100ms;">
-                        Nossa plataforma foi desenhada para ser fácil de integrar. Veja como é fácil ajudar seus clientes a criarem uma vaquinha em seu checkout.
+                        Nossa plataforma foi desenhada para ser fácil de integrar. Veja como é fácil ajudar seus clientes a criarem uma vaquinha em seu checkout
                     </p>
                 </div>
                 <div class="features-grid">
                     <div class="feature-card fade-in" style="transition-delay: 200ms;">
                         <div class="feature-icon"><i class="fas fa-plus"></i></div>
                         <h3>1. Criação do pedido</h3>
-                        <p>O pedido pode ser criado através da nossa API ou Dashboard.</p>
+                        <p>O pedido pode ser criado através da nossa API ou Dashboard</p>
                     </div>
                     <div class="feature-card fade-in" style="transition-delay: 300ms;">
                         <div class="feature-icon"><i class="fas fa-share-alt"></i></div>
                         <h3>2. Compartilhamento do link</h3>
-                        <p>O usuário copia o link e encaminha a todas pessoas que irão pagar junto a ele.</p>
+                        <p>O usuário copia o link e encaminha a todas pessoas que irão pagar junto a ele</p>
                     </div>
                     <div class="feature-card fade-in" style="transition-delay: 400ms;">
                         <div class="feature-icon"><i class="fas fa-wallet"></i></div>
                         <h3>3. Lucro!</h3>
-                        <p>Acompanhe os pagamentos sendo feitos em tempo real através da nossa solução.</p>
+                        <p>Acompanhe os pagamentos sendo feitos em tempo real através da nossa solução</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="benefits" id="benefits">
+        <!-- Small Business Section -->
+        <section class="small-business" id="small-business">
             <div class="container">
-                <div class="benefit-item">
-                    <div class="benefit-content slide-in-left">
-                        <h2>Mais agilidade e mais informações.</h2>
-                        <p>Incentivando seu cliente a dividir a conta, ele compra mais vezes. Além disso, você recebe os dados de todos os pagadores.</p>
-                        <ul>
-                            <li>Diminuição de carrinho abandonado</li>
-                            <li>Coleta de dados que antes eram impossíveis de se ter</li>
-                            <li>Possibilidade de analisar novos padrões de consumo</li>
+                <div class="business-header fade-in">
+                    <div class="badge">Para Pequenas Empresas</div>
+                    <h2>Cresça sem complicação</h2>
+                    <p class="lead">
+                        Transforme cada venda em uma oportunidade de crescimento. Sem mensalidades, sem burocracia
+                    </p>
+                </div>
+                
+                <div class="business-grid">
+                    <div class="business-card fade-in" style="transition-delay: 200ms;">
+                        <div class="business-icon"><i class="fas fa-rocket"></i></div>
+                        <h3>Aumente suas vendas</h3>
+                        <p>Clientes compram mais quando podem dividir. Transforme "muito caro" em "vamos rachar?"</p>
+                        <div class="business-metric">
+                            <div class="metric-icon">+</div>
+                            <div class="metric-text">Até 40% mais conversões</div>
+                        </div>
+                    </div>
+                    
+                    <div class="business-card fade-in" style="transition-delay: 400ms;">
+                        <div class="business-icon"><i class="fas fa-clock"></i></div>
+                        <h3>Economize tempo da equipe</h3>
+                        <p>Dashboard completo, uso simples. Faça sua equipe gastar tempo com o que realmente importa</p>
+                        <div class="business-metric">
+                            <div class="metric-icon">⚡</div>
+                            <div class="metric-text">Integração em 30min</div>
+                        </div>
+                    </div>
+                    
+                    <div class="business-card fade-in" style="transition-delay: 500ms;">
+                        <div class="business-icon"><i class="fas fa-users"></i></div>
+                        <h3>Novos clientes</h3>
+                        <p>Cada pagamento compartilhado traz novos compradores. Um cliente vira cinco automaticamente</p>
+                        <div class="business-metric">
+                            <div class="metric-icon">👥</div>
+                            <div class="metric-text">5x mais dados de clientes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Large Business Section -->
+        <section class="large-business" id="large-business">
+            <div class="container">
+                <div class="business-header fade-in">
+                    <div class="badge">Para Grandes Empresas</div>
+                    <h2 class="escale">Escale sem limites</h2>
+                    <p class="lead">
+                        Infraestrutura enterprise, insights avançados e suporte dedicado para operações de grande volume
+                    </p>
+                </div>
+                
+                <div class="enterprise-grid">
+                    <div class="enterprise-content fade-in">
+                        <h3>Dados que impulsionam decisões</h3>
+                        <p>
+                            Cada pagamento compartilhado revela padrões de consumo únicos. Entenda como grupos compram, quando dividem e por quê
+                        </p>
+                        <ul class="enterprise-features">
+                            <li>Analytics avançado de comportamento de grupo</li>
+                            <li>Segmentação automática por padrões de divisão</li>
+                            <li>Previsão de demanda baseada em sazonalidade</li>
+                            <li>Base de pagadores que podem vir a ser novos clientes</li>
+                            <li>Relatórios personalizados em tempo real</li>
                         </ul>
+                        <a href="#contact" class="btn btn-secondary">
+                            Agendar demonstração
+                        </a>
                     </div>
-                    <div class="benefit-image slide-in-right"><i class="fas fa-users"></i></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="testimonials" id="testimonials">
-            <div class="container">
-                <div style="max-width: 800px; margin: 0 auto;">
-                    <h2 class="fade-in">O que nossos parceiros dizem</h2>
-                </div>
-                <div class="testimonial-card scale-in" style="transition-delay: 200ms;">
-                    <p class="testimonial-text">
-                        "Nossas vendas foram impulsionadas após a parceria com a Pagjunto. Quando podem dividir a conta, os clientes se sentem à vontade para comprar mais vezes. É simplesmente genial."
-                    </p>
-                    <p class="testimonial-author">
-                        Marcelo
-                        <span>CEO, Empresa Anônima</span>
-                    </p>
+                    
+                    <div class="enterprise-stats fade-in" style="transition-delay: 200ms;">
+                        <div class="stat-card">
+                            <div class="stat-number">99.9%</div>
+                            <div class="stat-label">Uptime garantido</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">10M+</div>
+                            <div class="stat-label">Capacidade de transações/mês</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Suporte dedicado</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">< 50ms</div>
+                            <div class="stat-label">Latência média</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1615,7 +2222,7 @@ p {
                     <div class="contact-text fade-in">
                         <h2>Dúvidas? Fale com um especialista.</h2>
                         <p class="lead">
-                            Preencha o formulário e nossa equipe entrará em contato para entender suas necessidades e mostrar como o Pagjunto pode ajudar sua empresa a crescer.
+                            Preencha o formulário e nossa equipe entrará em contato para entender suas necessidades e mostrar como o Pagjunto pode ajudar sua empresa a crescer
                         </p>
                         <ul class="contact-info-list">
                             <li>
@@ -1672,7 +2279,7 @@ p {
                 <div class="cta-section scale-in">
                     <div class="container">
                         <h2>pagjunto, cresça junto</h2>
-                        <p>Fale com um especialista e comece a simplificar suas cobranças. Sem mensalidade, sem burocracia.</p>
+                        <p>Fale com um especialista e comece a simplificar suas cobranças. Sem mensalidade, sem burocracia</p>
                         <a href="#contact" class="btn btn-secondary">
                             Quero simplificar meus pagamentos
                         </a>
@@ -1687,7 +2294,7 @@ p {
             <a href="#" class="logo">
                 pagjunto
             </a>
-            <p>Simplificando a forma como o mundo divide contas.</p>
+            <p>Simplificando a forma como o mundo divide contas</p>
             <div class="social-links" style="margin: 32px 0;">
                 <a href="https://www.linkedin.com/company/pagjunto" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 <a href="https://www.instagram.com/pagjunto" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -1697,146 +2304,410 @@ p {
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Mobile Navigation Toggle
-            const navToggle = document.querySelector('.mobile-nav-toggle');
-            const navLinks = document.querySelector('.nav-links');
-            const body = document.body;
+document.addEventListener("DOMContentLoaded", function() {
+    // Mobile Navigation Toggle
+    const navToggle = document.querySelector('.mobile-nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    const body = document.body;
 
-            navToggle.addEventListener('click', () => {
-                const isOpened = navToggle.getAttribute('aria-expanded') === 'true';
-                navToggle.setAttribute('aria-expanded', !isOpened);
-                body.classList.toggle('nav-open');
-            });
+    navToggle.addEventListener('click', () => {
+        const isOpened = navToggle.getAttribute('aria-expanded') === 'true';
+        navToggle.setAttribute('aria-expanded', !isOpened);
+        body.classList.toggle('nav-open');
+    });
 
-            // Close mobile menu when a link is clicked
-            navLinks.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (body.classList.contains('nav-open')) {
-                        navToggle.setAttribute('aria-expanded', 'false');
-                        body.classList.remove('nav-open');
-                    }
-                });
-            });
+    // Close mobile menu when a link is clicked
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (body.classList.contains('nav-open')) {
+                navToggle.setAttribute('aria-expanded', 'false');
+                body.classList.remove('nav-open');
+            }
+        });
+    });
 
-            // Enhanced Intersection Observer for animations
-            const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        
-                        // Add staggered animation for feature cards
-                        if (entry.target.classList.contains('feature-card')) {
-                            const cards = document.querySelectorAll('.feature-card');
-                            cards.forEach((card, index) => {
-                                setTimeout(() => {
-                                    card.style.transform = 'translateY(0) scale(1)';
-                                    card.style.opacity = '1';
-                                }, index * 100);
-                            });
-                        }
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
+    // Enhanced Intersection Observer for animations
+    const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
 
-            animatedElements.forEach(el => observer.observe(el));
+    animatedElements.forEach(el => observer.observe(el));
 
-            // Header scroll effect with enhanced animation
-            const header = document.getElementById('header');
-            let lastScrollY = window.scrollY;
+    // Header scroll effect
+    const header = document.getElementById('header');
+    let lastScrollY = window.scrollY;
+    
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        
+        if (currentScrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+        
+        lastScrollY = currentScrollY;
+    });
+
+    // Form submission
+    const contactForm = document.querySelector('.contact-form');
+    if(contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const submitBtn = this.querySelector('.btn-primary');
+            const originalText = submitBtn.innerHTML;
             
-            window.addEventListener('scroll', () => {
-                const currentScrollY = window.scrollY;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Mensagem Enviada!';
+                submitBtn.style.background = '#34d399';
                 
-                if (currentScrollY > 50) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
-                
-                // Hide header on scroll down, show on scroll up
-                if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                    header.style.transform = 'translateY(-100%)';
-                } else {
-                    header.style.transform = 'translateY(0)';
-                }
-                
-                lastScrollY = currentScrollY;
-            });
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = '';
+                    contactForm.reset();
+                }, 3000);
+            }, 2000);
+        });
+    }
 
-            // Enhanced form submission animation
-            const contactForm = document.querySelector('.contact-form');
-            if(contactForm) {
-                contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const submitBtn = this.querySelector('.btn-primary');
-                    const originalText = submitBtn.innerHTML;
-                    
-                    // Add loading animation
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-                    submitBtn.disabled = true;
-                    submitBtn.style.transform = 'scale(0.95)';
-                    
-                    setTimeout(() => {
-                        submitBtn.innerHTML = '<i class="fas fa-check"></i> Mensagem Enviada!';
-                        submitBtn.style.background = '#34d399';
-                        submitBtn.style.transform = 'scale(1)';
-                        
-                        setTimeout(() => {
-                            submitBtn.innerHTML = originalText;
-                            submitBtn.disabled = false;
-                            submitBtn.style.background = '';
-                            submitBtn.style.transform = '';
-                            contactForm.reset();
-                        }, 3000);
-                    }, 2000);
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
                 });
             }
-
-            // Smooth scrolling for anchor links with enhanced easing
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-
-            // Add parallax effect to background elements
-            window.addEventListener('scroll', () => {
-                const scrolled = window.pageYOffset;
-                const parallaxElements = document.querySelectorAll('.bg-circle, .bg-square, .bg-triangle');
-                
-                parallaxElements.forEach((element, index) => {
-                    const speed = 0.5 + (index * 0.1);
-                    element.style.transform = `translateY(${scrolled * speed}px)`;
-                });
-            });
-
-            // Add hover effects to interactive elements
-            const interactiveElements = document.querySelectorAll('.feature-card, .contact-info-list li, .testimonial-card');
-            
-            interactiveElements.forEach(element => {
-                element.addEventListener('mouseenter', function() {
-                    this.style.transform = this.style.transform.replace('scale(1)', 'scale(1.02)');
-                });
-                
-                element.addEventListener('mouseleave', function() {
-                    this.style.transform = this.style.transform.replace('scale(1.02)', 'scale(1)');
-                });
-            });
-
-            // Add typing animation to hero title
         });
-    </script>
+    });
+});
+
+// Simple payment simulation variables
+let totalAmount = 210.00;
+let paidAmount = 0.00;
+let contributors = [];
+
+// Show payment page
+function showPaymentPage() {
+    const checkoutContent = document.querySelector('.checkout-content');
+    const remainingAmount = totalAmount - paidAmount;
+    const progressPercentage = (paidAmount / totalAmount) * 100;
+    
+    checkoutContent.innerHTML = `
+        <div class="checkout-header">
+            <button class="back-button" onclick="showCheckoutPage()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h3>Pagamento Compartilhado</h3>
+            <p>Divida este pagamento com seus amigos</p>
+        </div>
+        
+        <div class="payment-progress">
+            <div class="progress-header">
+                <span class="progress-title">Progresso do Pagamento</span>
+                <span class="progress-amount">R$ ${paidAmount.toFixed(2).replace('.', ',')} / R$ ${totalAmount.toFixed(2).replace('.', ',')}</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: ${progressPercentage}%"></div>
+            </div>
+            <div class="progress-percentage">${progressPercentage.toFixed(1)}% pago</div>
+            
+            ${contributors.length > 0 ? `
+                <div class="contributors-list">
+                    <div class="contributors-title">Quem já contribuiu:</div>
+                    ${contributors.map(contributor => `
+                        <div class="contributor-item">
+                            <span class="contributor-name">${contributor.name}</span>
+                            <span class="contributor-amount">R$ ${contributor.amount.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : ''}
+        </div>
+        
+        <div class="order-summary">
+            <div class="order-item">
+                <span>2x Produto Premium</span>
+                <span>R$ 198,00</span>
+            </div>
+            <div class="order-item">
+                <span>Frete</span>
+                <span>R$ 12,00</span>
+            </div>
+            <div class="order-item">
+                <span>Total</span>
+                <span>R$ 210,00</span>
+            </div>
+            <div class="order-item" style="color: #2563eb; border-top: 2px solid #2563eb;">
+                <span>Restante a pagar</span>
+                <span>R$ ${remainingAmount.toFixed(2).replace('.', ',')}</span>
+            </div>
+        </div>
+
+        <div class="payment-form">
+            <div class="form-group">
+                <label for="mobile-name">Seu nome completo</label>
+                <input type="text" id="mobile-name" placeholder="Digite seu nome completo" />
+            </div>
+            
+            <div class="form-group">
+                <label for="mobile-cpf">Seu CPF</label>
+                <input type="text" id="mobile-cpf" placeholder="000.000.000-00" />
+            </div>
+            
+            <div class="form-group">
+                <label for="mobile-valor">Quanto você quer pagar?</label>
+                <input type="text" id="mobile-valor" placeholder="R$ 0,00" />
+            </div>
+            
+            <div class="terms-consent-mobile">
+                <input type="checkbox" id="mobile-terms" />
+                <label for="mobile-terms">Concordo com os Termos de Uso</label>
+            </div>
+            
+            <button type="button" class="generate-pix-btn" onclick="generatePixCode()">
+                <i class="fas fa-qrcode"></i>
+                Gerar QR Code PIX
+            </button>
+        </div>
+    `;
+}
+
+// Generate PIX code
+function generatePixCode() {
+    const nameInput = document.getElementById('mobile-name');
+    const valorInput = document.getElementById('mobile-valor');
+    const termsCheckbox = document.getElementById('mobile-terms');
+    
+    // Clear previous errors
+    clearErrors();
+    
+    let hasErrors = false;
+    
+    // Validate name
+    if (!nameInput.value.trim()) {
+        showError('mobile-name', 'Por favor, digite seu nome completo');
+        hasErrors = true;
+    }
+    
+    // Validate value
+    if (!valorInput.value.trim()) {
+        showError('mobile-valor', 'Por favor, digite um valor');
+        hasErrors = true;
+    } else {
+        const valorText = valorInput.value.replace(/[^\d,]/g, '').replace(',', '.');
+        const valor = parseFloat(valorText);
+        
+        if (isNaN(valor) || valor <= 0) {
+            showError('mobile-valor', 'Digite um valor válido');
+            hasErrors = true;
+        }
+    }
+    
+    // Validate terms
+    if (!termsCheckbox.checked) {
+        showError('mobile-terms', 'Você deve aceitar os termos de uso');
+        hasErrors = true;
+    }
+    
+    if (hasErrors) {
+        return;
+    }
+    
+    // Get payment amount
+    const valorText = valorInput.value.replace(/[^\d,]/g, '').replace(',', '.');
+    const valor = parseFloat(valorText);
+    
+    // Store values
+    window.currentPaymentAmount = valor;
+    window.currentPaymentName = nameInput.value.trim();
+    
+    // Show PIX page
+    showPixPage();
+}
+
+// Add error handling functions
+function showError(inputId, message) {
+    const input = document.getElementById(inputId);
+    const formGroup = input.closest('.form-group') || input.closest('.terms-consent-mobile');
+    
+    // Add error class to input
+    input.classList.add('error');
+    
+    // Create or update error message
+    let errorElement = formGroup.querySelector('.error-message');
+    if (!errorElement) {
+        errorElement = document.createElement('p');
+        errorElement.className = 'error-message';
+        formGroup.appendChild(errorElement);
+    }
+    
+    errorElement.textContent = message;
+    errorElement.classList.add('show');
+}
+
+function clearErrors() {
+    // Remove error classes from inputs
+    document.querySelectorAll('.form-group input, .terms-consent-mobile input').forEach(input => {
+        input.classList.remove('error');
+    });
+    
+    // Hide all error messages
+    document.querySelectorAll('.error-message').forEach(error => {
+        error.classList.remove('show');
+    });
+}
+
+// Show PIX page
+function showPixPage() {
+    const checkoutContent = document.querySelector('.checkout-content');
+    const paymentAmount = window.currentPaymentAmount;
+    
+    checkoutContent.innerHTML = `
+        <div class="checkout-header">
+            <button class="back-button" onclick="showPaymentPage()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h3>Pagamento PIX</h3>
+            <p>Escaneie o QR Code para pagar</p>
+        </div>
+        
+        <div class="pix-container">
+            <div class="pix-qr-code">
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/form-component/qr-code-236.png?height=180&width=180" alt="QR Code PIX" class="qr-code-image" />
+            </div>
+            
+            <div class="pix-info">
+                <p><strong>Valor:</strong> R$ ${paymentAmount.toFixed(2).replace('.', ',')}</p>
+                <p><strong>Beneficiário:</strong> Pagjunto</p>
+            </div>
+            
+            <div class="payment-status" id="payment-status">
+                <i class="fas fa-clock"></i>
+                <p>Aguardando pagamento...</p>
+            </div>
+        </div>
+    `;
+    
+    // Simulate payment after 3 seconds
+    setTimeout(() => {
+        simulatePayment();
+    }, 3000);
+}
+
+// Simulate payment
+function simulatePayment() {
+    const paymentStatus = document.getElementById('payment-status');
+    
+    // Show processing
+    paymentStatus.classList.add('processing');
+    paymentStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando pagamento...';
+    
+    setTimeout(() => {
+        // Show success
+        paymentStatus.classList.remove('processing');
+        paymentStatus.classList.add('success');
+        paymentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Pagamento Aprovado!';
+        
+        // Update payment data
+        const paymentAmount = window.currentPaymentAmount;
+        const paymentName = window.currentPaymentName;
+        
+        paidAmount += paymentAmount;
+        contributors.push({
+            name: paymentName,
+            amount: paymentAmount
+        });
+        
+        // Redirect back to payment page after 2 seconds
+        setTimeout(() => {
+            showPaymentPage();
+        }, 2000);
+        
+    }, 2000);
+}
+
+// Show checkout page
+function showCheckoutPage() {
+    const checkoutContent = document.querySelector('.checkout-content');
+    checkoutContent.innerHTML = `
+        <div class="checkout-header">
+            <h3>Finalizar Pedido</h3>
+            <p>Escolha sua forma de pagamento</p>
+        </div>
+        
+        <div class="order-summary">
+            <div class="order-item">
+                <span>2x Produto Premium</span>
+                <span>R$ 198,00</span>
+            </div>
+            <div class="order-item">
+                <span>Frete</span>
+                <span>R$ 12,00</span>
+            </div>
+            <div class="order-item">
+                <span>Total</span>
+                <span>R$ 210,00</span>
+            </div>
+        </div>
+
+        <div class="payment-methods">
+            <h4>Forma de pagamento</h4>
+            
+            <div class="payment-option">
+                <div class="payment-radio"></div>
+                <div class="payment-icon card">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="payment-details">
+                    <div class="payment-title">Cartão de Crédito</div>
+                    <p class="payment-subtitle">Visa, Mastercard, Elo</p>
+                </div>
+            </div>
+
+            <div class="payment-option">
+                <div class="payment-radio"></div>
+                <div class="payment-icon pix">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+                <div class="payment-details">
+                    <div class="payment-title">PIX</div>
+                    <p class="payment-subtitle">Aprovação imediata</p>
+                </div>
+            </div>
+
+            <div class="payment-option pagjunto selected">
+                <div class="payment-radio"></div>
+                <div class="payment-icon pagjunto">
+                    PJ
+                </div>
+                <div class="payment-details">
+                    <div class="payment-title">Pagar com <span id="pagjunto-logo">pagjunto</span></div>
+                    <p class="payment-subtitle pagjunto-highlight">Divida com amigos • Sem juros</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="checkout-button" onclick="showPaymentPage()">
+            Continuar com pagjunto
+        </button>
+    `;
+}
+</script>
 </body>
 </html>
