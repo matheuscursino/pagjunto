@@ -882,6 +882,78 @@
                 min-width: 0;
                 justify-content: center;
             }
+
+            .mobile-order-details-section {
+                border-top: 1px solid var(--gray-200);
+                padding-top: 12px;
+                margin-top: 12px;
+                display: none;
+            }
+
+            .mobile-order-details-section.expanded {
+                display: block;
+            }
+
+            .mobile-payers-list {
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                margin-top: 8px;
+            }
+
+            .mobile-payer-item {
+                background: var(--gray-50);
+                padding: 12px;
+                border-radius: var(--radius);
+                border: 1px solid var(--gray-200);
+            }
+
+            .mobile-payer-name {
+                font-weight: 500;
+                color: var(--gray-900);
+                margin-bottom: 4px;
+            }
+
+            .mobile-payer-id,
+            .mobile-payer-phone {
+                font-size: 0.75rem;
+                color: var(--gray-500);
+                font-family: 'SF Mono', Consolas, monospace;
+                margin-bottom: 4px;
+            }
+
+            .mobile-payer-amount {
+                font-weight: 600;
+                color: var(--success);
+            }
+
+            .mobile-toggle-details {
+                width: 100%;
+                background: var(--gray-100);
+                border: 1px solid var(--gray-200);
+                border-radius: var(--radius);
+                padding: 10px;
+                color: var(--gray-700);
+                font-size: 0.875rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .mobile-toggle-details:hover {
+                background: var(--gray-200);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-orders-container {
+                display: none;
+            }
         }
 
         /* Touch-friendly improvements */
@@ -965,7 +1037,8 @@
             margin-bottom: 4px;
         }
 
-        .payer-id {
+        .payer-id,
+        .payer-phone {
             font-size: 0.75rem;
             color: var(--gray-500);
             font-family: 'SF Mono', Consolas, monospace;
@@ -1226,7 +1299,6 @@
 
 <body>
     <div class="app-layout">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <a href="/" class="logo">pagjunto</a>
@@ -1275,10 +1347,8 @@
             </div>
         </aside>
 
-        <!-- Sidebar Overlay for Mobile -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Main Content -->
         <main class="main-content">
             <header class="main-header">
                 <button class="mobile-sidebar-toggle" id="sidebarToggle">
@@ -1289,12 +1359,10 @@
                     <p class="page-subtitle" id="pageSubtitle">Dashboard executivo da sua conta</p>
                 </div>
                 <div class="header-actions">
-                    <!-- Future: notifications, user menu, etc. -->
-                </div>
+                    </div>
             </header>
 
             <div class="content-area">
-                <!-- Overview Section -->
                 <section class="content-section active" id="overview-section">
                     <div class="stats-grid">
     <div class="stat-card">
@@ -1429,7 +1497,6 @@
                     </div>
                 </section>
 
-                <!-- Orders Section -->
                 <section class="content-section" id="orders-section">
                     <div class="orders-header">
                         <div>
@@ -1464,11 +1531,9 @@
 </div>
 
 <div class="mobile-orders-container" id="mobileOrdersContainer">
-    <!-- Mobile order cards will be inserted here -->
-</div>
+    </div>
                 </section>
 
-                <!-- Create Order Section -->
                 <section class="content-section" id="create-section">
                     <div class="create-order-form">
                         <div class="form-header">
@@ -1510,7 +1575,6 @@
                     </div>
                 </section>
 
-                <!-- Settings Section -->
                 <section class="content-section" id="settings-section">
                     <div class="settings-card">
                         <div class="settings-header">
@@ -1533,7 +1597,6 @@
         </main>
     </div>
 
-    <!-- QR Code Modal -->
     <div id="qrCodeModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" id="closeQrModal">&times;</button>
@@ -1545,7 +1608,6 @@
         </div>
     </div>
 
-    <!-- Toast -->
     <div id="copyToast" class="toast"></div>
 
     <script>
@@ -1641,6 +1703,14 @@
                 paid: 'Pago'
             };
             return translations[status] || status;
+        }
+
+        // CPF MASKING FUNCTION
+        function maskCPF(cpf) {
+            if (!cpf || typeof cpf !== 'string') return 'N/A';
+            const cleanCpf = cpf.replace(/\D/g, '');
+            if (cleanCpf.length !== 11) return cpf; // Return original if not a valid CPF length
+            return `${cleanCpf.substring(0, 3)}.***.***-${cleanCpf.substring(9, 12)}`;
         }
 
         // Dashboard Display
@@ -1815,7 +1885,7 @@
     }
 
     orders.forEach(order => {
-        // Desktop table row (existing code)
+        // Desktop table row
         const mainRow = document.createElement('tr');
         mainRow.innerHTML = `
             <td>
@@ -1853,10 +1923,13 @@
                 order.payersIds.map((id, index) => {
                     const name = (Array.isArray(order.payersNames) && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
                     const value = (Array.isArray(order.payersValues) && typeof order.payersValues[index] !== 'undefined') ? formatCurrency(order.payersValues[index]) : '';
+                    const phone = (Array.isArray(order.payersPhone) && order.payersPhone[index]) ? order.payersPhone[index] : 'N/A';
+                    const maskedCpf = maskCPF(id);
                     
                     return `<li class="payer-item">
                                 <div class="payer-name">${name}</div>
-                                <div class="payer-id">CPF: ${id}</div>
+                                <div class="payer-id">CPF: ${maskedCpf}</div>
+                                <div class="payer-phone">Telefone: ${phone}</div>
                                 <div class="payer-amount">Valor Pago: ${value}</div>
                             </li>`;
                 }).join('')
@@ -1905,10 +1978,13 @@
                 order.payersIds.map((id, index) => {
                     const name = (Array.isArray(order.payersNames) && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
                     const value = (Array.isArray(order.payersValues) && typeof order.payersValues[index] !== 'undefined') ? formatCurrency(order.payersValues[index]) : '';
+                    const phone = (Array.isArray(order.payersPhone) && order.payersPhone[index]) ? order.payersPhone[index] : 'N/A';
+                    const maskedCpf = maskCPF(id);
                     
                     return `<li class="mobile-payer-item">
                                 <div class="mobile-payer-name">${name}</div>
-                                <div class="mobile-payer-id">CPF: ${id}</div>
+                                <div class="mobile-payer-id">CPF: ${maskedCpf}</div>
+                                <div class="mobile-payer-phone">Telefone: ${phone}</div>
                                 <div class="mobile-payer-amount">Valor Pago: ${value}</div>
                             </li>`;
                 }).join('')
@@ -2147,6 +2223,7 @@ function toggleOrderDetails(orderId) {
                         payersIds: [],
                         payersNames: [],
                         payersValues: [],
+                        payersPhone: [],
                         createdAt: new Date().toISOString()
                     };
                     updateDashboardWithNewOrder(newOrder);
