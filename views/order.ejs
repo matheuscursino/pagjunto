@@ -609,6 +609,10 @@
                     <input type="text" id="cpf" placeholder="000.000.000-00" required />
                 </div>
                 <div class="form-group">
+                    <label for="phone">Seu telefone (com DDD)</label>
+                    <input type="text" id="phone" placeholder="(99) 99999-9999" required />
+                </div>
+                <div class="form-group">
                     <label for="valor">Valor a pagar</label>
                     <input type="text" id="valor" placeholder="Ex: 50,00" inputmode="decimal" required />
                 </div>
@@ -640,7 +644,7 @@
     </main>
 
     <div id="termsModal" class="modal">
-        </div>
+    </div>
     
     <div id="pageQrModal" class="modal">
         <div class="modal-content" style="max-width: 450px;">
@@ -667,11 +671,9 @@
     </footer>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Funções e lógicas existentes (sem alteração)
     function getLastIdsFromCurrentUrl() {
         const parts = window.location.href.split("/").filter(Boolean);
         const id2 = parts[parts.length - 1];
@@ -731,8 +733,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (copyPageLinkBtn) {
         copyPageLinkBtn.addEventListener('click', () => {
              navigator.clipboard.writeText(pageQrLinkText.value).then(() => {
-                copyPageLinkBtn.textContent = 'Copiado!';
-                setTimeout(() => { copyPageLinkBtn.textContent = 'Copiar'; }, 2000);
+                 copyPageLinkBtn.textContent = 'Copiado!';
+                 setTimeout(() => { copyPageLinkBtn.textContent = 'Copiar'; }, 2000);
             });
         });
     }
@@ -757,9 +759,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     
-    // --- INÍCIO DA ÁREA CORRIGIDA ---
-
-    // A configuração do Socket.IO permanece a mesma, como solicitado.
     let socket;
     function initializeSocket() {
         try {
@@ -774,17 +773,13 @@ document.addEventListener('DOMContentLoaded', function () {
             socket.on('disconnect', (reason) => console.log('❌ Desconectado do WebSocket. Motivo:', reason));
             socket.on('connect_error', (err) => console.error('❌ Falha na conexão com o WebSocket:', err.message));
 
-            // CORREÇÃO: O manipulador do evento 'paymentConfirmed' foi simplificado para evitar erros.
             socket.on('paymentConfirmed', (data) => {
                 console.log('🎉 Evento de confirmação de pagamento recebido:', data);
 
                 try {
-                    // Ação principal: Substituir o formulário de pagamento por uma mensagem de sucesso.
-                    // Esta abordagem é mais segura e não depende de uma estrutura complexa de dados.
                     const paymentCard = document.getElementById('paymentCard');
 
                     if (paymentCard) {
-                        // Monta a mensagem de forma segura, com valores padrão caso 'data' seja inesperado.
                         const paidAmount = (data && typeof data.paidValue === 'number') ? data.paidValue.toFixed(2).replace('.', ',') : 'um valor';
                         const payer = (data && data.payerName) ? `de <strong>${data.payerName}</strong>` : '';
 
@@ -799,15 +794,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>`;
                     }
                     
-                    // O recarregamento da página é mantido, pois é a forma mais confiável de
-                    // garantir que todos os dados (resumo, progresso, etc.) fiquem 100% sincronizados.
                     setTimeout(() => {
                         window.location.reload();
                     }, 5000);
 
                 } catch (error) {
-                    // Este bloco de erro é uma segurança. Se algo inesperado ainda ocorrer,
-                    // a melhor ação é recarregar a página para obter o estado mais recente do servidor.
                     console.error('❌ Erro ao processar o evento de pagamento. Recarregando a página como segurança.', error);
                     window.location.reload();
                 }
@@ -820,13 +811,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     initializeSocket();
 
-    // --- FIM DA ÁREA CORRIGIDA ---
-
-
     if (document.getElementById('paymentForm')) {
         const paymentForm = document.getElementById('paymentForm');
         const nameInput = document.getElementById('name');
         const cpfInput = document.getElementById('cpf');
+        const phoneInput = document.getElementById('phone'); // Pega o novo campo
         const valueInput = document.getElementById('valor');
         const generateBtn = document.getElementById('generateBtn');
         const btnText = document.getElementById('btnText');
@@ -843,6 +832,21 @@ document.addEventListener('DOMContentLoaded', function () {
             e.target.value = value;
         });
 
+        // Adiciona a máscara para o campo de telefone
+        phoneInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '').slice(0, 11);
+            if (value.length > 10) {
+                value = value.replace(/^(\d\d)(\d{5})(\d{4}).*/, '($1) $2-$3');
+            } else if (value.length > 5) {
+                value = value.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                value = value.replace(/^(\d\d)(\d{0,5}).*/, '($1) $2');
+            } else {
+                value = value.replace(/^(\d*)/, '($1');
+            }
+            e.target.value = value;
+        });
+
         paymentForm.addEventListener('submit', (e) => {
             e.preventDefault();
             gerarPix();
@@ -854,6 +858,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const valorString = valueInput.value.replace(',', '.');
             const valorFloat = parseFloat(valorString);
             const cpf = cpfInput.value;
+            const phone = phoneInput.value;
+            const rawPhone = phone.replace(/\D/g, ''); // Telefone sem máscara
 
             const totalValue = <%= orderData.totalValue %>;
             const paidValue = <%= orderData.paidValue %>;
@@ -861,6 +867,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             if (!fullName || fullName.split(' ').length < 2) { return errorMessage.textContent = "Informe seu nome completo."; }
             if (cpf.length !== 14) { return errorMessage.textContent = "Informe um CPF válido."; }
+            if (rawPhone.length < 10 || rawPhone.length > 11) { return errorMessage.textContent = "Informe um telefone válido com DDD."; }
             if (isNaN(valorFloat) || valorFloat <= 0) { return errorMessage.textContent = "Insira um valor de pagamento válido."; }
             if (valorFloat > remainingValue + 0.001) {
                  return errorMessage.textContent = `O valor excede o restante (R$ ${remainingValue.toFixed(2).replace('.',',')}).`;
@@ -877,8 +884,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        name: fullName.split(' ')[0],
+                        name: fullName, // Enviando nome completo
                         cpf: cpf.replace(/\D/g, ''),
+                        phone: { // Enviando o telefone de forma estruturada
+                            country_code: '55',
+                            area_code: rawPhone.substring(0, 2),
+                            number: rawPhone.substring(2)
+                        },
                         amount: Math.round(valorFloat * 100),
                         recipient_id: "<%=partnerData.recipient_id%>",
                         orderId: id2
