@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagjunto - Simplifique pagamentos compartilhados</title>
-    <meta name="description" content="Simplifique pagamentos em grupo, vaquinhas e rateios. Com o Pagjunto, você cria um link de pagamento único e nós cuidamos do resto.">
+    <title>Pagjunto - Simplificando vaquinhas</title>
+    <meta name="description" content="Aumente suas vendas permitindo que clientes dividam pagamentos. Integração simples, sem mensalidade, resultados imediatos.">
     
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -14,8 +14,8 @@
     <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" content="#1e40af">
     
-    <meta property="og:title" content="Pagjunto - Simplifique pagamentos compartilhados">
-    <meta property="og:description" content="Simplifique pagamentos em grupo, vaquinhas e rateios.">
+    <meta property="og:title" content="Pagjunto - Simplificando vaquinhas">
+    <meta property="og:description" content="Aumente suas vendas permitindo que clientes dividam pagamentos. Integração simples, sem mensalidade, resultados imediatos.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.pagjunto.com">
     <meta property="og:image" content="https://www.pagjunto.com/og-image.png">
@@ -44,7 +44,7 @@
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
     --radius: 12px;
     --radius-lg: 20px;
-    
+
     /* Blue-ish Gradient Variables */
     --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
     --gradient-accent: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
@@ -810,120 +810,416 @@ p {
     line-height: 1.6;
 }
 
-/* Small Business Section */
-.small-business {
+/* Business Selector */
+.business-selector {
     background: linear-gradient(180deg, #ffffff 0%, rgba(248, 250, 252, 0.5) 100%);
     position: relative;
     overflow: hidden;
+    padding: 120px 0;
 }
 
-.small-business::before {
+.business-selector::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(ellipse at top left, rgba(34, 197, 94, 0.03) 0%, transparent 70%);
+    background: radial-gradient(ellipse at top center, rgba(37, 99, 235, 0.03) 0%, transparent 70%);
     pointer-events: none;
 }
 
-.business-header {
+.selector-header {
     text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.selector-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
     margin-bottom: 80px;
     position: relative;
     z-index: 2;
+    background: rgba(248, 250, 252, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 8px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 80px;
+    border: 1px solid rgba(226, 232, 240, 0.3);
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08);
 }
 
-.business-header .badge {
-    display: inline-block;
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
-    color: #059669;
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-size: 0.875rem;
+.tab-button {
+    flex: 1;
+    padding: 16px 24px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
     font-weight: 600;
-    margin-bottom: 24px;
-    border: 1px solid rgba(34, 197, 94, 0.2);
+    font-size: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-.business-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 32px;
+.tab-button.active {
+    background: var(--gradient-accent);
+    color: white;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+    transform: translateY(-1px);
+}
+
+.tab-button:hover:not(.active) {
+    background: rgba(37, 99, 235, 0.05);
+    color: var(--accent);
+}
+
+.tab-content {
+    display: none;
     position: relative;
     z-index: 2;
 }
 
-.business-card {
+.tab-content.active {
+    display: block;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Physical Business Section */
+.physical-business {
+    position: relative;
+}
+
+.business-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-bottom: 80px;
+}
+
+.showcase-content h3 {
+    font-size: 2.5rem;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.showcase-content p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+.use-cases {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.use-case {
+    padding: 24px;
     background: var(--gradient-card);
-    border-radius: var(--radius-lg);
-    padding: 40px 32px;
+    border-radius: var(--radius);
     border: 1px solid rgba(226, 232, 240, 0.3);
     backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.08);
     transition: all 0.3s ease;
+}
+
+.use-case:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(37, 99, 235, 0.12);
+}
+
+.use-case-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--gradient-accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+}
+
+.use-case h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.use-case p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ROI Calculator */
+.roi-calculator {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    border: 1px solid rgba(226, 232, 240, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
     position: relative;
     overflow: hidden;
 }
 
-.business-card::before {
+.roi-calculator::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    right: 0;
     height: 4px;
+    background: var(--gradient-accent);
+}
+
+.calculator-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.calculator-header h4 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+.calculator-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.calculator-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    border: 2px solid rgba(226, 232, 240, 0.3);
+    background: rgba(255, 255, 255, 0.8);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.calculator-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.result-card {
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(30, 64, 175, 0.05));
+    border-radius: var(--radius);
+    border: 1px solid rgba(37, 99, 235, 0.1);
+    transition: all 0.3s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+}
+
+.result-value {
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.result-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* App Business Section */
+.app-business {
+    position: relative;
+}
+
+.app-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-bottom: 80px;
+}
+
+.integration-demo {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    border: 1px solid rgba(226, 232, 240, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 32px rgba(37, 99, 235, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.integration-demo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
     background: linear-gradient(90deg, #22c55e, #16a34a);
 }
 
-.business-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(34, 197, 94, 0.15);
-    border-color: rgba(34, 197, 94, 0.2);
+.demo-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
 }
 
-.business-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: var(--radius);
+.demo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     background: linear-gradient(135deg, #22c55e, #16a34a);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 24px;
-    transition: all 0.3s ease;
+    font-size: 1.125rem;
 }
 
-.business-card:hover .business-icon {
-    transform: scale(1.1) rotate(5deg);
-}
-
-.business-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 16px;
+.demo-title {
+    font-size: 1.25rem;
+    font-weight: 600;
     color: var(--text-primary);
 }
 
-.business-card p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 24px;
+.code-snippet {
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow-x: auto;
 }
 
-.business-metric {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 20px;
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.02));
+.code-snippet::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ef4444;
+    box-shadow: 20px 0 0 #f59e0b, 40px 0 0 #22c55e;
+}
+
+.code-snippet code {
+    color: #e2e8f0;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    display: block;
+    margin-top: 20px;
+}
+
+.code-snippet .keyword {
+    color: #c084fc;
+}
+
+.code-snippet .string {
+    color: #34d399;
+}
+
+.code-snippet .comment {
+    color: #64748b;
+    font-style: italic;
+}
+
+.code-snippet .method {
+    color: #60a5fa;
+}
+
+.code-snippet .property {
+    color: #fbbf24;
+}
+
+.integration-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.integration-step {
+    text-align: center;
+    padding: 24px;
+    background: rgba(34, 197, 94, 0.05);
     border-radius: var(--radius);
     border: 1px solid rgba(34, 197, 94, 0.1);
+    transition: all 0.3s ease;
 }
 
-.metric-icon {
+.integration-step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.15);
+}
+
+.step-number {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -932,138 +1228,263 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 700;
     font-size: 0.875rem;
-    flex-shrink: 0;
+    margin: 0 auto 16px;
 }
 
-.metric-text {
-    font-size: 0.875rem;
+.integration-step h5 {
+    font-size: 1rem;
     font-weight: 600;
-    color: #059669;
+    margin-bottom: 8px;
+    color: var(--text-primary);
 }
 
-/* Large Business Section */
-.large-business {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 58, 138, 0.95) 100%);
-    color: white;
+.integration-step p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Enhanced Metrics Comparison */
+.metrics-comparison {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    border: 1px solid rgba(226, 232, 240, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+    margin-top: 60px;
     position: relative;
     overflow: hidden;
 }
 
-.large-business::before {
+.metrics-comparison::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
-    pointer-events: none;
-    animation: pulse 6s ease-in-out infinite;
+    height: 2px;
+    background: linear-gradient(90deg, #64748b, #1e40af);
 }
 
-.large-business .business-header {
-    color: white;
+.comparison-header {
+    text-align: center;
+    margin-bottom: 48px;
 }
 
-.large-business .business-header .badge {
-    background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(147, 51, 234, 0.1));
-    color: #c084fc;
-    border-color: rgba(147, 51, 234, 0.3);
+.comparison-header h4 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-primary);
 }
 
-.enterprise-grid {
+.comparison-header p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.comparison-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
+    gap: 48px;
     position: relative;
-    z-index: 2;
 }
 
-.enterprise-content h3 {
-    font-size: 2rem;
-    margin-bottom: 24px;
-    color: white;
-}
-
-.enterprise-content p {
-    font-size: 1.125rem;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 32px;
-    line-height: 1.6;
-}
-
-.enterprise-features {
-    list-style: none;
-    margin-bottom: 40px;
-}
-
-.enterprise-features li {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.enterprise-features li::before {
+.comparison-grid::before {
     content: '';
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #9333ea, #7c3aed);
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent 0%, rgba(148, 163, 184, 0.3) 20%, rgba(148, 163, 184, 0.3) 80%, transparent 100%);
+    transform: translateX(-50%);
 }
 
-.enterprise-features li::after {
-    content: '✓';
+.comparison-side {
+    position: relative;
+}
+
+.comparison-side h5 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    padding: 16px 24px;
+    border-radius: var(--radius);
+    text-align: center;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.875rem;
+}
+
+.before-side h5 {
+    background: linear-gradient(135deg, rgba(100, 116, 139, 0.1), rgba(71, 85, 105, 0.05));
+    color: #475569;
+    border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+.after-side h5 {
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(37, 99, 235, 0.05));
+    color: #1e40af;
+    border: 1px solid rgba(30, 64, 175, 0.2);
+}
+
+.metrics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+    position: relative;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.metric-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.metric-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.metric-description {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', monospace;
+}
+
+.before-side .metric-value {
+    color: #64748b;
+}
+
+.after-side .metric-value {
+    color: #1e40af;
+}
+
+.improvement-indicator {
     position: absolute;
-    margin-left: -14px;
+    top: -6px;
+    right: -6px;
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
     color: white;
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(30, 64, 175, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-trend {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 8px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.trend-up {
+    background: rgba(30, 64, 175, 0.1);
+    color: #1e40af;
+}
+
+.trend-down {
+    background: rgba(100, 116, 139, 0.1);
+    color: #64748b;
+}
+
+/* Professional Data Table Style */
+.metrics-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 32px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.metrics-table th {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.metrics-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+    font-size: 0.875rem;
+}
+
+.metrics-table tr:hover {
+    background: rgba(248, 250, 252, 0.5);
+}
+
+.metric-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.metric-before {
+    color: #64748b;
+    font-weight: 600;
+    font-family: 'Inter', monospace;
+}
+
+.metric-after {
+    color: #1e40af;
+    font-weight: 700;
+    font-family: 'Inter', monospace;
+}
+
+.metric-improvement {
+    color: #059669;
     font-weight: 700;
     font-size: 0.75rem;
-}
-
-.enterprise-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
-}
-
-.stat-card {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius-lg);
-    padding: 32px 24px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-}
-
-.stat-number {
-    font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #9333ea, #c084fc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 8px;
-}
-
-.stat-label {
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Contact Section */
@@ -1304,6 +1725,17 @@ p {
     }
 }
 
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @keyframes slideInLeft {
     from {
         opacity: 0;
@@ -1384,7 +1816,8 @@ p {
 
 /* Responsive Design */
 @media(max-width: 1024px) {
-    .enterprise-grid {
+    .business-showcase,
+    .app-showcase {
         grid-template-columns: 1fr;
         gap: 60px;
     }
@@ -1392,6 +1825,24 @@ p {
     .contact-grid {
         grid-template-columns: 1fr;
         gap: 60px;
+    }
+    
+    .comparison-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    
+    .comparison-grid::before {
+        display: none;
+    }
+    
+    .use-cases {
+        grid-template-columns: 1fr;
+    }
+    
+    .integration-steps {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 }
 
@@ -1451,16 +1902,20 @@ p {
         gap: 32px;
     }
     
-    .business-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
+    .selector-tabs {
+        flex-direction: column;
+        max-width: 400px;
     }
     
-    .enterprise-stats {
+    .calculator-inputs {
         grid-template-columns: 1fr;
-        gap: 24px;
     }
     
+    .calculator-results {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .roi-calculator,
     .contact-form {
         padding: 32px 24px;
     }
@@ -1486,6 +1941,18 @@ p {
     
     .bg-circle, .bg-square, .bg-triangle {
         display: none;
+    }
+    
+    .metrics-comparison {
+        padding: 32px 24px;
+    }
+    
+    .comparison-header h4 {
+        font-size: 1.5rem;
+    }
+    
+    .metric-value {
+        font-size: 1.25rem;
     }
 }
 
@@ -1727,24 +2194,6 @@ p {
     font-weight: 600;
 }
 
-.quick-amount-btn {
-    background: rgba(37, 99, 235, 0.1);
-    color: #2563eb;
-    border: 1px solid rgba(37, 99, 235, 0.2);
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.quick-amount-btn:hover {
-    background: rgba(37, 99, 235, 0.15);
-    border-color: rgba(37, 99, 235, 0.3);
-    transform: translateY(-1px);
-}
-
 /* PIX Page Styles */
 .pix-container {
     margin-top: 24px;
@@ -1776,49 +2225,6 @@ p {
     margin: 4px 0;
     font-size: 0.875rem;
     color: #374151;
-}
-
-.pix-key-section {
-    margin-bottom: 24px;
-}
-
-.pix-key-section label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 8px;
-    text-align: left;
-}
-
-.pix-key-wrapper-mobile {
-    display: flex;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.pix-key-wrapper-mobile input {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    background: transparent;
-    font-size: 0.8rem;
-    color: #6b7280;
-}
-
-.copy-btn-mobile {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 12px 16px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.copy-btn-mobile:hover {
-    background: #1d4ed8;
 }
 
 .payment-status {
@@ -1872,80 +2278,6 @@ p {
     color: #15803d;
 }
 
-/* Success Page Styles */
-.success-container {
-    text-align: center;
-    padding: 40px 20px;
-}
-
-.success-icon {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-    animation: successPulse 2s ease-in-out;
-}
-
-.success-icon i {
-    font-size: 2.5rem;
-    color: white;
-}
-
-.success-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #15803d;
-    margin-bottom: 12px;
-}
-
-.success-message {
-    font-size: 0.95rem;
-    color: #374151;
-    margin-bottom: 24px;
-    line-height: 1.5;
-}
-
-.success-details {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 24px;
-}
-
-.success-details p {
-    margin: 4px 0;
-    font-size: 0.875rem;
-    color: #15803d;
-}
-
-.new-payment-btn {
-    background: var(--gradient-accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.new-payment-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
-}
-
-@keyframes successPulse {
-    0% { transform: scale(0.8); opacity: 0; }
-    50% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
@@ -1956,9 +2288,14 @@ p {
 }
 
 .escale {
-    color: white
+    color: white;
+}
+
+.integrar {
+    margin-top: 30px;
 }
     </style>
+    
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -1990,8 +2327,8 @@ p {
                 pagjunto
             </a>
             <nav class="nav-links">
-                <a href="#features">Soluções</a>
-                <a href="#benefits">Vantagens</a>
+                <a href="#features">Como Funciona</a>
+                <a href="#benefits">Para Empresas</a>
                 <a href="#contact">Contato</a>
                 <a href="/login" class="btn btn-primary mobile-only">Entrar</a>
             </nav>
@@ -2007,13 +2344,13 @@ p {
     <main>
         <section class="hero" id="home">
             <div class="container">
-                <h1 id="hero-title">Simplifique pagamentos compartilhados</h1>
+                <h1 id="hero-title">Transforme "muito caro" em "vamos rachar?"</h1>
                 <p class="lead fade-in" style="transition-delay: 200ms;">
-                    Facilitamos cobranças em grupo: um link, múltiplos pagadores, sem dor de cabeça
+                    Permita que seus clientes dividam pagamentos com amigos. Aumente suas vendas até 40% sem aumentar custos.
                 </p>
                 <div class="hero-buttons fade-in" style="transition-delay: 300ms;">
                     <a href="#contact" class="btn btn-primary">
-                        Falar com especialista
+                        Aumentar Vendas Agora
                     </a>
                     <a href="#features" class="btn btn-secondary">
                         Ver como funciona
@@ -2094,120 +2431,457 @@ p {
         <section class="features" id="features">
             <div class="container">
                 <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                    <h2 class="fade-in">Pagamentos complexos, em 3 passos simples</h2>
+                    <h2 class="fade-in">Como funciona na prática</h2>
                     <p class="lead fade-in" style="transition-delay: 100ms;">
-                        Nossa plataforma foi desenhada para ser fácil de integrar. Veja como é fácil ajudar seus clientes a criarem uma vaquinha em seu checkout
+                        Seus clientes veem uma nova opção no checkout: "Dividir Pagamento". Em 3 cliques, transformam uma compra cara em pagamento compartilhado.
                     </p>
                 </div>
                 <div class="features-grid">
                     <div class="feature-card fade-in" style="transition-delay: 200ms;">
-                        <div class="feature-icon"><i class="fas fa-plus"></i></div>
-                        <h3>1. Criação do pedido</h3>
-                        <p>O pedido pode ser criado através da nossa API ou Dashboard</p>
+                        <div class="feature-icon"><i class="fas fa-mouse-pointer"></i></div>
+                        <h3>1. Cliente escolhe "Dividir"</h3>
+                        <p>Nova opção aparece no seu checkout, ao lado do cartão e PIX. Cliente clica e define quantos amigos vão pagar junto.</p>
                     </div>
                     <div class="feature-card fade-in" style="transition-delay: 300ms;">
                         <div class="feature-icon"><i class="fas fa-share-alt"></i></div>
-                        <h3>2. Compartilhamento do link</h3>
-                        <p>O usuário copia o link e encaminha a todas pessoas que irão pagar junto a ele</p>
+                        <h3>2. Compartilha com amigos</h3>
+                        <p>Link único é gerado automaticamente. Cliente manda no WhatsApp, cada amigo paga sua parte via PIX.</p>
                     </div>
                     <div class="feature-card fade-in" style="transition-delay: 400ms;">
-                        <div class="feature-icon"><i class="fas fa-wallet"></i></div>
-                        <h3>3. Lucro!</h3>
-                        <p>Acompanhe os pagamentos sendo feitos em tempo real através da nossa solução</p>
+                        <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+                        <h3>3. Você recebe tudo</h3>
+                        <p>Pagamento completo garantido na sua conta. Sem risco, sem complicação, sem trabalho extra para sua equipe.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="small-business" id="small-business">
+        <section class="business-selector" id="benefits">
             <div class="container">
-                <div class="business-header fade-in">
-                    <div class="badge">Para Pequenas Empresas</div>
-                    <h2>Cresça sem complicação</h2>
+                <div class="selector-header fade-in">
+                    <h2>Benefícios para seu negócio</h2>
                     <p class="lead">
-                        Transforme cada venda em uma oportunidade de crescimento. Sem mensalidades, sem burocracia
+                        Descubra como o Pagjunto pode transformar suas vendas, seja você um estabelecimento físico ou uma plataforma digital.
                     </p>
                 </div>
                 
-                <div class="business-grid">
-                    <div class="business-card fade-in" style="transition-delay: 200ms;">
-                        <div class="business-icon"><i class="fas fa-rocket"></i></div>
-                        <h3>Aumente suas vendas</h3>
-                        <p>Clientes compram mais quando podem dividir. Transforme "muito caro" em "vamos rachar?"</p>
-                        <div class="business-metric">
-                            <div class="metric-icon">+</div>
-                            <div class="metric-text">Até 40% mais conversões</div>
+                <div class="selector-tabs">
+                    <button class="tab-button active" onclick="switchTab('physical')">
+                        <i class="fas fa-store"></i>
+                        Estabelecimentos Físicos
+                    </button>
+                    <button class="tab-button" onclick="switchTab('app')">
+                        <i class="fas fa-mobile-alt"></i>
+                        Apps & E-commerce
+                    </button>
+                </div>
+
+                <!-- Physical Business Tab -->
+                <div class="tab-content active" id="physical-tab">
+                    <div class="physical-business">
+                        <div class="business-showcase fade-in">
+                            <div class="showcase-content">
+                                <h3>Restaurantes, bares, salões e lojas físicas</h3>
+                                <p>
+                                    Transforme mesas grandes, grupos de amigos e compras em família em oportunidades de venda. 
+                                    Quando o valor é alto, seus clientes podem dividir na hora.
+                                </p>
+                                
+                                <div class="use-cases">
+                                    <div class="use-case">
+                                        <div class="use-case-icon">
+                                            <i class="fas fa-utensils"></i>
+                                        </div>
+                                        <h4>Restaurantes</h4>
+                                        <p>Mesa de 8 pessoas, conta de R$ 400. Cada um paga R$ 50 via PIX.</p>
+                                    </div>
+                                    
+                                    <div class="use-case">
+                                        <div class="use-case-icon">
+                                            <i class="fas fa-cut"></i>
+                                        </div>
+                                        <h4>Salões de Beleza</h4>
+                                        <p>Pacote de noivas R$ 800. Família divide entre 4 pessoas.</p>
+                                    </div>
+                                    
+                                    <div class="use-case">
+                                        <div class="use-case-icon">
+                                            <i class="fas fa-shopping-bag"></i>
+                                        </div>
+                                        <h4>Lojas de Roupas</h4>
+                                        <p>Compra de R$ 600. Amigas dividem o look completo.</p>
+                                    </div>
+                                    
+                                    <div class="use-case">
+                                        <div class="use-case-icon">
+                                            <i class="fas fa-cocktail"></i>
+                                        </div>
+                                        <h4>Bares e Baladas</h4>
+                                        <p>Comanda de R$ 300. Grupo de amigos divide a conta.</p>
+                                    </div>
+                                </div>
+                                
+                                <a href="#contact" class="btn btn-primary">
+                                    Quero implementar no meu estabelecimento
+                                </a>
+                            </div>
+                            
+                            <div class="roi-calculator fade-in">
+                                <div class="calculator-header">
+                                    <h4>Calcule seu potencial de vendas</h4>
+                                    <p>Veja quanto você pode aumentar seu faturamento com o Pagjunto</p>
+                                </div>
+                                
+                                <div class="calculator-inputs">
+                                    <div class="input-group">
+                                        <label for="monthly-revenue">Faturamento mensal atual</label>
+                                        <input type="text" id="monthly-revenue" placeholder="R$ 50.000" oninput="calculateROI()">
+                                    </div>
+                                    
+                                    <div class="input-group">
+                                        <label for="avg-ticket">Ticket médio</label>
+                                        <input type="text" id="avg-ticket" placeholder="R$ 150" oninput="calculateROI()">
+                                    </div>
+                                    
+                                    <div class="input-group">
+                                        <label for="group-percentage">% de vendas em grupo</label>
+                                        <input type="text" id="group-percentage" placeholder="30%" oninput="calculateROI()">
+                                    </div>
+                                </div>
+                                
+                                <div class="calculator-results">
+                                    <div class="result-card">
+                                        <span class="result-value" id="new-revenue">R$ 0</span>
+                                        <div class="result-label">Novo faturamento mensal</div>
+                                    </div>
+                                    
+                                    <div class="result-card">
+                                        <span class="result-value" id="additional-revenue">R$ 0</span>
+                                        <div class="result-label">Receita adicional</div>
+                                    </div>
+                                    
+                                    <div class="result-card">
+                                        <span class="result-value" id="yearly-impact">R$ 0</span>
+                                        <div class="result-label">Impacto anual</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        
+<div class="metrics-comparison fade-in">
+    <div class="comparison-header">
+        <h4>Análise Comparativa de Performance</h4>
+        <p>Dados baseados em estabelecimentos que implementaram nossa solução</p>
+    </div>
+    
+    <div class="comparison-grid">
+        <div class="comparison-side before-side">
+            <h5>Cenário Atual</h5>
+            <div class="metrics-list">
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Taxa de Conversão</div>
+                        <div class="metric-description">Percentual de clientes que finalizam compras</div>
                     </div>
-                    
-                    <div class="business-card fade-in" style="transition-delay: 400ms;">
-                        <div class="business-icon"><i class="fas fa-clock"></i></div>
-                        <h3>Economize tempo da equipe</h3>
-                        <p>Dashboard completo, uso simples. Faça sua equipe gastar tempo com o que realmente importa</p>
-                        <div class="business-metric">
-                            <div class="metric-icon">⚡</div>
-                            <div class="metric-text">Integração em 30min</div>
-                        </div>
+                    <div class="metric-value">
+                        2.1%
+                        <span class="metric-trend trend-down">Baixa</span>
                     </div>
-                    
-                    <div class="business-card fade-in" style="transition-delay: 500ms;">
-                        <div class="business-icon"><i class="fas fa-users"></i></div>
-                        <h3>Novos clientes</h3>
-                        <p>Cada pagamento compartilhado traz novos compradores. Um cliente vira cinco automaticamente</p>
-                        <div class="business-metric">
-                            <div class="metric-icon">👥</div>
-                            <div class="metric-text">5x mais dados de clientes</div>
-                        </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Abandono por Preço</div>
+                        <div class="metric-description">Clientes que desistem por considerar caro</div>
+                    </div>
+                    <div class="metric-value">
+                        35%
+                        <span class="metric-trend trend-down">Alto</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Ticket Médio</div>
+                        <div class="metric-description">Valor médio por transação</div>
+                    </div>
+                    <div class="metric-value">
+                        R$ 150
+                        <span class="metric-trend trend-down">Limitado</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Satisfação NPS</div>
+                        <div class="metric-description">Net Promoter Score médio</div>
+                    </div>
+                    <div class="metric-value">
+                        7.2
+                        <span class="metric-trend trend-down">Regular</span>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section class="large-business" id="large-business">
-            <div class="container">
-                <div class="business-header fade-in">
-                    <div class="badge">Para Grandes Empresas</div>
-                    <h2 class="escale">Escale sem limites</h2>
-                    <p class="lead">
-                        Infraestrutura enterprise, insights avançados e suporte dedicado para operações de grande volume
-                    </p>
+        </div>
+        
+        <div class="comparison-side after-side">
+            <h5>Com Pagjunto</h5>
+            <div class="metrics-list">
+                <div class="metric-item">
+                    <div class="improvement-indicator">+52%</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Taxa de Conversão</div>
+                        <div class="metric-description">Aumento significativo nas finalizações</div>
+                    </div>
+                    <div class="metric-value">
+                        3.2%
+                        <span class="metric-trend trend-up">Otimizada</span>
+                    </div>
                 </div>
                 
-                <div class="enterprise-grid">
-                    <div class="enterprise-content fade-in">
-                        <h3>Dados que impulsionam decisões</h3>
-                        <p>
-                            Cada pagamento compartilhado revela padrões de consumo únicos. Entenda como grupos compram, quando dividem e por quê
-                        </p>
-                        <ul class="enterprise-features">
-                            <li>Analytics avançado de comportamento de grupo</li>
-                            <li>Segmentação automática por padrões de divisão</li>
-                            <li>Previsão de demanda baseada em sazonalidade</li>
-                            <li>Base de pagadores que podem vir a ser novos clientes</li>
-                            <li>Relatórios personalizados em tempo real</li>
-                        </ul>
-                        <a href="#contact" class="btn btn-secondary">
-                            Agendar demonstração
-                        </a>
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Abandono por Preço</div>
+                        <div class="metric-description">Redução drástica na desistência</div>
                     </div>
-                    
-                    <div class="enterprise-stats fade-in" style="transition-delay: 200ms;">
-                        <div class="stat-card">
-                            <div class="stat-number">99.9%</div>
-                            <div class="stat-label">Uptime garantido</div>
+                    <div class="metric-value">
+                        20%
+                        <span class="metric-trend trend-up">Reduzido</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Ticket Médio</div>
+                        <div class="metric-description">Crescimento no valor por transação</div>
+                    </div>
+                    <div class="metric-value">
+                        R$ 240
+                        <span class="metric-trend trend-up">Expandido</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Satisfação NPS</div>
+                        <div class="metric-description">Melhoria na experiência do cliente</div>
+                    </div>
+                    <div class="metric-value">
+                        9.5
+                        <span class="metric-trend trend-up">Excelente</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                    </div>
+                </div>
+
+                <!-- App Business Tab -->
+                <div class="tab-content" id="app-tab">
+                    <div class="app-business">
+                        <div class="app-showcase fade-in">
+                            <div class="showcase-content">
+                                <h3>E-commerce, marketplaces e aplicativos</h3>
+                                <p>
+                                    Integre nossa API REST em minutos e ofereça uma nova forma de pagamento que aumenta conversões e reduz abandono de carrinho.
+                                </p>
+                                
+                                <div class="integration-steps">
+                                    <div class="integration-step">
+                                        <div class="step-number">1</div>
+                                        <h5>Integração API</h5>
+                                        <p>Endpoints REST simples, documentação completa, suporte técnico dedicado.</p>
+                                    </div>
+                                    
+                                    <div class="integration-step">
+                                        <div class="step-number">2</div>
+                                        <h5>Configuração</h5>
+                                        <p>Dashboard intuitivo para configurar regras e acompanhar métricas.</p>
+                                    </div>
+                                    
+                                    <div class="integration-step">
+                                        <div class="step-number">3</div>
+                                        <h5>Go Live</h5>
+                                        <p>Nova opção de pagamento disponível para seus clientes em produção.</p>
+                                    </div>
+                                </div>
+                                
+                                <a href="#contact" class="btn btn-primary integrar">
+                                    Quero integrar no meu app
+                                </a>
+                            </div>
+                            
+                            <div class="integration-demo fade-in">
+                                <div class="demo-header">
+                                    <div class="demo-icon">
+                                        <i class="fas fa-code"></i>
+                                    </div>
+                                    <div class="demo-title">Integração via API REST</div>
+                                </div>
+                                
+                                <div class="code-snippet">
+                                    <code>
+<span class="comment">// Criar pagamento compartilhado</span>
+<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="method">fetch</span>(<span class="string">'https://api.pagjunto.com/v1/payments/pix'</span>, {
+  <span class="property">method</span>: <span class="string">'POST'</span>,
+  <span class="property">headers</span>: {
+    <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+    <span class="string">'Authorization'</span>: <span class="string">'Bearer YOUR_API_KEY'</span>
+  },
+  <span class="property">body</span>: <span class="method">JSON.stringify</span>({
+    <span class="property">name</span>: <span class="string">'João Silva'</span>,
+    <span class="property">cpf</span>: <span class="string">'12345678901'</span>,
+    <span class="property">amount</span>: <span class="string">21000</span>, <span class="comment">// R$ 210,00 em centavos</span>
+    <span class="property">orderId</span>: <span class="string">'order-123'</span>,
+    <span class="property">recipient_id</span>: <span class="string">'re_your_recipient_id'</span>
+  })
+})
+
+<span class="keyword">const</span> pixData = <span class="keyword">await</span> response.<span class="method">json</span>()
+
+<span class="comment">// Redirecionar para página de pagamento compartilhado</span>
+window.location.href = <span class="string">`https://pagjunto.com/${partnerId}/${pixData.data.id}`</span>
+                                    </code>
+                                </div>
+                                
+                                <p style="text-align: center; color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
+                                    <i class="fas fa-check-circle" style="color: #22c55e; margin-right: 8px;"></i>
+                                    Pronto! Seus clientes já podem dividir pagamentos
+                                </p>
+                            </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-number">10M+</div>
-                            <div class="stat-label">Capacidade de transações/mês</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">24/7</div>
-                            <div class="stat-label">Suporte dedicado</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">< 50ms</div>
-                            <div class="stat-label">Latência média</div>
-                        </div>
+                        
+<div class="metrics-comparison fade-in">
+    <div class="comparison-header">
+        <h4>Impacto Quantificado nas Métricas</h4>
+        <p>Análise baseada em dados de e-commerces integrados</p>
+    </div>
+    
+    <div class="comparison-grid">
+        <div class="comparison-side before-side">
+            <h5>Performance Anterior</h5>
+            <div class="metrics-list">
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Conversão do Checkout</div>
+                        <div class="metric-description">Taxa de finalização de pedidos</div>
+                    </div>
+                    <div class="metric-value">
+                        2.1%
+                        <span class="metric-trend trend-down">Padrão</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Abandono de Carrinho</div>
+                        <div class="metric-description">Usuários que desistem no pagamento</div>
+                    </div>
+                    <div class="metric-value">
+                        69%
+                        <span class="metric-trend trend-down">Elevado</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Valor Médio Pedido</div>
+                        <div class="metric-description">AOV - Average Order Value</div>
+                    </div>
+                    <div class="metric-value">
+                        R$ 180
+                        <span class="metric-trend trend-down">Limitado</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Taxa de Retenção</div>
+                        <div class="metric-description">Clientes que retornam em 30 dias</div>
+                    </div>
+                    <div class="metric-value">
+                        15%
+                        <span class="metric-trend trend-down">Baixa</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Net Promoter Score</div>
+                        <div class="metric-description">Índice de recomendação</div>
+                    </div>
+                    <div class="metric-value">
+                        6.2
+                        <span class="metric-trend trend-down">Regular</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="comparison-side after-side">
+            <h5>Performance Otimizada</h5>
+            <div class="metrics-list">
+                <div class="metric-item">
+                    <div class="improvement-indicator">+52%</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Conversão do Checkout</div>
+                        <div class="metric-description">Melhoria com opção de divisão</div>
+                    </div>
+                    <div class="metric-value">
+                        3.2%
+                        <span class="metric-trend trend-up">Superior</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Abandono de Carrinho</div>
+                        <div class="metric-description">Redução significativa na desistência</div>
+                    </div>
+                    <div class="metric-value">
+                        45%
+                        <span class="metric-trend trend-up">Otimizado</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Valor Médio Pedido</div>
+                        <div class="metric-description">Crescimento no AOV</div>
+                    </div>
+                    <div class="metric-value">
+                        R$ 280
+                        <span class="metric-trend trend-up">Expandido</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Taxa de Retenção</div>
+                        <div class="metric-description">Aumento na fidelização</div>
+                    </div>
+                    <div class="metric-value">
+                        28%
+                        <span class="metric-trend trend-up">Elevada</span>
+                    </div>
+                </div>
+                
+                <div class="metric-item">
+                    <div class="metric-content">
+                        <div class="metric-label">Net Promoter Score</div>
+                        <div class="metric-description">Melhoria na satisfação</div>
+                    </div>
+                    <div class="metric-value">
+                        8.7
+                        <span class="metric-trend trend-up">Excelente</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -2217,9 +2891,9 @@ p {
             <div class="container">
                 <div class="contact-grid">
                     <div class="contact-text fade-in">
-                        <h2>Dúvidas? Fale com um especialista.</h2>
+                        <h2>Pronto para aumentar suas vendas?</h2>
                         <p class="lead">
-                            Preencha o formulário e nossa equipe entrará em contato para entender suas necessidades e mostrar como o Pagjunto pode ajudar sua empresa a crescer
+                            Preencha o formulário e nossa equipe entrará em contato para entender suas necessidades e mostrar como o Pagjunto pode transformar seu negócio.
                         </p>
                         <ul class="contact-info-list">
                             <li>
@@ -2276,9 +2950,9 @@ p {
                 <div class="cta-section scale-in">
                     <div class="container">
                         <h2>pagjunto, cresça junto</h2>
-                        <p>Fale com um especialista e comece a simplificar suas cobranças. Sem mensalidade, sem burocracia</p>
+                        <p>Fale com um especialista e comece a transformar vendas caras em pagamentos compartilhados. Sem mensalidade, sem burocracia.</p>
                         <a href="#contact" class="btn btn-secondary">
-                            Quero simplificar meus pagamentos
+                            Quero aumentar minhas vendas
                         </a>
                     </div>
                 </div>
@@ -2291,7 +2965,7 @@ p {
             <a href="#" class="logo">
                 pagjunto
             </a>
-            <p>Simplificando a forma como o mundo divide contas</p>
+            <p>Simplificando vaquinhas</p>
             <div class="social-links" style="margin: 32px 0;">
                 <a href="https://www.linkedin.com/company/pagjunto" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 <a href="https://www.instagram.com/pagjunto" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -2359,7 +3033,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if(contactForm) {
         contactForm.addEventListener('submit', function(e) {
             // Previne o comportamento padrão de submissão do formulário (redirecionamento)
-            e.preventDefault(); 
+            e.preventDefault();
             
             const form = e.target;
             const formData = new FormData(form);
@@ -2407,7 +3081,60 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
+    // Initialize calculator with default values
+    calculateROI();
 });
+
+// Tab switching functionality
+function switchTab(tabName) {
+    // Remove active class from all tabs and buttons
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    // Add active class to selected tab and button
+    document.getElementById(tabName + '-tab').classList.add('active');
+    event.target.classList.add('active');
+}
+
+// ROI Calculator functionality
+function calculateROI() {
+    const monthlyRevenueInput = document.getElementById('monthly-revenue');
+    const avgTicketInput = document.getElementById('avg-ticket');
+    const groupPercentageInput = document.getElementById('group-percentage');
+    
+    if (!monthlyRevenueInput || !avgTicketInput || !groupPercentageInput) return;
+    
+    // Parse values
+    const monthlyRevenue = parseFloat(monthlyRevenueInput.value.replace(/[^\d]/g, '')) || 50000;
+    const avgTicket = parseFloat(avgTicketInput.value.replace(/[^\d]/g, '')) || 150;
+    const groupPercentage = parseFloat(groupPercentageInput.value.replace(/[^\d]/g, '')) || 30;
+    
+    // Calculate improvements with Pagjunto
+    const improvementFactor = 1.4; // 40% increase
+    const newMonthlyRevenue = monthlyRevenue * improvementFactor;
+    const additionalRevenue = newMonthlyRevenue - monthlyRevenue;
+    const yearlyImpact = additionalRevenue * 12;
+    
+    // Update display
+    document.getElementById('new-revenue').textContent = formatCurrency(newMonthlyRevenue);
+    document.getElementById('additional-revenue').textContent = formatCurrency(additionalRevenue);
+    document.getElementById('yearly-impact').textContent = formatCurrency(yearlyImpact);
+}
+
+// Format currency helper
+function formatCurrency(value) {
+    return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(value);
+}
 
 // Simple payment simulation variables
 let totalAmount = 210.00;
@@ -2601,7 +3328,7 @@ function showPixPage() {
         
         <div class="pix-container">
             <div class="pix-qr-code">
-                <img src="https://icons.veryicon.com/png/o/miscellaneous/form-component/qr-code-236.png?height=180&width=180" alt="QR Code PIX" class="qr-code-image" />
+                <img src="/placeholder.svg?height=180&width=180" alt="QR Code PIX" class="qr-code-image" />
             </div>
             
             <div class="pix-info">
