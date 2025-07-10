@@ -611,7 +611,10 @@
         .paid-card-message {
             text-align: center;
             padding: 40px 20px;
-            grid-column: span 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .paid-card-message .section-title {
@@ -839,7 +842,6 @@
     </header>
 
     <main class="container">
-        <!-- Summary Card -->
         <div class="card">
             <div class="card-header">
                 <div class="section-title">
@@ -888,7 +890,6 @@
                 </div>
             </div>
 
-            <!-- Payers Section -->
             <div class="payers-section">
                 <div class="payers-header">
                     <div class="payers-title">
@@ -926,7 +927,6 @@
             </div>
         </div>
 
-        <!-- Payment Form or Completion Message -->
         <% if (orderData.paidValue >= orderData.totalValue) { %>
             <div class="card paid-card-message">
                 <div class="section-title">
@@ -989,7 +989,6 @@
         <% } %>
     </main>
 
-    <!-- Modals -->
     <div id="termsModal" class="modal"></div>
     
     <div id="pageQrModal" class="modal">
