@@ -96,13 +96,13 @@ app.get('/dashboard', (req, res) => {
 })
 
 app.get('/:partnerId/:orderId', (req, res) => {
-    axios.get('https://api.pagjunto.com/partner', {
+    axios.get('https://api.pagjunto.com/v1/partner', {
         data: {
             'partnerId': req.params.partnerId
         }
     }, axiosConfig).then((response) => {
         var partnerData = response.data
-        axios.get('https://api.pagjunto.com/order', {
+        axios.get('https://api.pagjunto.com/v1/order', {
             data: {
                 orderId: req.params.orderId
             }
