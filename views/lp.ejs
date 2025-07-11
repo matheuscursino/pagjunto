@@ -2724,25 +2724,23 @@ p {
                                 <div class="code-snippet">
                                     <code>
 <span class="comment">// Criar pagamento compartilhado</span>
-<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="method">fetch</span>(<span class="string">'https://api.pagjunto.com/v1/payments/pix'</span>, {
+<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="method">fetch</span>(<span class="string">'https://api.pagjunto.com/v1/order'</span>, {
   <span class="property">method</span>: <span class="string">'POST'</span>,
   <span class="property">headers</span>: {
-    <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
-    <span class="string">'Authorization'</span>: <span class="string">'Bearer YOUR_API_KEY'</span>
+    <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
   },
   <span class="property">body</span>: <span class="method">JSON.stringify</span>({
-    <span class="property">name</span>: <span class="string">'João Silva'</span>,
-    <span class="property">cpf</span>: <span class="string">'12345678901'</span>,
-    <span class="property">amount</span>: <span class="string">21000</span>, <span class="comment">// R$ 210,00 em centavos</span>
-    <span class="property">orderId</span>: <span class="string">'order-123'</span>,
-    <span class="property">recipient_id</span>: <span class="string">'re_your_recipient_id'</span>
+    <span class="property">name</span>: <span class="string">'pedido2'</span>,
+    <span class="property">totalValue</span>: <span class="string">21000</span>, <span class="comment">// R$ 210,00 em centavos</span>
+    <span class="property">partnerId</span>: <span class="string">'seu_partnerId'</span>,
+    <span class="property">api_key</span>: <span class="string">'sua_api_key'</span>
   })
 })
 
-<span class="keyword">const</span> pixData = <span class="keyword">await</span> response.<span class="method">json</span>()
+<span class="keyword">const</span> orderData = <span class="keyword">await</span> response.<span class="method">json</span>()
 
 <span class="comment">// Redirecionar para página de pagamento compartilhado</span>
-window.location.href = <span class="string">`https://pagjunto.com/${partnerId}/${pixData.data.id}`</span>
+window.location.href = <span class="string">`https://pagjunto.com/${partnerId}/${orderData}`</span>
                                     </code>
                                 </div>
                                 
