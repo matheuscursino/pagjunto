@@ -989,7 +989,63 @@
         <% } %>
     </main>
 
-    <div id="termsModal" class="modal"></div>
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Termos e Condições de Uso</h2>
+                <button id="closeTermsModal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Última atualização:</strong> 12 de julho de 2025</p>
+                <p>
+                    Bem-vindo à Pagjunto. Ao utilizar nossa plataforma para realizar pagamentos, você ("Usuário") concorda e se vincula a estes Termos e Condições de Uso ("Termos"). A sua utilização constitui um contrato entre você e a Pagjunto. Se não concordar com estes termos, não utilize nossos serviços.
+                </p>
+    
+                <h3>1. Objeto do Serviço</h3>
+                <p>
+                    1.1. A Pagjunto atua como uma <strong>plataforma de intermediação de pagamentos</strong>, facilitando a transferência de valores entre você, o pagador, e o comerciante ou organizador da cobrança ("Parceiro").
+                </p>
+                <p>
+                    1.2. Nós <strong>NÃO</strong> somos o vendedor do produto ou serviço, nem o organizador do evento ou cobrança. Nossa responsabilidade se limita a processar o seu pagamento de forma segura e repassá-lo ao Parceiro.
+                </p>
+    
+                <h3>2. Coleta e Uso de Dados Pessoais</h3>
+                <p>
+                    2.1. Ao prosseguir com o pagamento, você autoriza a Pagjunto a coletar, armazenar e processar seus dados pessoais (nome, CPF, telefone, e-mail) com a <strong>finalidade estrita</strong> de:
+                    <ul>
+                        <li><strong>Processar a transação financeira:</strong> Identificar, autenticar e registrar o pagamento junto às instituições financeiras.</li>
+                        <li><strong>Segurança e Prevenção à Fraude:</strong> Analisar os dados para mitigar riscos de transações fraudulentas, protegendo você, o Parceiro e a plataforma.</li>
+                        <li><strong>Comunicação Transacional:</strong> Enviar confirmações ou notificações sobre o status do seu pagamento.</li>
+                        <li><strong>Identificação junto ao Parceiro:</strong> Compartilhar seu nome e o valor pago com o Parceiro para que ele possa identificar sua contribuição e cumprir com a entrega do produto ou serviço correspondente.</li>
+                    </ul>
+                </p>
+                <p>
+                    2.2. <strong>Consentimento para Análise e Marketing:</strong> Ao aceitar estes Termos, você também nos concede o direito de utilizar seus dados, de forma <strong>anonimizada e agregada</strong>, para fins de análise estatística e melhoria de nossos serviços. Adicionalmente, você concorda em receber comunicações de marketing e ofertas de produtos ou serviços da Pagjunto e de seus parceiros comerciais, podendo se descadastrar a qualquer momento.
+                </p>
+    
+                <h3>3. Política de Não Reembolso e Disputas</h3>
+                <p>
+                    3.1. <strong>Irrevogabilidade da Transação:</strong> Uma vez que um pagamento é confirmado e processado através da nossa plataforma, a transação é considerada <strong>final e irrevogável</strong> pela Pagjunto.
+                </p>
+                <p>
+                    3.2. <strong>Responsabilidade do Parceiro:</strong> A Pagjunto <strong>NÃO</strong> se responsabiliza por disputas relacionadas à entrega, qualidade, cancelamento ou qualquer outra questão referente ao produto ou serviço adquirido. Quaisquer solicitações de reembolso, devolução, cancelamento ou estorno devem ser tratadas <strong>DIRETAMENTE</strong> com o Parceiro que originou a cobrança.
+                </p>
+                <p>
+                    3.3. <strong>Ausência de Mediação:</strong> Nós não mediaremos disputas entre o Usuário e o Parceiro. Ao utilizar nosso serviço, você reconhece que a responsabilidade pela transação comercial (produto/serviço) é exclusiva do Parceiro.
+                </p>
+    
+                <h3>4. Limitação de Responsabilidade</h3>
+                <p>
+                    A Pagjunto não será responsável por quaisquer danos diretos ou indiretos decorrentes da sua relação com o Parceiro. Nossa máxima responsabilidade está estritamente limitada ao valor da transação processada.
+                </p>
+    
+                <h3>5. Disposições Gerais</h3>
+                <p>
+                    Reservamo-nos o direito de alterar estes Termos a qualquer momento. A continuidade do uso da plataforma após qualquer alteração implica na sua aceitação dos novos Termos.
+                </p>
+            </div>
+        </div>
+    </div>
     
     <div id="pageQrModal" class="modal">
         <div class="modal-content" style="max-width: 450px;">
@@ -1018,6 +1074,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Modal de Termos
+            const termsModal = document.getElementById('termsModal');
+            const openTermsModalBtn = document.getElementById('openTermsModal');
+            const closeTermsModalBtn = document.getElementById('closeTermsModal');
+
+            if (openTermsModalBtn) {
+                openTermsModalBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    termsModal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (closeTermsModalBtn) {
+                closeTermsModalBtn.addEventListener('click', () => {
+                    termsModal.classList.remove('show');
+                    document.body.style.overflow = 'auto';
+                });
+            }
+
             function getLastIdsFromCurrentUrl() {
                 const parts = window.location.href.split("/").filter(Boolean);
                 const id2 = parts[parts.length - 1];
@@ -1084,8 +1160,8 @@
                 });
             }
 
-            // Modal close functionality
-            [pageQrModal, document.getElementById('termsModal')].forEach(modal => {
+            // Central Modal close functionality
+            [pageQrModal, termsModal].forEach(modal => {
                 if (modal) {
                     modal.addEventListener('click', (e) => {
                         if (e.target === modal) {
@@ -1123,13 +1199,9 @@
                     socket.on('paymentConfirmed', (data) => {
                         console.log('🎉 Evento de confirmação de pagamento recebido:', data);
                         try {
-                            // Update payers list
                             updatePayersList(data);
-                            
-                            // Update summary values
                             updateSummaryValues(data);
                             
-                            // Show confirmation message in payment card
                             const paymentCard = document.getElementById('paymentCard');
                             if (paymentCard) {
                                 const paidAmount = (data && typeof data.paidValue === 'number') ? data.paidValue.toFixed(2).replace('.', ',') : 'um valor';
@@ -1163,13 +1235,11 @@
                 const payersCount = document.getElementById('payersCount');
                 
                 if (data && data.payerName && data.paidValue) {
-                    // Remove empty state if exists
                     const emptyState = payersList.querySelector('.empty-payers');
                     if (emptyState) {
                         emptyState.remove();
                     }
 
-                    // Add new payer
                     const payerItem = document.createElement('div');
                     payerItem.className = 'payer-item';
                     payerItem.innerHTML = `
@@ -1188,7 +1258,6 @@
                     `;
                     payersList.appendChild(payerItem);
 
-                    // Update count
                     const currentCount = parseInt(payersCount.textContent) || 0;
                     payersCount.textContent = currentCount + 1;
                 }
@@ -1222,7 +1291,6 @@
 
             initializeSocket();
 
-            // Payment form functionality
             if (document.getElementById('paymentForm')) {
                 const paymentForm = document.getElementById('paymentForm');
                 const nameInput = document.getElementById('name');
@@ -1238,7 +1306,6 @@
                 const pixKeyInput = document.getElementById('pixKey');
                 const termsCheckbox = document.getElementById('termsCheckbox');
 
-                // Input masks
                 cpfInput.addEventListener('input', (e) => {
                     let value = e.target.value.replace(/\D/g, '').slice(0, 11);
                     value = value.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
