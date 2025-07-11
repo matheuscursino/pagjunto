@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
-    <script src="<%=process.env.API_SITE_URL%>/socket.io/socket.io.js"></script>
+    <script src="<%=process.env.API_SITE_URL_BASE%>/socket.io/socket.io.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -1110,7 +1110,7 @@
             function initializeSocket() {
                 try {
                     const { id2 } = getLastIdsFromCurrentUrl();
-                    socket = io("<%=process.env.API_SITE_URL%>", { transports: ['websocket', 'polling'] });
+                    socket = io("<%=process.env.API_SITE_URL_BASE%>", { transports: ['websocket', 'polling'] });
                     
                     socket.on('connect', () => {
                         console.log('✅ Conectado ao WebSocket. Socket ID:', socket.id);
