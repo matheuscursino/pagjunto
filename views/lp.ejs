@@ -44,7 +44,6 @@
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
     --radius: 12px;
     --radius-lg: 20px;
-
     /* Blue-ish Gradient Variables */
     --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
     --gradient-accent: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
@@ -362,6 +361,12 @@ p {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     transform: translateY(-1px);
+}
+
+.header-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
 }
 
 .mobile-nav-toggle {
@@ -972,8 +977,8 @@ p {
     margin: 0;
 }
 
-/* ROI Calculator */
-.roi-calculator {
+/* Professional Benefits Section */
+.professional-benefits {
     background: var(--gradient-card);
     border-radius: var(--radius-lg);
     padding: 48px;
@@ -984,7 +989,7 @@ p {
     overflow: hidden;
 }
 
-.roi-calculator::before {
+.professional-benefits::before {
     content: '';
     position: absolute;
     top: 0;
@@ -994,70 +999,32 @@ p {
     background: var(--gradient-accent);
 }
 
-.calculator-header {
+.benefits-header {
     text-align: center;
     margin-bottom: 40px;
 }
 
-.calculator-header h4 {
+.benefits-header h4 {
     font-size: 1.75rem;
     font-weight: 700;
     margin-bottom: 12px;
     color: var(--text-primary);
 }
 
-.calculator-header p {
+.benefits-header p {
     color: var(--text-secondary);
     font-size: 1rem;
     margin: 0;
 }
 
-.calculator-inputs {
+.benefits-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 24px;
-    margin-bottom: 40px;
-}
-
-.input-group {
-    position: relative;
-}
-
-.input-group label {
-    display: block;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-    font-size: 0.875rem;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 16px 20px;
-    border-radius: var(--radius);
-    border: 2px solid rgba(226, 232, 240, 0.3);
-    background: rgba(255, 255, 255, 0.8);
-    font-family: inherit;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    background: rgba(255, 255, 255, 0.95);
-}
-
-.calculator-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 24px;
     margin-bottom: 32px;
 }
 
-.result-card {
+.benefit-card {
     text-align: center;
     padding: 20px;
     background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(30, 64, 175, 0.05));
@@ -1066,26 +1033,32 @@ p {
     transition: all 0.3s ease;
 }
 
-.result-card:hover {
+.benefit-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
 }
 
-.result-value {
+.benefit-icon {
     font-size: 2rem;
-    font-weight: 800;
     background: var(--gradient-accent);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
     display: block;
 }
 
-.result-label {
+.benefit-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.benefit-description {
     font-size: 0.875rem;
     color: var(--text-secondary);
-    font-weight: 500;
+    margin: 0;
 }
 
 /* App Business Section */
@@ -1246,245 +1219,26 @@ p {
     margin: 0;
 }
 
-/* Enhanced Metrics Comparison */
-.metrics-comparison {
-    background: var(--gradient-card);
-    border-radius: var(--radius-lg);
-    padding: 48px;
-    border: 1px solid rgba(226, 232, 240, 0.3);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
-    margin-top: 60px;
-    position: relative;
-    overflow: hidden;
-}
-
-.metrics-comparison::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #64748b, #1e40af);
-}
-
-.comparison-header {
-    text-align: center;
-    margin-bottom: 48px;
-}
-
-.comparison-header h4 {
-    font-size: 1.875rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-    color: var(--text-primary);
-}
-
-.comparison-header p {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    margin: 0;
-}
-
-.comparison-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    position: relative;
-}
-
-.comparison-grid::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: linear-gradient(180deg, transparent 0%, rgba(148, 163, 184, 0.3) 20%, rgba(148, 163, 184, 0.3) 80%, transparent 100%);
-    transform: translateX(-50%);
-}
-
-.comparison-side {
-    position: relative;
-}
-
-.comparison-side h5 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 32px;
-    padding: 16px 24px;
+.docs-cta {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(30, 64, 175, 0.05));
     border-radius: var(--radius);
+    padding: 24px;
     text-align: center;
-    position: relative;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 0.875rem;
-}
-
-.before-side h5 {
-    background: linear-gradient(135deg, rgba(100, 116, 139, 0.1), rgba(71, 85, 105, 0.05));
-    color: #475569;
-    border: 1px solid rgba(100, 116, 139, 0.2);
-}
-
-.after-side h5 {
-    background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(37, 99, 235, 0.05));
-    color: #1e40af;
-    border: 1px solid rgba(30, 64, 175, 0.2);
-}
-
-.metrics-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.metric-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 24px;
-    border-radius: var(--radius);
-    transition: all 0.3s ease;
-    position: relative;
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(226, 232, 240, 0.5);
-}
-
-.metric-item:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    background: rgba(255, 255, 255, 0.8);
-}
-
-.metric-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-.metric-label {
-    font-size: 0.875rem;
-    color: var(--text-primary);
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.metric-description {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    line-height: 1.4;
-}
-
-.metric-value {
-    font-size: 1.5rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Inter', monospace;
-}
-
-.before-side .metric-value {
-    color: #64748b;
-}
-
-.after-side .metric-value {
-    color: #1e40af;
-}
-
-.improvement-indicator {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: linear-gradient(135deg, #1e40af, #3b82f6);
-    color: white;
-    font-size: 0.625rem;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(30, 64, 175, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.metric-trend {
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-left: 8px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.trend-up {
-    background: rgba(30, 64, 175, 0.1);
-    color: #1e40af;
-}
-
-.trend-down {
-    background: rgba(100, 116, 139, 0.1);
-    color: #64748b;
-}
-
-/* Professional Data Table Style */
-.metrics-table {
-    width: 100%;
-    border-collapse: collapse;
+    border: 1px solid rgba(37, 99, 235, 0.1);
     margin-top: 32px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.metrics-table th {
-    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-    padding: 16px 20px;
-    text-align: left;
+.docs-cta h5 {
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.docs-cta p {
+    color: var(--text-secondary);
+    margin-bottom: 16px;
     font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
-}
-
-.metrics-table td {
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(226, 232, 240, 0.3);
-    font-size: 0.875rem;
-}
-
-.metrics-table tr:hover {
-    background: rgba(248, 250, 252, 0.5);
-}
-
-.metric-name {
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.metric-before {
-    color: #64748b;
-    font-weight: 600;
-    font-family: 'Inter', monospace;
-}
-
-.metric-after {
-    color: #1e40af;
-    font-weight: 700;
-    font-family: 'Inter', monospace;
-}
-
-.metric-improvement {
-    color: #059669;
-    font-weight: 700;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 /* Contact Section */
@@ -1827,15 +1581,6 @@ p {
         gap: 60px;
     }
     
-    .comparison-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
-    }
-    
-    .comparison-grid::before {
-        display: none;
-    }
-    
     .use-cases {
         grid-template-columns: 1fr;
     }
@@ -1880,6 +1625,10 @@ p {
         font-size: 1.5rem;
     }
     
+    .header-buttons {
+        display: none;
+    }
+    
     .hero {
         padding-top: 120px;
         min-height: auto;
@@ -1907,15 +1656,11 @@ p {
         max-width: 400px;
     }
     
-    .calculator-inputs {
+    .benefits-grid {
         grid-template-columns: 1fr;
     }
     
-    .calculator-results {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .roi-calculator,
+    .professional-benefits,
     .contact-form {
         padding: 32px 24px;
     }
@@ -1941,18 +1686,6 @@ p {
     
     .bg-circle, .bg-square, .bg-triangle {
         display: none;
-    }
-    
-    .metrics-comparison {
-        padding: 32px 24px;
-    }
-    
-    .comparison-header h4 {
-        font-size: 1.5rem;
-    }
-    
-    .metric-value {
-        font-size: 1.25rem;
     }
 }
 
@@ -2329,12 +2062,18 @@ p {
             <nav class="nav-links">
                 <a href="#features">Como Funciona</a>
                 <a href="#benefits">Para Empresas</a>
+                <a href="/docs">Documentação</a>
                 <a href="#contact">Contato</a>
-                <a href="/login" class="btn btn-primary mobile-only">Entrar</a>
+                <a href="#contact" class="btn btn-primary mobile-only">Registrar</a>
             </nav>
-            <a href="/login" class="btn btn-primary desktop-only">
-                Entrar
-            </a>
+            <div class="header-buttons desktop-only">
+                <a href="#contact" class="btn btn-secondary">
+                    Registrar
+                </a>
+                <a href="/docs" class="btn btn-primary">
+                    Documentação
+                </a>
+            </div>
             <button class="mobile-nav-toggle" aria-controls="nav-links" aria-expanded="false" aria-label="Abrir menu">
                 <span class="hamburger"></span>
             </button>
@@ -2346,14 +2085,14 @@ p {
             <div class="container">
                 <h1 id="hero-title">Transforme "muito caro" em "vamos rachar?"</h1>
                 <p class="lead fade-in" style="transition-delay: 200ms;">
-                    Permita que seus clientes dividam pagamentos com amigos. Aumente suas vendas até 40% sem aumentar custos.
+                    Permita que seus clientes dividam pagamentos com amigos. Solução profissional para aumentar conversões e reduzir abandono de carrinho.
                 </p>
                 <div class="hero-buttons fade-in" style="transition-delay: 300ms;">
                     <a href="#contact" class="btn btn-primary">
-                        Aumentar Vendas Agora
+                        Começar Agora
                     </a>
-                    <a href="#features" class="btn btn-secondary">
-                        Ver como funciona
+                    <a href="/docs" class="btn btn-secondary">
+                        Ver Documentação
                     </a>
                 </div>
                 <div class="hero-mockup scale-in" style="transition-delay: 400ms;">
@@ -2466,18 +2205,18 @@ p {
                 </div>
                 
                 <div class="selector-tabs">
-                    <button class="tab-button active" onclick="switchTab('physical')">
+                    <button class="tab-button" onclick="switchTab('physical')">
                         <i class="fas fa-store"></i>
                         Estabelecimentos Físicos
                     </button>
-                    <button class="tab-button" onclick="switchTab('app')">
+                    <button class="tab-button active" onclick="switchTab('app')">
                         <i class="fas fa-mobile-alt"></i>
                         Apps & E-commerce
                     </button>
                 </div>
 
                 <!-- Physical Business Tab -->
-                <div class="tab-content active" id="physical-tab">
+                <div class="tab-content" id="physical-tab">
                     <div class="physical-business">
                         <div class="business-showcase fade-in">
                             <div class="showcase-content">
@@ -2526,160 +2265,45 @@ p {
                                 </a>
                             </div>
                             
-                            <div class="roi-calculator fade-in">
-                                <div class="calculator-header">
-                                    <h4>Calcule seu potencial de vendas</h4>
-                                    <p>Veja quanto você pode aumentar seu faturamento com o Pagjunto</p>
+                            <div class="professional-benefits fade-in">
+                                <div class="benefits-header">
+                                    <h4>Vantagens Profissionais</h4>
+                                    <p>Solução empresarial completa para seu negócio</p>
                                 </div>
                                 
-                                <div class="calculator-inputs">
-                                    <div class="input-group">
-                                        <label for="monthly-revenue">Faturamento mensal atual</label>
-                                        <input type="text" id="monthly-revenue" placeholder="R$ 50.000" oninput="calculateROI()">
+                                <div class="benefits-grid">
+                                    <div class="benefit-card">
+                                        <i class="fas fa-chart-line benefit-icon"></i>
+                                        <div class="benefit-title">Aumento de Conversões</div>
+                                        <p class="benefit-description">Reduza abandono por preço alto com pagamentos compartilhados</p>
                                     </div>
                                     
-                                    <div class="input-group">
-                                        <label for="avg-ticket">Ticket médio</label>
-                                        <input type="text" id="avg-ticket" placeholder="R$ 150" oninput="calculateROI()">
+                                    <div class="benefit-card">
+                                        <i class="fas fa-shield-alt benefit-icon"></i>
+                                        <div class="benefit-title">Pagamento Garantido</div>
+                                        <p class="benefit-description">Receba o valor total mesmo se alguns não pagarem</p>
                                     </div>
                                     
-                                    <div class="input-group">
-                                        <label for="group-percentage">% de vendas em grupo</label>
-                                        <input type="text" id="group-percentage" placeholder="30%" oninput="calculateROI()">
+                                    <div class="benefit-card">
+                                        <i class="fas fa-cogs benefit-icon"></i>
+                                        <div class="benefit-title">Integração Simples</div>
+                                        <p class="benefit-description">Dashboard fácil de utilizar e suporte técnico dedicado</p>
+                                    </div>
+                                    
+                                    <div class="benefit-card">
+                                        <i class="fas fa-mobile-alt benefit-icon"></i>
+                                        <div class="benefit-title">Interface Otimizada</div>
+                                        <p class="benefit-description">Experiência mobile-first para seus clientes</p>
                                     </div>
                                 </div>
-                                
-                                <div class="calculator-results">
-                                    <div class="result-card">
-                                        <span class="result-value" id="new-revenue">R$ 0</span>
-                                        <div class="result-label">Novo faturamento mensal</div>
-                                    </div>
-                                    
-                                    <div class="result-card">
-                                        <span class="result-value" id="additional-revenue">R$ 0</span>
-                                        <div class="result-label">Receita adicional</div>
-                                    </div>
-                                    
-                                    <div class="result-card">
-                                        <span class="result-value" id="yearly-impact">R$ 0</span>
-                                        <div class="result-label">Impacto anual</div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
-                        
-<div class="metrics-comparison fade-in">
-    <div class="comparison-header">
-        <h4>Análise Comparativa de Performance</h4>
-        <p>Dados baseados em estabelecimentos que implementaram nossa solução</p>
-    </div>
-    
-    <div class="comparison-grid">
-        <div class="comparison-side before-side">
-            <h5>Cenário Atual</h5>
-            <div class="metrics-list">
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Taxa de Conversão</div>
-                        <div class="metric-description">Percentual de clientes que finalizam compras</div>
-                    </div>
-                    <div class="metric-value">
-                        2.1%
-                        <span class="metric-trend trend-down">Baixa</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Abandono por Preço</div>
-                        <div class="metric-description">Clientes que desistem por considerar caro</div>
-                    </div>
-                    <div class="metric-value">
-                        35%
-                        <span class="metric-trend trend-down">Alto</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Ticket Médio</div>
-                        <div class="metric-description">Valor médio por transação</div>
-                    </div>
-                    <div class="metric-value">
-                        R$ 150
-                        <span class="metric-trend trend-down">Limitado</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Satisfação NPS</div>
-                        <div class="metric-description">Net Promoter Score médio</div>
-                    </div>
-                    <div class="metric-value">
-                        7.2
-                        <span class="metric-trend trend-down">Regular</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="comparison-side after-side">
-            <h5>Com Pagjunto</h5>
-            <div class="metrics-list">
-                <div class="metric-item">
-                    <div class="improvement-indicator">+52%</div>
-                    <div class="metric-content">
-                        <div class="metric-label">Taxa de Conversão</div>
-                        <div class="metric-description">Aumento significativo nas finalizações</div>
-                    </div>
-                    <div class="metric-value">
-                        3.2%
-                        <span class="metric-trend trend-up">Otimizada</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Abandono por Preço</div>
-                        <div class="metric-description">Redução drástica na desistência</div>
-                    </div>
-                    <div class="metric-value">
-                        20%
-                        <span class="metric-trend trend-up">Reduzido</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Ticket Médio</div>
-                        <div class="metric-description">Crescimento no valor por transação</div>
-                    </div>
-                    <div class="metric-value">
-                        R$ 240
-                        <span class="metric-trend trend-up">Expandido</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Satisfação NPS</div>
-                        <div class="metric-description">Melhoria na experiência do cliente</div>
-                    </div>
-                    <div class="metric-value">
-                        9.5
-                        <span class="metric-trend trend-up">Excelente</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
                     </div>
                 </div>
 
                 <!-- App Business Tab -->
-                <div class="tab-content" id="app-tab">
+                <div class="tab-content active" id="app-tab">
                     <div class="app-business">
                         <div class="app-showcase fade-in">
                             <div class="showcase-content">
@@ -2722,8 +2346,7 @@ p {
                                 </div>
                                 
                                 <div class="code-snippet">
-                                    <code>
-<span class="comment">// Criar pagamento compartilhado</span>
+                                    <code><span class="comment">// Criar pagamento compartilhado</span>
 <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="method">fetch</span>(<span class="string">'https://api.pagjunto.com/v1/order'</span>, {
   <span class="property">method</span>: <span class="string">'POST'</span>,
   <span class="property">headers</span>: {
@@ -2748,138 +2371,17 @@ window.location.href = <span class="string">`https://pagjunto.com/${partnerId}/$
                                     <i class="fas fa-check-circle" style="color: #22c55e; margin-right: 8px;"></i>
                                     Pronto! Seus clientes já podem dividir pagamentos
                                 </p>
+
+                                <div class="docs-cta">
+                                    <h5>Documentação Técnica Completa</h5>
+                                    <p>Guias, exemplos de código e referência da API</p>
+                                    <a href="/docs" class="btn btn-primary">
+                                        <i class="fas fa-book"></i>
+                                        Acessar Documentação
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        
-<div class="metrics-comparison fade-in">
-    <div class="comparison-header">
-        <h4>Impacto Quantificado nas Métricas</h4>
-        <p>Análise baseada em dados de e-commerces integrados</p>
-    </div>
-    
-    <div class="comparison-grid">
-        <div class="comparison-side before-side">
-            <h5>Performance Anterior</h5>
-            <div class="metrics-list">
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Conversão do Checkout</div>
-                        <div class="metric-description">Taxa de finalização de pedidos</div>
-                    </div>
-                    <div class="metric-value">
-                        2.1%
-                        <span class="metric-trend trend-down">Padrão</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Abandono de Carrinho</div>
-                        <div class="metric-description">Usuários que desistem no pagamento</div>
-                    </div>
-                    <div class="metric-value">
-                        69%
-                        <span class="metric-trend trend-down">Elevado</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Valor Médio Pedido</div>
-                        <div class="metric-description">AOV - Average Order Value</div>
-                    </div>
-                    <div class="metric-value">
-                        R$ 180
-                        <span class="metric-trend trend-down">Limitado</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Taxa de Retenção</div>
-                        <div class="metric-description">Clientes que retornam em 30 dias</div>
-                    </div>
-                    <div class="metric-value">
-                        15%
-                        <span class="metric-trend trend-down">Baixa</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Net Promoter Score</div>
-                        <div class="metric-description">Índice de recomendação</div>
-                    </div>
-                    <div class="metric-value">
-                        6.2
-                        <span class="metric-trend trend-down">Regular</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="comparison-side after-side">
-            <h5>Performance Otimizada</h5>
-            <div class="metrics-list">
-                <div class="metric-item">
-                    <div class="improvement-indicator">+52%</div>
-                    <div class="metric-content">
-                        <div class="metric-label">Conversão do Checkout</div>
-                        <div class="metric-description">Melhoria com opção de divisão</div>
-                    </div>
-                    <div class="metric-value">
-                        3.2%
-                        <span class="metric-trend trend-up">Superior</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Abandono de Carrinho</div>
-                        <div class="metric-description">Redução significativa na desistência</div>
-                    </div>
-                    <div class="metric-value">
-                        45%
-                        <span class="metric-trend trend-up">Otimizado</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Valor Médio Pedido</div>
-                        <div class="metric-description">Crescimento no AOV</div>
-                    </div>
-                    <div class="metric-value">
-                        R$ 280
-                        <span class="metric-trend trend-up">Expandido</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Taxa de Retenção</div>
-                        <div class="metric-description">Aumento na fidelização</div>
-                    </div>
-                    <div class="metric-value">
-                        28%
-                        <span class="metric-trend trend-up">Elevada</span>
-                    </div>
-                </div>
-                
-                <div class="metric-item">
-                    <div class="metric-content">
-                        <div class="metric-label">Net Promoter Score</div>
-                        <div class="metric-description">Melhoria na satisfação</div>
-                    </div>
-                    <div class="metric-value">
-                        8.7
-                        <span class="metric-trend trend-up">Excelente</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
                     </div>
                 </div>
             </div>
@@ -2889,7 +2391,7 @@ window.location.href = <span class="string">`https://pagjunto.com/${partnerId}/$
             <div class="container">
                 <div class="contact-grid">
                     <div class="contact-text fade-in">
-                        <h2>Pronto para aumentar suas vendas?</h2>
+                        <h2>Pronto para começar?</h2>
                         <p class="lead">
                             Preencha o formulário e nossa equipe entrará em contato para entender suas necessidades e mostrar como o Pagjunto pode transformar seu negócio.
                         </p>
@@ -2908,6 +2410,7 @@ window.location.href = <span class="string">`https://pagjunto.com/${partnerId}/$
                             </li>
                         </ul>
                     </div>
+
                     <form action="https://docs.google.com/forms/d/e/1FAIpQLSfPdzuJtGHHsQs88oHcypCCDBa1eP6IBW9ckU-AnW_q16XN_A/formResponse" method="POST" class="contact-form fade-in" style="transition-delay: 200ms;">
                         <div class="form-group">
                             <label for="name">Nome Completo</label>
@@ -2948,9 +2451,9 @@ window.location.href = <span class="string">`https://pagjunto.com/${partnerId}/$
                 <div class="cta-section scale-in">
                     <div class="container">
                         <h2>pagjunto, cresça junto</h2>
-                        <p>Fale com um especialista e comece a transformar vendas caras em pagamentos compartilhados. Sem mensalidade, sem burocracia.</p>
-                        <a href="#contact" class="btn btn-secondary">
-                            Quero aumentar minhas vendas
+                        <p>Fale com um especialista e comece a transformar vendas caras em pagamentos compartilhados. Solução profissional, sem mensalidade, sem burocracia.</p>
+                        <a href="/docs" class="btn btn-secondary">
+                            Ver Documentação Técnica
                         </a>
                     </div>
                 </div>
@@ -3079,9 +2582,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-
-    // Initialize calculator with default values
-    calculateROI();
 });
 
 // Tab switching functionality
@@ -3097,41 +2597,6 @@ function switchTab(tabName) {
     // Add active class to selected tab and button
     document.getElementById(tabName + '-tab').classList.add('active');
     event.target.classList.add('active');
-}
-
-// ROI Calculator functionality
-function calculateROI() {
-    const monthlyRevenueInput = document.getElementById('monthly-revenue');
-    const avgTicketInput = document.getElementById('avg-ticket');
-    const groupPercentageInput = document.getElementById('group-percentage');
-    
-    if (!monthlyRevenueInput || !avgTicketInput || !groupPercentageInput) return;
-    
-    // Parse values
-    const monthlyRevenue = parseFloat(monthlyRevenueInput.value.replace(/[^\d]/g, '')) || 50000;
-    const avgTicket = parseFloat(avgTicketInput.value.replace(/[^\d]/g, '')) || 150;
-    const groupPercentage = parseFloat(groupPercentageInput.value.replace(/[^\d]/g, '')) || 30;
-    
-    // Calculate improvements with Pagjunto
-    const improvementFactor = 1.4; // 40% increase
-    const newMonthlyRevenue = monthlyRevenue * improvementFactor;
-    const additionalRevenue = newMonthlyRevenue - monthlyRevenue;
-    const yearlyImpact = additionalRevenue * 12;
-    
-    // Update display
-    document.getElementById('new-revenue').textContent = formatCurrency(newMonthlyRevenue);
-    document.getElementById('additional-revenue').textContent = formatCurrency(additionalRevenue);
-    document.getElementById('yearly-impact').textContent = formatCurrency(yearlyImpact);
-}
-
-// Format currency helper
-function formatCurrency(value) {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(value);
 }
 
 // Simple payment simulation variables
@@ -3445,6 +2910,6 @@ function showCheckoutPage() {
         </button>
     `;
 }
-</script>
+    </script>
 </body>
 </html>
