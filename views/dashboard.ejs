@@ -1592,6 +1592,23 @@
                             </button>
                         </div>
                     </div>
+
+                    <div class="settings-card">
+                        <div class="settings-header">
+                            <h3 class="settings-title">ID de Recebedor (Recipient ID)</h3>
+                            <p class="settings-description">Este é o seu identificador de recebedor.</p>
+                        </div>
+                        
+                        <div class="api-key-container">
+                            <input type="text" id="recipientIdInput" class="form-input api-key-input"
+                                   value="<%= partnerData.recipient_id %>"
+                                   readonly>
+                            <button id="copyRecipientIdButton" class="btn btn-primary">
+                                <i class="fas fa-copy"></i>
+                                Copiar ID
+                            </button>
+                        </div>
+                    </div>
                 </section>
             </div>
         </main>
@@ -1613,6 +1630,7 @@
     <script>
         const localPartnerId = "<%= partnerData.partnerId %>";
         const localPartnerApiKey = "<%= partnerData.apiKey %>";
+        const localRecipientId = "<%= partnerData.recipient_id %>";
         const stats = <%- JSON.stringify(stats || {}) %>;
         const recentOrders = <%- JSON.stringify(orders || []) %>;
         const balance = <%- JSON.stringify(balance || { data: {} }) %>;
@@ -2252,6 +2270,10 @@
 
             document.getElementById('copyApiKeyButton').addEventListener('click', () => {
                 copyToClipboard(localPartnerApiKey, 'Chave de API copiada!');
+            });
+            
+            document.getElementById('copyRecipientIdButton').addEventListener('click', () => {
+                copyToClipboard(localRecipientId, 'ID de Recebedor copiado!');
             });
 
             // Modal close
