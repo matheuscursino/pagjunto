@@ -7,9 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-
     <style>
         :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
             --bg-main: #f8fafc;
             --bg-sidebar: #ffffff;
             --bg-code: #1e293b;
@@ -18,10 +21,13 @@
             --text-muted: #64748b;
             --text-code: #e2e8f0;
             --border-color: #e2e8f0;
-            --accent: #3b82f6;
-            --accent-dark: #1d4ed8;
             --green: #10b981;
             --orange: #f59e0b;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --radius: 12px;
+            --radius-lg: 20px;
         }
 
         * {
@@ -39,9 +45,154 @@
             background-color: var(--bg-main);
             color: var(--text-secondary);
             line-height: 1.7;
+            padding-top: 80px; /* Space for fixed header */
         }
 
-        .container {
+        /* Header */
+        .header {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+            padding: 16px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transform: translateY(-1px);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            color: var(--accent);
+            border: 2px solid rgba(37, 99, 235, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+            border-color: var(--accent);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.15);
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .mobile-nav-toggle .hamburger {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-primary);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-toggle .hamburger::before,
+        .mobile-nav-toggle .hamburger::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-primary);
+            left: 0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-toggle .hamburger::before {
+            top: -8px;
+        }
+
+        .mobile-nav-toggle .hamburger::after {
+            bottom: -8px;
+        }
+
+        .docs-container {
             display: flex;
             max-width: 1400px;
             margin: 0 auto;
@@ -51,32 +202,42 @@
         .sidebar {
             width: 280px;
             position: sticky;
-            top: 0;
-            height: 100vh;
+            top: 80px;
+            height: calc(100vh - 80px);
             border-right: 1px solid var(--border-color);
             padding: 40px 0;
             background: var(--bg-sidebar);
             flex-shrink: 0;
+            box-shadow: var(--shadow-sm);
         }
 
         .sidebar-header {
             padding: 0 24px 20px 24px;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             color: var(--text-primary);
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
+
+        .sidebar-header i {
+            color: var(--accent);
+            font-size: 1.125rem;
+        }
+
         .sidebar-nav {
             padding-top: 20px;
         }
 
         .sidebar-nav h3 {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             font-weight: 600;
             color: var(--text-muted);
             padding: 16px 24px 8px;
+            letter-spacing: 0.5px;
         }
 
         .sidebar-nav a {
@@ -85,21 +246,23 @@
             color: var(--text-secondary);
             font-weight: 500;
             font-size: 0.9rem;
-            padding: 10px 24px;
+            padding: 12px 24px;
             transition: all 0.2s ease;
             border-left: 3px solid transparent;
+            position: relative;
         }
 
         .sidebar-nav a:hover {
             color: var(--text-primary);
-            background-color: #f1f5f9;
+            background-color: rgba(37, 99, 235, 0.05);
+            border-left-color: rgba(37, 99, 235, 0.2);
         }
 
         .sidebar-nav a.active {
             color: var(--accent);
             font-weight: 600;
             border-left-color: var(--accent);
-            background-color: #eff6ff;
+            background-color: rgba(37, 99, 235, 0.08);
         }
 
         /* Main Content */
@@ -115,7 +278,7 @@
             padding-bottom: 40px;
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         section:last-of-type {
             border-bottom: none;
         }
@@ -128,6 +291,10 @@
         h1 {
             font-size: 2.5rem;
             margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         h2 {
@@ -136,7 +303,7 @@
             padding-top: 24px;
             border-top: 1px solid var(--border-color);
         }
-        
+
         section:first-of-type h2 {
             border-top: none;
             padding-top: 0;
@@ -149,11 +316,12 @@
 
         code {
             font-family: 'Fira Code', monospace;
-            background-color: #f1f5f9;
-            color: var(--accent-dark);
-            padding: 2px 6px;
-            border-radius: 4px;
+            background-color: rgba(37, 99, 235, 0.08);
+            color: var(--accent);
+            padding: 3px 8px;
+            border-radius: 6px;
             font-size: 0.9em;
+            font-weight: 500;
         }
 
         /* Two-column layout for endpoints */
@@ -170,22 +338,26 @@
         /* Code Blocks */
         .code-block {
             background-color: var(--bg-code);
-            border-radius: 8px;
+            border-radius: var(--radius);
             overflow: hidden;
             margin-bottom: 24px;
             position: relative;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .code-block-header {
-            background-color: #334155;
-            padding: 8px 16px;
+            background: linear-gradient(135deg, #334155 0%, #475569 100%);
+            padding: 12px 16px;
             font-family: 'Fira Code', monospace;
             font-size: 0.8rem;
-            color: #94a3b8;
+            color: #cbd5e1;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .code-block pre {
-            padding: 16px;
+            padding: 20px;
             overflow-x: auto;
         }
 
@@ -199,19 +371,23 @@
 
         .code-block .copy-btn {
             position: absolute;
-            top: 6px;
-            right: 8px;
-            background: #475569;
+            top: 8px;
+            right: 12px;
+            background: rgba(71, 85, 105, 0.8);
             color: #cbd5e1;
             border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 6px 12px;
+            border-radius: 6px;
             font-size: 0.75rem;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
         }
+
         .code-block .copy-btn:hover {
-            background: #64748b;
+            background: rgba(100, 116, 139, 0.9);
+            transform: translateY(-1px);
         }
 
         /* Syntax Highlighting (simple) */
@@ -225,61 +401,196 @@
         /* Badges */
         .badge {
             display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
             font-family: 'Fira Code', monospace;
             vertical-align: middle;
+            margin-right: 12px;
         }
-        .badge-post { background-color: #dcfce7; color: #166534; }
-        .badge-get { background-color: #dbeafe; color: #1e40af; }
-        .badge-webhook { background-color: #fef9c3; color: #854d0e; }
+
+        .badge-post { 
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); 
+            color: #166534; 
+            border: 1px solid #86efac;
+        }
         
+        .badge-get { 
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); 
+            color: #1e40af; 
+            border: 1px solid #93c5fd;
+        }
+        
+        .badge-webhook { 
+            background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%); 
+            color: #854d0e; 
+            border: 1px solid #facc15;
+        }
+
         /* Parameter Tables */
         .param-table {
             width: 100%;
             margin: 24px 0;
             border-collapse: collapse;
             font-size: 0.9rem;
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
         }
+
         .param-table th, .param-table td {
             text-align: left;
-            padding: 12px;
+            padding: 16px;
             border-bottom: 1px solid var(--border-color);
         }
+
         .param-table th {
             font-weight: 600;
             color: var(--text-primary);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
         }
+
+        .param-table tbody tr:hover {
+            background-color: rgba(37, 99, 235, 0.02);
+        }
+
         .param-table .param-name {
             font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-weight: 600;
         }
+
         .param-table .param-type {
             color: var(--text-muted);
-        }
-        .param-table .param-required {
-            color: var(--error);
             font-weight: 500;
         }
-        
+
+        .param-table .param-required {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        /* Intro section styling */
+        #introducao {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(30, 64, 175, 0.05) 100%);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(37, 99, 235, 0.1);
+            margin-top: 20px;
+        }
+
+        #introducao p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Links styling */
+        a[href="/dashboard"] {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        a[href="/dashboard"]:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+
         @media (max-width: 1024px) {
-            .sidebar { display: none; }
-            .main-content { padding: 20px; }
-            .endpoint-layout { grid-template-columns: 1fr; }
+            .sidebar { 
+                display: none; 
+            }
+            
+            .main-content { 
+                padding: 20px; 
+            }
+            
+            .endpoint-layout { 
+                grid-template-columns: 1fr; 
+            }
+
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+
+            .header .container {
+                padding: 0 16px;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .main-content {
+                padding: 20px 16px;
+            }
+
+            #introducao {
+                padding: 24px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <header class="header">
+        <div class="container">
+            <a href="/" class="logo">
+                pagjunto
+            </a>
+            <nav class="nav-links">
+                <a href="/">Início</a>
+                <a href="/#features">Como Funciona</a>
+                <a href="/#benefits">Para Empresas</a>
+                <a href="/docs">Documentação</a>
+                <a href="/#contact">Contato</a>
+            </nav>
+            <div class="header-buttons">
+                <a href="/#contact" class="btn btn-secondary">
+                    Registrar
+                </a>
+                <a href="/login" class="btn btn-primary">
+                    Entrar
+                </a>
+            </div>
+            <button class="mobile-nav-toggle" aria-label="Abrir menu">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="docs-container">
         <aside class="sidebar">
             <div class="sidebar-header">
+                <i class="fas fa-code"></i>
                 API PagJunto
             </div>
             <nav class="sidebar-nav">
                 <h3>Primeiros Passos</h3>
                 <a href="#autenticacao" class="nav-link">Autenticação</a>
-
+                
                 <h3>Pedidos</h3>
                 <a href="#criar-pedido" class="nav-link">Criar um Pedido</a>
                 <a href="#consultar-pedido" class="nav-link">Consultar um Pedido</a>
@@ -297,8 +608,9 @@
 
             <section id="autenticacao">
                 <h2>Autenticação</h2>
-                <p>Nossa API utiliza uma chave (<code>apiKey</code>) para autenticar as requisições. Você pode encontrar sua chave de API no seu <a href="/dashboard" style="color: var(--accent);">Dashboard de Parceiro</a>, na aba de Configurações.</p>
+                <p>Nossa API utiliza uma chave (<code>apiKey</code>) para autenticar as requisições. Você pode encontrar sua chave de API no seu <a href="/dashboard">Dashboard de Parceiro</a>, na aba de Configurações.</p>
                 <p>A chave deve ser enviada no corpo (body) de cada requisição que necessite de autenticação, como a criação de um pedido.</p>
+                
                 <div class="endpoint-layout">
                     <div class="endpoint-details">
                         <h3>Como incluir a chave</h3>
@@ -329,12 +641,34 @@
                         
                         <h3>Parâmetros do Corpo (Body)</h3>
                         <table class="param-table">
-                            <thead><tr><th>Parâmetro</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Tipo</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                <tr><td><span class="param-name">name</span></td><td class="param-type">String</td><td>Nome descritivo para o pedido (ex: "Pedido Mesa 5").</td></tr>
-                                <tr><td><span class="param-name">totalValue</span></td><td class="param-type">Number</td><td><span class="param-required">Obrigatório.</span> Valor total a ser arrecadado.</td></tr>
-                                <tr><td><span class="param-name">partnerId</span></td><td class="param-type">String</td><td><span class="param-required">Obrigatório.</span> ID do parceiro, obtido no seu dashboard.</td></tr>
-                                <tr><td><span class="param-name">apiKey</span></td><td class="param-type">String</td><td><span class="param-required">Obrigatório.</span> Sua chave de API secreta.</td></tr>
+                                <tr>
+                                    <td><span class="param-name">name</span></td>
+                                    <td class="param-type">String</td>
+                                    <td>Nome descritivo para o pedido (ex: "Pedido Mesa 5").</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">totalValue</span></td>
+                                    <td class="param-type">Number</td>
+                                    <td><span class="param-required">Obrigatório.</span> Valor total a ser arrecadado.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">partnerId</span></td>
+                                    <td class="param-type">String</td>
+                                    <td><span class="param-required">Obrigatório.</span> ID do parceiro, obtido no seu dashboard.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">apiKey</span></td>
+                                    <td class="param-type">String</td>
+                                    <td><span class="param-required">Obrigatório.</span> Sua chave de API secreta.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -378,9 +712,19 @@ fetch(<span class="hl-string">'https://api.pagjunto.com/v1/order'</span>, {
                         
                         <h3>Parâmetros do Corpo (Body)</h3>
                         <table class="param-table">
-                            <thead><tr><th>Parâmetro</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Tipo</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                <tr><td><span class="param-name">orderId</span></td><td class="param-type">String</td><td><span class="param-required">Obrigatório.</span> O ID do pedido que deseja consultar.</td></tr>
+                                <tr>
+                                    <td><span class="param-name">orderId</span></td>
+                                    <td class="param-type">String</td>
+                                    <td><span class="param-required">Obrigatório.</span> O ID do pedido que deseja consultar.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -424,8 +768,8 @@ fetch(<span class="hl-string">'https://api.pagjunto.com/v1/order'</span>, {
                 <h2><span class="badge badge-webhook">WEBHOOK</span> Pedido Pago</h2>
                 <div class="endpoint-layout">
                     <div class="endpoint-details">
-                        <p>Para automatizar seus processos, você pode configurar uma URL de Webhook no seu <a href="/dashboard" style="color: var(--accent);">Dashboard</a>. Nós enviaremos uma requisição <code>POST</code> para essa URL sempre que um pedido for totalmente pago.</p>
-
+                        <p>Para automatizar seus processos, você pode configurar uma URL de Webhook no seu <a href="/dashboard">Dashboard</a>. Nós enviaremos uma requisição <code>POST</code> para essa URL sempre que um pedido for totalmente pago.</p>
+                        
                         <h3>Segurança</h3>
                         <p>Para garantir que a requisição é genuína, todas os nossos webhooks são assinados. Nós incluímos um cabeçalho <code>X-Pagjunto-Signature-256</code> na requisição.</p>
                         <p>A assinatura é um hash <strong>HMAC-SHA256</strong>, gerado usando sua <strong>apiKey</strong> como segredo e o corpo (body) da requisição como mensagem. Você deve calcular a mesma assinatura no seu servidor e comparar com a que recebeu para validar a autenticidade.</p>
@@ -433,13 +777,39 @@ fetch(<span class="hl-string">'https://api.pagjunto.com/v1/order'</span>, {
                         <h3>Payload do Webhook</h3>
                         <p>O corpo da requisição terá a seguinte estrutura:</p>
                         <table class="param-table">
-                            <thead><tr><th>Parâmetro</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Tipo</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                <tr><td><span class="param-name">event</span></td><td class="param-type">String</td><td>Tipo do evento. Será sempre <code>"order.paid"</code>.</td></tr>
-                                <tr><td><span class="param-name">orderId</span></td><td class="param-type">String</td><td>O ID único do pedido que foi pago.</td></tr>
-                                <tr><td><span class="param-name">totalValue</span></td><td class="param-type">Number</td><td>O valor total do pedido.</td></tr>
-                                <tr><td><span class="param-name">paidAt</span></td><td class="param-type">String</td><td>Data (ISO 8601) de quando o pedido foi pago.</td></tr>
-                                <tr><td><span class="param-name">payers</span></td><td class="param-type">Array</td><td>Uma lista de objetos, cada um com <code>name</code> e <code>value</code> de cada pagador.</td></tr>
+                                <tr>
+                                    <td><span class="param-name">event</span></td>
+                                    <td class="param-type">String</td>
+                                    <td>Tipo do evento. Será sempre <code>"order.paid"</code>.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">orderId</span></td>
+                                    <td class="param-type">String</td>
+                                    <td>O ID único do pedido que foi pago.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">totalValue</span></td>
+                                    <td class="param-type">Number</td>
+                                    <td>O valor total do pedido.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">paidAt</span></td>
+                                    <td class="param-type">String</td>
+                                    <td>Data (ISO 8601) de quando o pedido foi pago.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">payers</span></td>
+                                    <td class="param-type">Array</td>
+                                    <td>Uma lista de objetos, cada um com <code>name</code> e <code>value</code> de cada pagador.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -493,7 +863,7 @@ app.post(<span class="hl-string">'/webhook-pagjunto'</span>, (req, res) => {
             // --- Navegação com ScrollSpy ---
             const navLinks = document.querySelectorAll('.sidebar-nav a.nav-link');
             const sections = document.querySelectorAll('.main-content section');
-
+            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -514,12 +884,27 @@ app.post(<span class="hl-string">'/webhook-pagjunto'</span>, (req, res) => {
                 button.addEventListener('click', () => {
                     const codeBlock = button.nextElementSibling;
                     const code = codeBlock.querySelector('code').innerText;
+                    
                     navigator.clipboard.writeText(code).then(() => {
                         button.innerText = 'Copiado!';
                         setTimeout(() => {
                             button.innerText = 'Copiar';
                         }, 2000);
                     });
+                });
+            });
+
+            // --- Smooth scrolling for anchor links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 });
             });
         });
