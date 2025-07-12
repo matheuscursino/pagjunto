@@ -1544,7 +1544,7 @@
                         <form id="newOrderForm">
                             <div class="form-group">
                                 <label for="orderName" class="form-label">Nome do Pedido (Opcional)</label>
-                                <input type="text" id="orderName" name="orderName" class="form-input" placeholder="Ex: Viagem para a praia">
+                                <input type="text" id="orderName" name="orderName" class="form-input" placeholder="Ex: Pedido mesa 7">
                             </div>
 
                             <div class="form-group">
@@ -1596,7 +1596,7 @@
                     <div class="settings-card">
                         <div class="settings-header">
                             <h3 class="settings-title">ID de Recebedor (Recipient ID)</h3>
-                            <p class="settings-description">Este é o seu identificador de recebedor.</p>
+                            <p class="settings-description">Este é o seu identificador de recebedor na Pagar.me, para onde os valores são enviados.</p>
                         </div>
                         
                         <div class="api-key-container">
@@ -1608,6 +1608,26 @@
                                 Copiar ID
                             </button>
                         </div>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <div class="settings-header">
+                            <h3 class="settings-title">Configurar Webhook</h3>
+                            <p class="settings-description">Informe uma URL para receber notificações automáticas sempre que um pedido for totalmente pago.</p>
+                        </div>
+                        
+                        <form id="webhookForm">
+                            <div class="api-key-container">
+                                <input type="url" id="webhookUrlInput" class="form-input api-key-input"
+                                       placeholder="https://seusite.com/webhook"
+                                       value="<%= partnerData.webhookUrl || '' %>">
+                                <button type="submit" id="saveWebhookButton" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    Salvar URL
+                                </button>
+                            </div>
+                            <p id="webhookSaveStatus" style="margin-top: 10px; font-size: 0.875rem;"></p>
+                        </form>
                     </div>
                 </section>
             </div>
@@ -1656,20 +1676,16 @@
                 item.addEventListener('click', () => {
                     const targetSection = item.dataset.section;
                     
-                    // Update active nav item
                     navItems.forEach(nav => nav.classList.remove('active'));
                     item.classList.add('active');
                     
-                    // Update active section
                     sections.forEach(section => section.classList.remove('active'));
                     document.getElementById(`${targetSection}-section`).classList.add('active');
                     
-                    // Update page title
                     const titleData = sectionTitles[targetSection];
                     pageTitle.textContent = titleData.title;
                     pageSubtitle.textContent = titleData.subtitle;
 
-                    // Close mobile sidebar
                     closeMobileSidebar();
                 });
             });
@@ -1723,15 +1739,13 @@
             return translations[status] || status;
         }
 
-        // CPF MASKING FUNCTION
         function maskCPF(cpf) {
             if (!cpf || typeof cpf !== 'string') return 'N/A';
             const cleanCpf = cpf.replace(/\D/g, '');
-            if (cleanCpf.length !== 11) return cpf; // Return original if not a valid CPF length
+            if (cleanCpf.length !== 11) return cpf;
             return `${cleanCpf.substring(0, 3)}.***.***-${cleanCpf.substring(9, 12)}`;
         }
 
-        // Dashboard Display
         function updateDashboardDisplay() {
             const totalBalanceCents = (balance.data.available_amount || 0) + (balance.data.waiting_funds_amount || 0);
             document.getElementById('accountBalanceValue').textContent = formatCurrencyFromCents(totalBalanceCents);
@@ -1741,14 +1755,10 @@
             document.getElementById('paidOrdersValue').textContent = formatNumber(stats.paidOrders || 0);
             document.getElementById('freshOrdersValue').textContent = formatNumber(stats.freshOrders || 0);
             document.getElementById('progressOrdersValue').textContent = formatNumber(stats.progressOrders || 0);
-
             const conversionRate = (stats.totalOrders > 0) ? (stats.paidOrders / stats.totalOrders) * 100 : 0;
             document.getElementById('conversionRateValue').textContent = conversionRate.toFixed(1).replace('.', ',') + '%';
-
             const averageTicket = (stats.totalOrders > 0) ? (stats.totalValue / stats.totalOrders) : 0;
             document.getElementById('averageTicketValue').textContent = formatCurrency(averageTicket);
-
-            // Calculate total unique payers
             const uniquePayers = new Set();
             recentOrders.forEach(order => {
                 if (Array.isArray(order.payersIds)) {
@@ -1756,26 +1766,22 @@
                 }
             });
             document.getElementById('totalPayersValue').textContent = formatNumber(uniquePayers.size);
-
             updateSalesChart();
             updateStatusChart();
         }
 
-        // Charts
         function calculateMonthlySalesData(orders) {
             const monthlyData = {};
             const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
             const currentMonth = new Date().getMonth();
             const currentYear = new Date().getFullYear();
             const labels = [];
-
             for (let i = 6; i >= 0; i--) {
                 const date = new Date(currentYear, currentMonth - i, 1);
                 const monthName = months[date.getMonth()];
                 labels.push(monthName);
                 monthlyData[monthName] = 0;
             }
-
             orders.forEach((order) => {
                 if (order.createdAt && order.totalValue) {
                     const orderDate = new Date(order.createdAt);
@@ -1785,7 +1791,6 @@
                     }
                 }
             });
-
             const data = labels.map(label => monthlyData[label]);
             return { labels, data };
         }
@@ -1793,11 +1798,9 @@
         function updateSalesChart() {
             const ctx = document.getElementById('salesChart').getContext('2d');
             const monthlySales = calculateMonthlySalesData(recentOrders);
-
             if (salesChart) {
                 salesChart.destroy();
             }
-
             salesChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -1819,26 +1822,14 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            ticks: {
-                                callback: value => formatCurrency(value)
-                            },
-                            grid: {
-                                color: '#f1f5f9'
-                            }
+                            ticks: { callback: value => formatCurrency(value) },
+                            grid: { color: '#f1f5f9' }
                         },
-                        x: {
-                            grid: {
-                                color: '#f1f5f9'
-                            }
-                        }
+                        x: { grid: { color: '#f1f5f9' } }
                     }
                 }
             });
@@ -1846,16 +1837,10 @@
 
         function updateStatusChart() {
             const ctx = document.getElementById('statusChart').getContext('2d');
-            const statusData = [
-                stats.freshOrders || 0,
-                stats.progressOrders || 0,
-                stats.paidOrders || 0
-            ];
-
+            const statusData = [stats.freshOrders || 0, stats.progressOrders || 0, stats.paidOrders || 0];
             if (statusChart) {
                 statusChart.destroy();
             }
-
             statusChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -1878,9 +1863,7 @@
                                 usePointStyle: true,
                                 boxWidth: 6,
                                 padding: 15,
-                                font: {
-                                    size: 12
-                                }
+                                font: { size: 12 }
                             }
                         }
                     }
@@ -1888,7 +1871,6 @@
             });
         }
 
-        // Orders Table
         function displayOrders(orders = filteredOrders) {
             const tableBody = document.getElementById('ordersTableBody');
             const mobileContainer = document.getElementById('mobileOrdersContainer');
@@ -1903,230 +1885,83 @@
             }
 
             orders.forEach(order => {
-                // Desktop table row
                 const mainRow = document.createElement('tr');
                 mainRow.innerHTML = `
-                    <td>
-                        <div class="order-info">
-                            ${order.name || order.orderName ? `<div class="order-name">${order.name || order.orderName}</div>` : ''}
-                            <div class="order-id">${order.orderId}</div>
-                        </div>
-                    </td>
+                    <td><div class="order-info">${order.name || order.orderName ? `<div class="order-name">${order.name || order.orderName}</div>` : ''}<div class="order-id">${order.orderId}</div></div></td>
                     <td>${formatCurrency(order.totalValue || 0)}</td>
                     <td>${formatCurrency(order.paidValue || 0)}</td>
                     <td><span class="status-badge status-${order.status}">${translateStatus(order.status)}</span></td>
                     <td class="hide-mobile">${new Date(order.createdAt).toLocaleDateString('pt-BR')}</td>
-                    <td>
-                        <div class="table-actions">
-                            <button class="action-btn" onclick="toggleOrderDetails('${order.orderId}')">
-                                <i class="fas fa-chevron-down" id="chevron-${order.orderId}"></i>
-                                <span class="hide-mobile">Detalhes</span>
-                            </button>
-                            <button class="action-btn action-btn-primary" onclick="copyOrderLink('${order.orderId}')">
-                                <i class="fas fa-copy"></i>
-                                <span class="hide-mobile">Copiar</span>
-                            </button>
-                            <button class="action-btn" onclick="showQrCode('${order.orderId}')">
-                                <i class="fas fa-qrcode"></i>
-                                <span class="hide-mobile">QR</span>
-                            </button>
-                        </div>
-                    </td>
+                    <td><div class="table-actions"><button class="action-btn" onclick="toggleOrderDetails('${order.orderId}')"><i class="fas fa-chevron-down" id="chevron-${order.orderId}"></i><span class="hide-mobile">Detalhes</span></button><button class="action-btn action-btn-primary" onclick="copyOrderLink('${order.orderId}')"><i class="fas fa-copy"></i><span class="hide-mobile">Copiar</span></button><button class="action-btn" onclick="showQrCode('${order.orderId}')"><i class="fas fa-qrcode"></i><span class="hide-mobile">QR</span></button></div></td>
                 `;
 
-                // Details row for desktop
                 let payersListHTML = '<span style="color: var(--gray-500);">Nenhum pagador identificado.</span>';
                 if (Array.isArray(order.payersIds) && order.payersIds.length > 0) {
-                    payersListHTML = `<ul class="payers-list">${
-                        order.payersIds.map((id, index) => {
-                            const name = (Array.isArray(order.payersNames) && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
-                            const value = (Array.isArray(order.payersValues) && typeof order.payersValues[index] !== 'undefined') ? formatCurrency(order.payersValues[index]) : '';
-                            const phone = (Array.isArray(order.payersPhone) && order.payersPhone[index]) ? order.payersPhone[index] : 'N/A';
-                            const maskedCpf = maskCPF(id);
-                            
-                            return `<li class="payer-item">
-                                        <div class="payer-name">${name}</div>
-                                        <div class="payer-id">CPF: ${maskedCpf}</div>
-                                        <div class="payer-phone">Telefone: ${phone}</div>
-                                        <div class="payer-amount">Valor Pago: ${value}</div>
-                                    </li>`;
-                        }).join('')
-                    }</ul>`;
+                    payersListHTML = `<ul class="payers-list">${order.payersIds.map((id, index) => {
+                        const name = (Array.isArray(order.payersNames) && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
+                        const value = (Array.isArray(order.payersValues) && typeof order.payersValues[index] !== 'undefined') ? formatCurrency(order.payersValues[index]) : '';
+                        const phone = (Array.isArray(order.payersPhone) && order.payersPhone[index]) ? order.payersPhone[index] : 'N/A';
+                        const maskedCpf = maskCPF(id);
+                        return `<li class="payer-item"><div class="payer-name">${name}</div><div class="payer-id">CPF: ${maskedCpf}</div><div class="payer-phone">Telefone: ${phone}</div><div class="payer-amount">Valor Pago: ${value}</div></li>`;
+                    }).join('')}</ul>`;
                 }
 
                 const detailsRow = document.createElement('tr');
                 detailsRow.className = 'details-row';
                 detailsRow.id = `details-row-${order.orderId}`;
-                detailsRow.innerHTML = `
-                    <td colspan="6">
-                        <div class="details-content">
-                            <div class="details-grid">
-                                <div class="detail-item">
-                                    <span class="detail-label">Nome</span>
-                                    <span class="detail-value">${order.name || order.orderName || 'Não especificado'}</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="detail-label">ID do Pedido</span>
-                                    <span class="detail-value">${order.orderId}</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="detail-label">Data de Criação</span>
-                                    <span class="detail-value">${new Date(order.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="detail-label">Status</span>
-                                    <span class="detail-value">${translateStatus(order.status)}</span>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Pagadores</span>
-                                <div class="detail-value">${payersListHTML}</div>
-                            </div>
-                        </div>
-                    </td>
-                `;
-
+                detailsRow.innerHTML = `<td colspan="6"><div class="details-content"><div class="details-grid"><div class="detail-item"><span class="detail-label">Nome</span><span class="detail-value">${order.name || order.orderName || 'Não especificado'}</span></div><div class="detail-item"><span class="detail-label">ID do Pedido</span><span class="detail-value">${order.orderId}</span></div><div class="detail-item"><span class="detail-label">Data de Criação</span><span class="detail-value">${new Date(order.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span></div><div class="detail-item"><span class="detail-label">Status</span><span class="detail-value">${translateStatus(order.status)}</span></div></div><div class="detail-item"><span class="detail-label">Pagadores</span><div class="detail-value">${payersListHTML}</div></div></div></td>`;
                 tableBody.appendChild(mainRow);
                 tableBody.appendChild(detailsRow);
 
-                // Mobile card
                 let mobilePayersHTML = '<span style="color: var(--gray-500); font-size: 0.875rem;">Nenhum pagador identificado.</span>';
                 if (Array.isArray(order.payersIds) && order.payersIds.length > 0) {
-                    mobilePayersHTML = `<ul class="mobile-payers-list">${
-                        order.payersIds.map((id, index) => {
-                            const name = (Array.isArray(order.payersNames) && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
-                            const value = (Array.isArray(order.payersValues) && typeof order.payersValues[index] !== 'undefined') ? formatCurrency(order.payersValues[index]) : '';
-                            const phone = (Array.isArray(order.payersPhone) && order.payersPhone[index]) ? order.payersPhone[index] : 'N/A';
-                            const maskedCpf = maskCPF(id);
-                            
-                            return `<li class="mobile-payer-item">
-                                        <div class="mobile-payer-name">${name}</div>
-                                        <div class="mobile-payer-id">CPF: ${maskedCpf}</div>
-                                        <div class="mobile-payer-phone">Telefone: ${phone}</div>
-                                        <div class="mobile-payer-amount">Valor Pago: ${value}</div>
-                                    </li>`;
-                        }).join('')
-                    }</ul>`;
+                    mobilePayersHTML = `<ul class="mobile-payers-list">${order.payersIds.map((id, index) => {
+                        const name = (Array.isArray(order.payersNames) && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
+                        const value = (Array.isArray(order.payersValues) && typeof order.payersValues[index] !== 'undefined') ? formatCurrency(order.payersValues[index]) : '';
+                        const phone = (Array.isArray(order.payersPhone) && order.payersPhone[index]) ? order.payersPhone[index] : 'N/A';
+                        const maskedCpf = maskCPF(id);
+                        return `<li class="mobile-payer-item"><div class="mobile-payer-name">${name}</div><div class="mobile-payer-id">CPF: ${maskedCpf}</div><div class="mobile-payer-phone">Telefone: ${phone}</div><div class="mobile-payer-amount">Valor Pago: ${value}</div></li>`;
+                    }).join('')}</ul>`;
                 }
 
                 const mobileCard = document.createElement('div');
                 mobileCard.className = 'mobile-order-card';
-                mobileCard.innerHTML = `
-                    <div class="mobile-order-header">
-                        <div class="mobile-order-info">
-                            <h4>${order.name || order.orderName || 'Pedido sem nome'}</h4>
-                            <div class="order-id">${order.orderId}</div>
-                        </div>
-                        <span class="status-badge status-${order.status}">${translateStatus(order.status)}</span>
-                    </div>
-                    
-                    <div class="mobile-order-details">
-                        <div class="mobile-detail-item">
-                            <span class="mobile-detail-label">Valor Total</span>
-                            <span class="mobile-detail-value">${formatCurrency(order.totalValue || 0)}</span>
-                        </div>
-                        <div class="mobile-detail-item">
-                            <span class="mobile-detail-label">Valor Pago</span>
-                            <span class="mobile-detail-value">${formatCurrency(order.paidValue || 0)}</span>
-                        </div>
-                        <div class="mobile-detail-item">
-                            <span class="mobile-detail-label">Data</span>
-                            <span class="mobile-detail-value">${new Date(order.createdAt).toLocaleDateString('pt-BR')}</span>
-                        </div>
-                        <div class="mobile-detail-item">
-                            <span class="mobile-detail-label">Pagadores</span>
-                            <span class="mobile-detail-value">${Array.isArray(order.payersIds) ? order.payersIds.length : 0}</span>
-                        </div>
-                    </div>
-
-                    <div class="mobile-order-actions">
-                        <button class="action-btn action-btn-primary" onclick="copyOrderLink('${order.orderId}')">
-                            <i class="fas fa-copy"></i>
-                            Copiar
-                        </button>
-                        <button class="action-btn" onclick="showQrCode('${order.orderId}')">
-                            <i class="fas fa-qrcode"></i>
-                            QR Code
-                        </button>
-                    </div>
-
-                    <button class="mobile-toggle-details" onclick="toggleMobileOrderDetails('${order.orderId}')">
-                        <i class="fas fa-chevron-down" id="mobile-chevron-${order.orderId}"></i>
-                        Ver Detalhes dos Pagadores
-                    </button>
-
-                    <div class="mobile-order-details-section" id="mobile-details-${order.orderId}">
-                        <div class="mobile-detail-item">
-                            <span class="mobile-detail-label">Pagadores</span>
-                            <div style="margin-top: 8px;">${mobilePayersHTML}</div>
-                        </div>
-                    </div>
-                `;
-
+                mobileCard.innerHTML = `<div class="mobile-order-header"><div class="mobile-order-info"><h4>${order.name || order.orderName || 'Pedido sem nome'}</h4><div class="order-id">${order.orderId}</div></div><span class="status-badge status-${order.status}">${translateStatus(order.status)}</span></div><div class="mobile-order-details"><div class="mobile-detail-item"><span class="mobile-detail-label">Valor Total</span><span class="mobile-detail-value">${formatCurrency(order.totalValue || 0)}</span></div><div class="mobile-detail-item"><span class="mobile-detail-label">Valor Pago</span><span class="mobile-detail-value">${formatCurrency(order.paidValue || 0)}</span></div><div class="mobile-detail-item"><span class="mobile-detail-label">Data</span><span class="mobile-detail-value">${new Date(order.createdAt).toLocaleDateString('pt-BR')}</span></div><div class="mobile-detail-item"><span class="mobile-detail-label">Pagadores</span><span class="mobile-detail-value">${Array.isArray(order.payersIds) ? order.payersIds.length : 0}</span></div></div><div class="mobile-order-actions"><button class="action-btn action-btn-primary" onclick="copyOrderLink('${order.orderId}')"><i class="fas fa-copy"></i>Copiar</button><button class="action-btn" onclick="showQrCode('${order.orderId}')"><i class="fas fa-qrcode"></i>QR Code</button></div><button class="mobile-toggle-details" onclick="toggleMobileOrderDetails('${order.orderId}')"><i class="fas fa-chevron-down" id="mobile-chevron-${order.orderId}"></i> Ver Detalhes dos Pagadores</button><div class="mobile-order-details-section" id="mobile-details-${order.orderId}"><div class="mobile-detail-item"><span class="mobile-detail-label">Pagadores</span><div style="margin-top: 8px;">${mobilePayersHTML}</div></div></div>`;
                 mobileContainer.appendChild(mobileCard);
             });
         }
 
-        // Add toggleMobileOrderDetails function
         function toggleMobileOrderDetails(orderId) {
             const detailsSection = document.getElementById(`mobile-details-${orderId}`);
             const chevron = document.getElementById(`mobile-chevron-${orderId}`);
-            
             const isExpanded = detailsSection.classList.toggle('expanded');
-            
-            if (isExpanded) {
-                chevron.classList.remove('fa-chevron-down');
-                chevron.classList.add('fa-chevron-up');
-            } else {
-                chevron.classList.remove('fa-chevron-up');
-                chevron.classList.add('fa-chevron-down');
-            }
+            chevron.className = isExpanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
         }
 
-        // Add toggleOrderDetails function for desktop
         function toggleOrderDetails(orderId) {
             const detailsRow = document.getElementById(`details-row-${orderId}`);
             const chevron = document.getElementById(`chevron-${orderId}`);
-            
             const isExpanded = detailsRow.classList.toggle('expanded');
-            
-            if (isExpanded) {
-                chevron.classList.remove('fa-chevron-down');
-                chevron.classList.add('fa-chevron-up');
-            } else {
-                chevron.classList.remove('fa-chevron-up');
-                chevron.classList.add('fa-chevron-down');
-            }
+            chevron.className = isExpanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
         }
 
-        // Search and Filter
         function initSearchAndFilter() {
             const searchInput = document.getElementById('searchInput');
             const statusFilter = document.getElementById('statusFilter');
-
             function filterOrders() {
                 const searchTerm = searchInput.value.toLowerCase();
                 const statusFilterValue = document.getElementById('statusFilter').value;
-
                 filteredOrders = recentOrders.filter(order => {
-                    const matchesSearch = !searchTerm || 
-                        (order.name && order.name.toLowerCase().includes(searchTerm)) ||
-                        (order.orderName && order.orderName.toLowerCase().includes(searchTerm)) ||
-                        order.orderId.toLowerCase().includes(searchTerm);
-                    
+                    const matchesSearch = !searchTerm || (order.name && order.name.toLowerCase().includes(searchTerm)) || (order.orderName && order.orderName.toLowerCase().includes(searchTerm)) || order.orderId.toLowerCase().includes(searchTerm);
                     const matchesStatus = !statusFilterValue || order.status === statusFilterValue;
-                    
                     return matchesSearch && matchesStatus;
                 });
-
                 displayOrders(filteredOrders);
             }
-
             searchInput.addEventListener('input', filterOrders);
             statusFilter.addEventListener('change', filterOrders);
         }
 
-        // Order Actions
         function copyOrderLink(orderId) {
             const orderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
             copyToClipboard(orderLink, 'Link do pedido copiado!');
@@ -2138,9 +1973,7 @@
         }
 
         function copyToClipboard(text, successMessage) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast(successMessage);
-            }).catch(err => {
+            navigator.clipboard.writeText(text).then(() => showToast(successMessage)).catch(err => {
                 console.error('Falha ao copiar:', err);
                 showToast('Erro ao copiar');
             });
@@ -2157,19 +1990,13 @@
             const qrCodeModal = document.getElementById('qrCodeModal');
             const qrCodeContainer = document.getElementById('qrcode-container');
             const qrLinkText = document.getElementById('qrLinkText');
-            
             qrCodeContainer.innerHTML = '';
             qrCodeModal.classList.add('show');
-            
             new QRCode(qrCodeContainer, {
-                text: link,
-                width: 200,
-                height: 200,
-                colorDark: "#0f172a",
-                colorLight: "#ffffff",
+                text: link, width: 200, height: 200,
+                colorDark: "#0f172a", colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
-            
             qrLinkText.textContent = link;
         }
 
@@ -2191,7 +2018,6 @@
             updateDashboardDisplay();
             displayOrders();
 
-            // Form submission
             document.getElementById('newOrderForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const orderNameInput = document.getElementById('orderName');
@@ -2199,10 +2025,8 @@
                 const totalValue = parseFloat(totalValueInput.value);
                 const orderName = orderNameInput.value;
                 const submitButton = e.target.querySelector('button[type="submit"]');
-
                 submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
                 submitButton.disabled = true;
-
                 try {
                     const payload = {
                         name: orderName || '',
@@ -2210,20 +2034,16 @@
                         totalValue: totalValue,
                         apiKey: localPartnerApiKey,
                     };
-
                     const response = await fetch(`<%=process.env.API_SITE_URL%>/order`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido.' }));
                         throw new Error(errorData.message || `Erro HTTP: ${response.status}`);
                     }
-
                     const orderId = await response.json();
-                    
                     const orderLinkElement = document.getElementById('orderLink');
                     const orderCreationResult = document.getElementById('orderCreationResult');
                     const generatedOrderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
@@ -2231,21 +2051,16 @@
                     orderLinkElement.textContent = generatedOrderLink;
                     orderCreationResult.classList.add('show');
                     showToast('Pedido criado com sucesso!');
-                    
                     const newOrder = {
                         name: orderName,
                         orderId: orderId,
                         totalValue: totalValue,
                         paidValue: 0,
                         status: 'fresh',
-                        payersIds: [],
-                        payersNames: [],
-                        payersValues: [],
-                        payersPhone: [],
+                        payersIds: [], payersNames: [], payersValues: [], payersPhone: [],
                         createdAt: new Date().toISOString()
                     };
                     updateDashboardWithNewOrder(newOrder);
-                    
                     totalValueInput.value = '';
                     orderNameInput.value = '';
                 } catch (error) {
@@ -2257,37 +2072,88 @@
                 }
             });
 
-            // Copy buttons
             document.getElementById('copyLinkButton').addEventListener('click', () => {
                 const link = document.getElementById('orderLink').href;
                 copyToClipboard(link, 'Link do pedido copiado!');
             });
-
             document.getElementById('qrCodeNewOrderButton').addEventListener('click', () => {
                 const link = document.getElementById('orderLink').href;
                 generateAndShowQrModal(link);
             });
-
             document.getElementById('copyApiKeyButton').addEventListener('click', () => {
                 copyToClipboard(localPartnerApiKey, 'Chave de API copiada!');
             });
-            
             document.getElementById('copyRecipientIdButton').addEventListener('click', () => {
                 copyToClipboard(localRecipientId, 'ID de Recebedor copiado!');
             });
 
-            // Modal close
             document.getElementById('closeQrModal').addEventListener('click', () => {
                 document.getElementById('qrCodeModal').classList.remove('show');
             });
-
             document.getElementById('qrCodeModal').addEventListener('click', (event) => {
                 if (event.target === event.currentTarget) {
                     event.currentTarget.classList.remove('show');
                 }
             });
 
-            // Keyboard shortcuts
+            // Lógica para o formulário de Webhook com tratamento de erro
+            const webhookForm = document.getElementById('webhookForm');
+            const webhookUrlInput = document.getElementById('webhookUrlInput');
+            const saveButton = document.getElementById('saveWebhookButton');
+            const statusText = document.getElementById('webhookSaveStatus');
+
+            webhookUrlInput.addEventListener('input', () => {
+                webhookUrlInput.style.borderColor = '';
+                statusText.textContent = '';
+            });
+
+            webhookForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const urlValue = webhookUrlInput.value.trim();
+                
+                if (urlValue) {
+                    const urlPattern = new RegExp('^(https?|ftp)://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?$', 'i');
+                    if (!urlPattern.test(urlValue)) {
+                        statusText.textContent = 'Formato de URL inválido. Use o formato https://...';
+                        statusText.style.color = 'var(--error)';
+                        webhookUrlInput.style.borderColor = 'var(--error)';
+                        return;
+                    }
+                }
+                
+                const originalButtonText = saveButton.innerHTML;
+                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+                saveButton.disabled = true;
+                statusText.textContent = '';
+                statusText.style.color = '';
+                try {
+                    const response = await fetch(`<%=process.env.API_SITE_URL%>/partner/webhook`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            partnerId: localPartnerId,
+                            apiKey: localPartnerApiKey,
+                            webhookUrl: urlValue
+                        })
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({ message: 'Falha ao salvar a URL.' }));
+                        throw new Error(errorData.message);
+                    }
+                    statusText.textContent = 'URL do webhook salva com sucesso!';
+                    statusText.style.color = 'var(--success)';
+                } catch (error) {
+                    console.error('Erro ao salvar webhook:', error);
+                    statusText.textContent = `Erro: ${error.message}`;
+                    statusText.style.color = 'var(--error)';
+                    webhookUrlInput.style.borderColor = 'var(--error)';
+                } finally {
+                    saveButton.innerHTML = originalButtonText;
+                    saveButton.disabled = false;
+                    setTimeout(() => { statusText.textContent = ''; }, 5000);
+                }
+            });
+            
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     document.getElementById('qrCodeModal').classList.remove('show');
