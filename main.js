@@ -125,6 +125,10 @@ app.get('/logout', (req, res) => {
 
 app.use('/signin', signinRouter)
 
+app.get('/docs', (req,res) => {
+    res.render('docs')
+})
+
 
 app.listen(port, () => {
     console.log(`server started on port: ${port}`)

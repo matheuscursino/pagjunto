@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação da API - PagJunto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --bg-sidebar: #ffffff;
+            --bg-code: #1e293b;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --text-code: #e2e8f0;
+            --border-color: #e2e8f0;
+            --accent: #3b82f6;
+            --accent-dark: #1d4ed8;
+            --green: #10b981;
+            --orange: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            border-right: 1px solid var(--border-color);
+            padding: 40px 0;
+            background: var(--bg-sidebar);
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 0 24px 20px 24px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sidebar-nav {
+            padding-top: 20px;
+        }
+
+        .sidebar-nav h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 16px 24px 8px;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 10px 24px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--text-primary);
+            background-color: #f1f5f9;
+        }
+
+        .sidebar-nav a.active {
+            color: var(--accent);
+            font-weight: 600;
+            border-left-color: var(--accent);
+            background-color: #eff6ff;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px 60px;
+            min-width: 0;
+        }
+
+        section {
+            padding-top: 60px;
+            margin-top: -60px; /* Offset for anchor links */
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        h1, h2, h3 {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        section:first-of-type h2 {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            font-size: 1rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background-color: #f1f5f9;
+            color: var(--accent-dark);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        /* Two-column layout for endpoints */
+        .endpoint-layout {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .endpoint-details, .endpoint-code {
+            min-width: 0;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background-color: var(--bg-code);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            position: relative;
+        }
+        
+        .code-block-header {
+            background-color: #334155;
+            padding: 8px 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .code-block pre {
+            padding: 16px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            background: none;
+            padding: 0;
+            color: var(--text-code);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .code-block .copy-btn {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            background: #475569;
+            color: #cbd5e1;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .code-block .copy-btn:hover {
+            background: #64748b;
+        }
+
+        /* Syntax Highlighting (simple) */
+        .code-block .hl-method { color: #6ee7b7; }
+        .code-block .hl-url { color: #93c5fd; }
+        .code-block .hl-key { color: #e879f9; }
+        .code-block .hl-string { color: #fde047; }
+        .code-block .hl-number { color: #fb923c; }
+        .code-block .hl-comment { color: #9ca3af; }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Fira Code', monospace;
+            vertical-align: middle;
+        }
+        .badge-post { background-color: #dcfce7; color: #166534; }
+        .badge-get { background-color: #dbeafe; color: #1e40af; }
+        .badge-webhook { background-color: #fef9c3; color: #854d0e; }
+        
+        /* Parameter Tables */
+        .param-table {
+            width: 100%;
+            margin: 24px 0;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .param-table th, .param-table td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .param-table th {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .param-table .param-name {
+            font-family: 'Fira Code', monospace;
+        }
+        .param-table .param-type {
+            color: var(--text-muted);
+        }
+        .param-table .param-required {
+            color: var(--error);
+            font-weight: 500;
+        }
+        
+        @media (max-width: 1024px) {
+            .sidebar { display: none; }
+            .main-content { padding: 20px; }
+            .endpoint-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                API PagJunto
+            </div>
+            <nav class="sidebar-nav">
+                <h3>Primeiros Passos</h3>
+                <a href="#autenticacao" class="nav-link">Autenticação</a>
+
+                <h3>Pedidos</h3>
+                <a href="#criar-pedido" class="nav-link">Criar um Pedido</a>
+                <a href="#consultar-pedido" class="nav-link">Consultar um Pedido</a>
+                
+                <h3>Webhooks</h3>
+                <a href="#webhook-pedido-pago" class="nav-link">Receber Notificações</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section id="introducao">
+                <h1>Documentação da API PagJunto</h1>
+                <p>Nossa API foi desenhada para ser simples e poderosa, permitindo que você integre um sistema de pagamentos compartilhados ("vaquinhas") diretamente em sua aplicação. Com poucos endpoints, você pode criar, gerenciar e ser notificado sobre pagamentos.</p>
+            </section>
+
+            <section id="autenticacao">
+                <h2>Autenticação</h2>
+                <p>Nossa API utiliza uma chave (<code>apiKey</code>) para autenticar as requisições. Você pode encontrar sua chave de API no seu <a href="/dashboard" style="color: var(--accent);">Dashboard de Parceiro</a>, na aba de Configurações.</p>
+                <p>A chave deve ser enviada no corpo (body) de cada requisição que necessite de autenticação, como a criação de um pedido.</p>
+                <div class="endpoint-layout">
+                    <div class="endpoint-details">
+                        <h3>Como incluir a chave</h3>
+                        <p>Simplesmente adicione o par <code>"apiKey": "sua_chave_secreta"</code> ao objeto JSON que você envia para nossos endpoints.</p>
+                    </div>
+                    <div class="endpoint-code">
+                        <div class="code-block">
+                            <div class="code-block-header">Exemplo de payload JSON</div>
+                            <button class="copy-btn">Copiar</button>
+                            <pre><code><span class="hl-comment">// Exemplo de corpo da requisição</span>
+{
+  <span class="hl-key">"name"</span>: <span class="hl-string">"Pedido de Exemplo"</span>,
+  <span class="hl-key">"totalValue"</span>: <span class="hl-number">150.00</span>,
+  <span class="hl-key">"partnerId"</span>: <span class="hl-string">"60d5f..."</span>,
+  <span class="hl-key">"apiKey"</span>: <span class="hl-string">"abc-123-def-456"</span> <span class="hl-comment">// <-- Sua chave aqui</span>
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="criar-pedido">
+                <h2><span class="badge badge-post">POST</span> Criar um Pedido</h2>
+                <div class="endpoint-layout">
+                    <div class="endpoint-details">
+                        <p>Este endpoint cria um novo pedido de pagamento compartilhado. Em resposta, você receberá um <code>orderId</code> único, que será usado para construir a URL de pagamento para seus clientes.</p>
+                        <code>/v1/order</code>
+                        
+                        <h3>Parâmetros do Corpo (Body)</h3>
+                        <table class="param-table">
+                            <thead><tr><th>Parâmetro</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                            <tbody>
+                                <tr><td><span class="param-name">name</span></td><td class="param-type">String</td><td>Nome descritivo para o pedido (ex: "Pedido Mesa 5").</td></tr>
+                                <tr><td><span class="param-name">totalValue</span></td><td class="param-type">Number</td><td><span class="param-required">Obrigatório.</span> Valor total a ser arrecadado.</td></tr>
+                                <tr><td><span class="param-name">partnerId</span></td><td class="param-type">String</td><td><span class="param-required">Obrigatório.</span> ID do parceiro, obtido no seu dashboard.</td></tr>
+                                <tr><td><span class="param-name">apiKey</span></td><td class="param-type">String</td><td><span class="param-required">Obrigatório.</span> Sua chave de API secreta.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="endpoint-code">
+                        <div class="code-block">
+                            <div class="code-block-header">Exemplo: JavaScript (Fetch)</div>
+                            <button class="copy-btn">Copiar</button>
+                            <pre><code><span class="hl-key">const</span> data = {
+  name: <span class="hl-string">'Pedido para a Festa'</span>,
+  totalValue: <span class="hl-number">250.50</span>,
+  partnerId: <span class="hl-string">'60d5f1b4e6b3c1001f... '</span>,
+  apiKey: <span class="hl-string">'abc-123-def-456'</span>
+};
+
+fetch(<span class="hl-string">'https://api.pagjunto.com/v1/order'</span>, {
+  method: <span class="hl-string">'POST'</span>,
+  headers: { <span class="hl-string">'Content-Type'</span>: <span class="hl-string">'application/json'</span> },
+  body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(orderId => {
+  console.log(<span class="hl-string">'ID do Pedido Criado:'</span>, orderId);
+  <span class="hl-comment">// "668ffb369c0d12e8c2d5e16a"</span>
+});</code></pre>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">Resposta de Sucesso: 201 Created</div>
+                            <button class="copy-btn">Copiar</button>
+                            <pre><code><span class="hl-string">"668ffb369c0d12e8c2d5e16a"</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="consultar-pedido">
+                <h2><span class="badge badge-get">GET</span> Consultar um Pedido</h2>
+                <div class="endpoint-layout">
+                    <div class="endpoint-details">
+                        <p>Utilize este endpoint para obter o status atual e todos os detalhes de um pedido existente, incluindo os pagamentos já realizados.</p>
+                        <code>/v1/order</code>
+                        
+                        <h3>Parâmetros do Corpo (Body)</h3>
+                        <table class="param-table">
+                            <thead><tr><th>Parâmetro</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                            <tbody>
+                                <tr><td><span class="param-name">orderId</span></td><td class="param-type">String</td><td><span class="param-required">Obrigatório.</span> O ID do pedido que deseja consultar.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="endpoint-code">
+                        <div class="code-block">
+                            <div class="code-block-header">Exemplo: JavaScript (Fetch)</div>
+                            <button class="copy-btn">Copiar</button>
+                            <pre><code><span class="hl-key">const</span> orderId = <span class="hl-string">'668ffb369c0d12e8c2d5e16a'</span>;
+
+fetch(<span class="hl-string">'https://api.pagjunto.com/v1/order'</span>, {
+  method: <span class="hl-string">'GET'</span>,
+  headers: { <span class="hl-string">'Content-Type'</span>: <span class="hl-string">'application/json'</span> },
+  body: JSON.stringify({ orderId })
+})
+.then(res => res.json())
+.then(pedido => console.log(pedido));</code></pre>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">Resposta de Sucesso: 200 OK</div>
+                            <button class="copy-btn">Copiar</button>
+                            <pre><code>{
+  <span class="hl-key">"name"</span>: <span class="hl-string">"Pedido para a Festa"</span>,
+  <span class="hl-key">"orderId"</span>: <span class="hl-string">"668ffb369..."</span>,
+  <span class="hl-key">"partnerId"</span>: <span class="hl-string">"60d5f1b4e..."</span>,
+  <span class="hl-key">"totalValue"</span>: <span class="hl-number">250.5</span>,
+  <span class="hl-key">"paidValue"</span>: <span class="hl-number">100</span>,
+  <span class="hl-key">"status"</span>: <span class="hl-string">"progress"</span>,
+  <span class="hl-key">"payersNames"</span>: [<span class="hl-string">"João Silva"</span>],
+  <span class="hl-key">"payersValues"</span>: [<span class="hl-number">100</span>],
+  <span class="hl-key">"payersIds"</span>: [<span class="hl-number">999.999.999-33</span>],
+  <span class="hl-key">"payersPhone"</span>: [<span class="hl-number">(99)99999-9999</span>],
+  <span class="hl-key">"createdAt"</span>: <span class="hl-string">"2025-07-12T..."</span>,
+  <span class="hl-key">"updatedAt"</span>: <span class="hl-string">"2025-07-12T..."</span>
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="webhook-pedido-pago">
+                <h2><span class="badge badge-webhook">WEBHOOK</span> Pedido Pago</h2>
+                <div class="endpoint-layout">
+                    <div class="endpoint-details">
+                        <p>Para automatizar seus processos, você pode configurar uma URL de Webhook no seu <a href="/dashboard" style="color: var(--accent);">Dashboard</a>. Nós enviaremos uma requisição <code>POST</code> para essa URL sempre que um pedido for totalmente pago.</p>
+
+                        <h3>Segurança</h3>
+                        <p>Para garantir que a requisição é genuína, todas os nossos webhooks são assinados. Nós incluímos um cabeçalho <code>X-Pagjunto-Signature-256</code> na requisição.</p>
+                        <p>A assinatura é um hash <strong>HMAC-SHA256</strong>, gerado usando sua <strong>apiKey</strong> como segredo e o corpo (body) da requisição como mensagem. Você deve calcular a mesma assinatura no seu servidor e comparar com a que recebeu para validar a autenticidade.</p>
+                        
+                        <h3>Payload do Webhook</h3>
+                        <p>O corpo da requisição terá a seguinte estrutura:</p>
+                        <table class="param-table">
+                            <thead><tr><th>Parâmetro</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                            <tbody>
+                                <tr><td><span class="param-name">event</span></td><td class="param-type">String</td><td>Tipo do evento. Será sempre <code>"order.paid"</code>.</td></tr>
+                                <tr><td><span class="param-name">orderId</span></td><td class="param-type">String</td><td>O ID único do pedido que foi pago.</td></tr>
+                                <tr><td><span class="param-name">totalValue</span></td><td class="param-type">Number</td><td>O valor total do pedido.</td></tr>
+                                <tr><td><span class="param-name">paidAt</span></td><td class="param-type">String</td><td>Data (ISO 8601) de quando o pedido foi pago.</td></tr>
+                                <tr><td><span class="param-name">payers</span></td><td class="param-type">Array</td><td>Uma lista de objetos, cada um com <code>name</code> e <code>value</code> de cada pagador.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="endpoint-code">
+                        <div class="code-block">
+                            <div class="code-block-header">Exemplo: Validando o Webhook em Node.js</div>
+                            <button class="copy-btn">Copiar</button>
+                            <pre><code><span class="hl-key">const</span> crypto = <span class="hl-method">require</span>(<span class="hl-string">'crypto'</span>);
+<span class="hl-key">const</span> express = <span class="hl-method">require</span>(<span class="hl-string">'express'</span>);
+<span class="hl-key">const</span> app = <span class="hl-method">express</span>();
+
+<span class="hl-comment">// Use o 'raw' body. Middlewares como o body-parser podem alterar o formato.</span>
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf;
+  }
+}));
+
+<span class="hl-key">const</span> PARTNER_API_KEY = <span class="hl-string">'sua_chave_secreta_aqui'</span>;
+
+app.post(<span class="hl-string">'/webhook-pagjunto'</span>, (req, res) => {
+  <span class="hl-key">const</span> signature = req.get(<span class="hl-string">'X-Pagjunto-Signature-256'</span>);
+  <span class="hl-key">const</span> expectedSignature = crypto
+    .createHmac(<span class="hl-string">'sha256'</span>, PARTNER_API_KEY)
+    .update(req.rawBody) <span class="hl-comment">// Importante usar o corpo bruto!</span>
+    .digest(<span class="hl-string">'hex'</span>);
+
+  <span class="hl-key">if</span> (signature !== expectedSignature) {
+    <span class="hl-key">return</span> res.status(<span class="hl-number">400</span>).send(<span class="hl-string">'Assinatura inválida.'</span>);
+  }
+
+  <span class="hl-comment">// Assinatura válida. Processe o evento.</span>
+  <span class="hl-key">const</span> { event, orderId } = req.body;
+  
+  <span class="hl-key">if</span> (event === <span class="hl-string">'order.paid'</span>) {
+    console.log(`Pedido ${orderId} foi pago!`);
+    <span class="hl-comment">// Execute sua lógica de negócio (ex: liberar produto, enviar email).</span>
+  }
+
+  res.status(<span class="hl-number">200</span>).send();
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Navegação com ScrollSpy ---
+            const navLinks = document.querySelectorAll('.sidebar-nav a.nav-link');
+            const sections = document.querySelectorAll('.main-content section');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+
+            sections.forEach(section => observer.observe(section));
+
+            // --- Funcionalidade de Copiar Código ---
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const codeBlock = button.nextElementSibling;
+                    const code = codeBlock.querySelector('code').innerText;
+                    navigator.clipboard.writeText(code).then(() => {
+                        button.innerText = 'Copiado!';
+                        setTimeout(() => {
+                            button.innerText = 'Copiar';
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
