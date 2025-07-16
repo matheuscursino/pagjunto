@@ -254,7 +254,6 @@
         .copy-btn { background: var(--accent-primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
         .copy-btn:hover { filter: brightness(1.1); }
         
-        /* NOVO: Estilo para o botão de voltar */
         .btn-link {
             background: none;
             border: none;
@@ -478,14 +477,46 @@
         </div>
     </div>
     
-    <div id="termsModal" class="modal"></div>
-    <div id="pageQrModal" class="modal"></div>
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Termos e Condições de Uso</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Última atualização:</strong> 16 de julho de 2025</p>
+                <h3>1. Objeto do Serviço</h3>
+                <p>A Pagjunto atua como uma <strong>plataforma de intermediação de pagamentos</strong>, facilitando a transferência de valores entre você, o pagador, e o comerciante ou organizador da cobrança ("Parceiro"). Nós <strong>NÃO</strong> somos o vendedor do produto ou serviço. Nossa responsabilidade se limita a processar o seu pagamento de forma segura.</p>
+                <h3>2. Coleta e Uso de Dados Pessoais</h3>
+                <p>Ao prosseguir, você autoriza a Pagjunto a coletar e processar seus dados pessoais (nome, CPF, telefone) para a finalidade estrita de processar a transação, garantir a segurança e identificar seu pagamento junto ao Parceiro.</p>
+                <h3>3. Política de Não Reembolso e Disputas</h3>
+                <p>Uma vez que um pagamento é confirmado, a transação é <strong>final e irrevogável</strong> pela Pagjunto. Quaisquer solicitações de reembolso ou disputas sobre o produto/serviço devem ser tratadas <strong>DIRETAMENTE</strong> com o Parceiro que originou a cobrança.</p>
+            </div>
+        </div>
+    </div>
+    <div id="pageQrModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h2 class="modal-title">Compartilhar Link da Cobrança</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body centered">
+                <p>Escaneie para abrir esta página em outro dispositivo.</p>
+                <div id="pageQrcodeContainer"></div>
+                <p style="margin-top: 15px; font-size: 14px; word-break: break-all;">Ou copie o link:</p>
+                <div class="pix-key-wrapper" style="max-width: 400px; margin: 10px auto 0;">
+                    <input type="text" readonly id="pageQrLinkText" value="" />
+                    <button class="copy-btn" id="copyPageLinkBtn">Copiar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // --- Estado Global e Seletores ---
+        // --- Estado Global a partir dos dados do servidor ---
         const TOTAL_VALUE = <%= orderData.totalValue %>;
         let currentPaidValue = <%= orderData.paidValue %>;
         let payers = [
@@ -496,6 +527,8 @@
                 <% } %>
             <% } %>
         ];
+
+        // --- Seletores de Elementos ---
         const progressRing = document.getElementById('progressRing');
         const paidValueSpan = document.getElementById('paidValueSpan');
         const totalValueSpan = document.getElementById('totalValueSpan');
@@ -557,6 +590,7 @@
             const loader = document.getElementById('loader');
             const errorMessage = document.getElementById('errorMessage');
 
+            // Máscaras de input
             cpfInput.addEventListener('input', e => { let v = e.target.value.replace(/\D/g, '').slice(0, 11); v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2'); e.target.value = v; });
             phoneInput.addEventListener('input', e => { let v = e.target.value.replace(/\D/g, '').slice(0, 11); if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3'); else if (v.length > 5) v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3'); else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2'); else v = v.replace(/^(\d*)/, '($1'); e.target.value = v; });
 
@@ -565,7 +599,7 @@
                 errorMessage.textContent = '';
                 const remainingValue = TOTAL_VALUE - currentPaidValue;
                 const valorFloat = parseFloat(valueInput.value.replace(',', '.'));
-
+                // Validações
                 if (!nameInput.value.trim() || nameInput.value.trim().split(' ').length < 2) return errorMessage.textContent = "Informe seu nome completo.";
                 if (cpfInput.value.length !== 14) return errorMessage.textContent = "Informe um CPF válido.";
                 if (phoneInput.value.replace(/\D/g, '').length < 10) return errorMessage.textContent = "Informe um telefone válido com DDD.";
@@ -605,7 +639,6 @@
             });
         }
         
-        // FUNÇÃO ATUALIZADA para incluir o botão de voltar
         const displayQrCode = (qrUrl, pixKey) => {
             const qrWrapper = document.getElementById('qrWrapper');
             qrWrapper.innerHTML = `
@@ -633,9 +666,55 @@
             });
         };
 
-        const setupModals = () => { /* ... Lógica dos modais inalterada ... */ };
+        const setupModals = () => {
+             const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.addEventListener('click', e => {
+                    if (e.target === modal || e.target.classList.contains('close-btn')) {
+                        modal.classList.remove('show');
+                    }
+                });
+            });
+            document.getElementById('openTermsModal')?.addEventListener('click', e => { e.preventDefault(); document.getElementById('termsModal').classList.add('show'); });
+            document.getElementById('showQrBtn')?.addEventListener('click', () => {
+                const modal = document.getElementById('pageQrModal');
+                const container = document.getElementById('pageQrcodeContainer');
+                const linkInput = document.getElementById('pageQrLinkText');
+                container.innerHTML = '';
+                new QRCode(container, { text: window.location.href, width: 256, height: 256, colorLight: "#ffffff", colorDark: "#000000" });
+                linkInput.value = window.location.href;
+                modal.classList.add('show');
+            });
+            document.getElementById('copyPageLinkBtn')?.addEventListener('click', (e) => {
+                navigator.clipboard.writeText(document.getElementById('pageQrLinkText').value).then(() => {
+                    e.target.textContent = 'Copiado!';
+                    setTimeout(() => { e.target.textContent = 'Copiar'; }, 2000);
+                });
+            });
+            document.getElementById('copyLinkBtn')?.addEventListener('click', (e) => {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    e.currentTarget.innerHTML = '<i class="fas fa-check"></i>';
+                    e.currentTarget.classList.add('copied');
+                    setTimeout(() => { e.currentTarget.innerHTML = '<i class="fas fa-link"></i>'; e.currentTarget.classList.remove('copied'); }, 2000);
+                });
+            });
+        };
         
-        // --- Lógica do Socket.IO ATUALIZADA ---
+        const showToast = (message) => {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                toast.addEventListener('animationend', () => toast.remove());
+            }, 4000);
+        };
+        
+        // --- Lógica do Socket.IO FINAL ---
         const initializeSocket = () => {
             try {
                 const id2 = window.location.pathname.split('/').filter(Boolean).pop();
@@ -646,20 +725,20 @@
                 });
 
                 socket.on('paymentConfirmed', data => {
-                    if (!data || !data.payerName || typeof data.paidValue !== 'number') return;
+                    if (!data || !data.payerName || typeof data.paidValue !== 'number') {
+                        return; // Ignora eventos com formato inválido
+                    }
 
-                    // ATUALIZAÇÃO 1: Mostrar notificação Toast
                     showToast(`<b>${data.payerName}</b> pagou <b>R$ ${data.paidValue.toFixed(2).replace('.', ',')}</b>`);
                     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
                     
-                    // ATUALIZAÇÃO 2: Se o QR code estiver na tela, volte para o formulário
                     if (actionPane && actionPane.classList.contains('qr-visible')) {
                         actionPane.classList.remove('qr-visible');
                     }
                     
-                    // Lógica de cálculo e atualização da UI
                     const paymentAmount = data.paidValue;
                     currentPaidValue += paymentAmount;
+                    
                     addPayerToList({ name: data.payerName, value: paymentAmount });
                     payersCount.textContent = parseInt(payersCount.textContent) + 1;
                     updateProgress(currentPaidValue, TOTAL_VALUE);
