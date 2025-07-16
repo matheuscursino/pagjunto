@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pagamento Seguro - Pagjunto</title>
+    <title>Dashboard de Pagamento - Pagjunto</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -186,19 +186,17 @@
             background: var(--bg-glow); pointer-events: none;
         }
         .action-content { position: relative; z-index: 1; width: 100%; }
-        .form-wrapper, .qr-wrapper, .paid-message-wrapper { transition: opacity 0.4s ease, transform 0.4s ease; }
-        .action-pane:not(.qr-visible):not(.paid-visible) .qr-wrapper,
-        .action-pane:not(.qr-visible):not(.paid-visible) .paid-message-wrapper,
-        .action-pane.qr-visible .form-wrapper,
-        .action-pane.qr-visible .paid-message-wrapper,
-        .action-pane.paid-visible .form-wrapper,
-        .action-pane.paid-visible .qr-wrapper {
-            opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute;
-        }
+        
+        /* Transição QR Code Desktop */
         .qr-wrapper, .paid-message-wrapper {
             opacity: 0; pointer-events: none; text-align: center;
             position: absolute; top: 50%; left: 2.5rem; right: 2.5rem;
             transform: translateY(-50%) scale(0.95);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .action-pane.qr-visible .form-wrapper,
+        .action-pane.paid-visible .form-wrapper {
+            opacity: 0; transform: scale(0.95); pointer-events: none;
         }
         .action-pane.qr-visible .qr-wrapper,
         .action-pane.paid-visible .paid-message-wrapper {
@@ -282,7 +280,7 @@
         #pageQrcodeContainer { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
         #pageQrcodeContainer img { border: 1px solid var(--border-color); border-radius: 16px; }
 
-        /* --- Animações & Responsividade --- */
+        /* --- Animações de entrada --- */
         @keyframes fade-in-down { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fade-in-right { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
@@ -290,13 +288,53 @@
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
+        /* --- RESPONSIVIDADE - CORREÇÃO PARA TELAS PEQUENAS --- */
         @media (max-width: 1024px) {
-            .main-container { display: block; height: auto; padding: 1rem; overflow: auto; }
-            .payment-dashboard { grid-template-columns: 1fr; height: auto; max-height: none; gap: 1rem; }
-            .context-pane { order: 1; }
-            .action-pane { order: 2; min-height: 600px; }
-            .action-pane.qr-visible .form-wrapper, .action-pane.paid-visible .form-wrapper { display: none; }
-            .action-pane.qr-visible .qr-wrapper, .action-pane.paid-visible .paid-message-wrapper { position: static; transform: none; padding-top: 2rem; }
+            body {
+                overflow: auto; /* Permite a rolagem */
+            }
+            .main-container {
+                display: block; /* Remove o flexbox que centraliza */
+                min-height: auto;
+                padding: 1rem;
+                overflow: visible;
+            }
+            .payment-dashboard {
+                grid-template-columns: 1fr; /* Transforma em coluna única */
+                height: auto;
+                max-height: none;
+                gap: 1rem;
+            }
+            .context-pane { order: 1; padding: 0.5rem; }
+            .action-pane { order: 2; min-height: auto; padding: 1.5rem; }
+
+            .header .logo { font-size: 1.5rem; }
+            .header .title { font-size: 1rem; }
+
+            .progress-container svg {
+                width: 200px;
+                height: 200px;
+            }
+            .progress-info .paid-value { font-size: 2rem; }
+            .progress-info .total-value { font-size: 0.9rem; }
+            .payers-list { max-height: 120px; }
+            
+            /* Correção da transição para QR Code em telas pequenas */
+            .action-pane.qr-visible .form-wrapper,
+            .action-pane.paid-visible .form-wrapper {
+                display: none; /* Simplesmente esconde o form */
+            }
+            .qr-wrapper, .paid-message-wrapper {
+                position: static; /* Remove posicionamento absoluto */
+                transform: none;
+                opacity: 1;
+                padding: 1rem 0;
+            }
+            /* Garante que eles só apareçam quando a classe for aplicada */
+            .action-pane:not(.qr-visible) .qr-wrapper,
+            .action-pane:not(.paid-visible) .paid-message-wrapper {
+                 display: none;
+            }
         }
     </style>
 </head>
@@ -340,7 +378,7 @@
             <div class="action-pane" id="actionPane">
                 <div class="action-content">
                     <% if (orderData.paidValue >= orderData.totalValue) { %>
-                        <div class="paid-message-wrapper" style="opacity: 1; pointer-events: all; transform: translateY(-50%) scale(1);">
+                        <div class="paid-message-wrapper">
                             <div class="icon"><i class="fas fa-check-circle"></i></div>
                             <h2 class="action-title">Cobrança Finalizada</h2>
                             <p class="action-subtitle">Este pagamento já foi totalmente concluído. Obrigado!</p>
@@ -452,7 +490,7 @@
             totalValueSpan.textContent = `de R$ ${total.toFixed(2).replace('.', ',')}`;
             if (paid >= total) {
                 progressRing.style.stroke = 'var(--accent-success)';
-                actionPane.classList.add('paid-visible');
+                if(actionPane) actionPane.classList.add('paid-visible');
             }
         };
 
@@ -473,8 +511,10 @@
         };
         
         const renderInitialPayers = () => {
-            payers.forEach(p => addPayerToList(p, false));
-            payersCount.textContent = payers.length;
+            if (payers && payers.length > 0) {
+                payers.forEach(p => addPayerToList(p, false));
+                payersCount.textContent = payers.length;
+            }
         };
         
         // --- Lógica do Formulário e Pagamento ---
@@ -550,7 +590,7 @@
                     <button class="copy-btn" id="qrCopyBtn">Copiar</button>
                 </div>
             `;
-            actionPane.classList.add('qr-visible');
+            if (actionPane) actionPane.classList.add('qr-visible');
             document.getElementById('qrCopyBtn').addEventListener('click', (e) => {
                 navigator.clipboard.writeText(pixKey).then(() => {
                     e.target.textContent = 'Copiado!';
@@ -575,7 +615,7 @@
                 const container = document.getElementById('pageQrcodeContainer');
                 const linkInput = document.getElementById('pageQrLinkText');
                 container.innerHTML = '';
-                new QRCode(container, { text: window.location.href, width: 256, height: 256 });
+                new QRCode(container, { text: window.location.href, width: 256, height: 256, colorLight: "#ffffff", colorDark: "#000000" });
                 linkInput.value = window.location.href;
                 modal.classList.add('show');
             });
