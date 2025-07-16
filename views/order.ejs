@@ -196,12 +196,10 @@
             transform: translateY(-50%) scale(0.95);
             transition: opacity 0.4s ease, transform 0.4s ease;
         }
-        .action-pane.qr-visible .form-wrapper,
-        .action-pane.paid-visible .form-wrapper {
+        .action-pane.qr-visible .form-wrapper {
             opacity: 0; transform: scale(0.95); pointer-events: none;
         }
-        .action-pane.qr-visible .qr-wrapper,
-        .action-pane.paid-visible .paid-message-wrapper {
+        .action-pane.qr-visible .qr-wrapper {
             opacity: 1; transform: translateY(-50%) scale(1); pointer-events: all;
         }
         
@@ -375,8 +373,7 @@
             .progress-info .total-value { font-size: 0.9rem; }
             .payers-list { max-height: 140px; }
             
-            .action-pane.qr-visible .form-wrapper,
-            .action-pane.paid-visible .form-wrapper {
+            .action-pane.qr-visible .form-wrapper {
                 display: none;
             }
             .qr-wrapper, .paid-message-wrapper {
@@ -431,10 +428,10 @@
             </div>
 
             <div class="action-pane" id="actionPane">
-                <div class="action-content">
+                <div class="action-content" id="actionContent">
                     <% if (orderData.paidValue >= orderData.totalValue) { %>
-                        <div class="paid-message-wrapper" style="display: block; position: static; transform: none; opacity: 1;">
-                            <div class="icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="paid-message-wrapper" style="display: block; position: static; transform: none; opacity: 1; text-align:center;">
+                            <div class="icon" style="font-size: 3rem; color: var(--accent-success); margin-bottom: 1rem;"><i class="fas fa-check-circle"></i></div>
                             <h2 class="action-title">Cobrança Finalizada</h2>
                             <p class="action-subtitle">Este pagamento já foi totalmente concluído. Obrigado!</p>
                         </div>
@@ -537,6 +534,18 @@
         const actionPane = document.getElementById('actionPane');
         
         // --- Funções de UI ---
+        const showPaidState = () => {
+            const actionContent = document.getElementById('actionContent');
+            if (!actionContent) return;
+            actionContent.innerHTML = `
+                <div class="paid-message-wrapper" style="display: block; position: static; transform: none; opacity: 1; text-align: center;">
+                    <div class="icon" style="font-size: 3rem; color: var(--accent-success); margin-bottom: 1rem;"><i class="fas fa-check-circle"></i></div>
+                    <h2 class="action-title">Cobrança Finalizada</h2>
+                    <p class="action-subtitle">Este pagamento já foi totalmente concluído. Obrigado!</p>
+                </div>
+            `;
+        };
+        
         const updateProgress = (paid, total) => {
             const percentage = total > 0 ? (paid / total) * 100 : 0;
             const radius = progressRing.r.baseVal.value;
@@ -547,10 +556,7 @@
             totalValueSpan.textContent = `de R$ ${total.toFixed(2).replace('.', ',')}`;
             if (paid >= total) {
                 progressRing.style.stroke = 'var(--accent-success)';
-                if(actionPane) {
-                   actionPane.classList.add('paid-visible');
-                   actionPane.classList.remove('qr-visible');
-                }
+                showPaidState();
             }
         };
 
@@ -577,19 +583,17 @@
             }
         };
 
-        // --- CORREÇÃO: Função showToast movida para antes de ser chamada ---
         const showToast = (message) => {
             const toastContainer = document.getElementById('toastContainer');
+            if(!toastContainer) return;
             const toast = document.createElement('div');
             toast.className = 'toast';
             toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            
             toastContainer.appendChild(toast);
-
             setTimeout(() => {
                 toast.classList.add('fade-out');
                 toast.addEventListener('animationend', () => toast.remove());
-            }, 4000); // Notificação visível por 4 segundos
+            }, 4000);
         };
         
         // --- Lógica do Formulário e Pagamento ---
@@ -613,7 +617,6 @@
                 errorMessage.textContent = '';
                 const remainingValue = TOTAL_VALUE - currentPaidValue;
                 const valorFloat = parseFloat(valueInput.value.replace(',', '.'));
-
                 if (!nameInput.value.trim() || nameInput.value.trim().split(' ').length < 2) return errorMessage.textContent = "Informe seu nome completo.";
                 if (cpfInput.value.length !== 14) return errorMessage.textContent = "Informe um CPF válido.";
                 if (phoneInput.value.replace(/\D/g, '').length < 10) return errorMessage.textContent = "Informe um telefone válido com DDD.";
@@ -675,6 +678,8 @@
             });
             
             document.getElementById('backToFormBtn').addEventListener('click', () => {
+                const generateBtn = document.getElementById('generateBtn');
+                if (generateBtn) generateBtn.disabled = false;
                 actionPane.classList.remove('qr-visible');
             });
         };
@@ -713,7 +718,6 @@
             });
         };
         
-        // --- Lógica do Socket.IO FINAL ---
         const initializeSocket = () => {
             try {
                 const id2 = window.location.pathname.split('/').filter(Boolean).pop();
@@ -724,14 +728,14 @@
                 });
 
                 socket.on('paymentConfirmed', data => {
-                    if (!data || !data.payerName || typeof data.paidValue !== 'number') {
-                        return;
-                    }
-
+                    if (!data || !data.payerName || typeof data.paidValue !== 'number') return;
+                    
                     showToast(`<b>${data.payerName}</b> pagou <b>R$ ${data.paidValue.toFixed(2).replace('.', ',')}</b>`);
                     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
                     
                     if (actionPane && actionPane.classList.contains('qr-visible')) {
+                        const generateBtn = document.getElementById('generateBtn');
+                        if (generateBtn) generateBtn.disabled = false;
                         actionPane.classList.remove('qr-visible');
                     }
                     
@@ -742,7 +746,6 @@
                     payersCount.textContent = parseInt(payersCount.textContent) + 1;
                     updateProgress(currentPaidValue, TOTAL_VALUE);
                 });
-
             } catch (error) { 
                 // Erros de socket são silenciados em produção
             }
