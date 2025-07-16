@@ -576,6 +576,21 @@
                 payersCount.textContent = payers.length;
             }
         };
+
+        // --- CORREÇÃO: Função showToast movida para antes de ser chamada ---
+        const showToast = (message) => {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                toast.addEventListener('animationend', () => toast.remove());
+            }, 4000); // Notificação visível por 4 segundos
+        };
         
         // --- Lógica do Formulário e Pagamento ---
         const paymentForm = document.getElementById('paymentForm');
@@ -590,7 +605,6 @@
             const loader = document.getElementById('loader');
             const errorMessage = document.getElementById('errorMessage');
 
-            // Máscaras de input
             cpfInput.addEventListener('input', e => { let v = e.target.value.replace(/\D/g, '').slice(0, 11); v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2'); e.target.value = v; });
             phoneInput.addEventListener('input', e => { let v = e.target.value.replace(/\D/g, '').slice(0, 11); if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3'); else if (v.length > 5) v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3'); else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2'); else v = v.replace(/^(\d*)/, '($1'); e.target.value = v; });
 
@@ -599,7 +613,7 @@
                 errorMessage.textContent = '';
                 const remainingValue = TOTAL_VALUE - currentPaidValue;
                 const valorFloat = parseFloat(valueInput.value.replace(',', '.'));
-                // Validações
+
                 if (!nameInput.value.trim() || nameInput.value.trim().split(' ').length < 2) return errorMessage.textContent = "Informe seu nome completo.";
                 if (cpfInput.value.length !== 14) return errorMessage.textContent = "Informe um CPF válido.";
                 if (phoneInput.value.replace(/\D/g, '').length < 10) return errorMessage.textContent = "Informe um telefone válido com DDD.";
@@ -659,8 +673,7 @@
                     setTimeout(() => { e.target.textContent = 'Copiar'; }, 2000);
                 });
             });
-
-            // Adiciona o evento para o novo botão de voltar
+            
             document.getElementById('backToFormBtn').addEventListener('click', () => {
                 actionPane.classList.remove('qr-visible');
             });
@@ -700,20 +713,6 @@
             });
         };
         
-        const showToast = (message) => {
-            const toastContainer = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            
-            toastContainer.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('fade-out');
-                toast.addEventListener('animationend', () => toast.remove());
-            }, 4000);
-        };
-        
         // --- Lógica do Socket.IO FINAL ---
         const initializeSocket = () => {
             try {
@@ -726,7 +725,7 @@
 
                 socket.on('paymentConfirmed', data => {
                     if (!data || !data.payerName || typeof data.paidValue !== 'number') {
-                        return; // Ignora eventos com formato inválido
+                        return;
                     }
 
                     showToast(`<b>${data.payerName}</b> pagou <b>R$ ${data.paidValue.toFixed(2).replace('.', ',')}</b>`);
