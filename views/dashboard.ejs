@@ -797,7 +797,7 @@
                 gap: 12px;
             }
 
-            .search-input, .filter-select {
+            .search-input, .filter-select, .search-filter-bar > .btn {
                 width: 100%;
             }
 
@@ -1037,8 +1037,7 @@
             margin-bottom: 4px;
         }
 
-        .payer-id,
-        .payer-phone {
+        .payer-id {
             font-size: 0.75rem;
             color: var(--gray-500);
             font-family: 'SF Mono', Consolas, monospace;
@@ -1511,6 +1510,10 @@
                                 <option value="progress">Em Progresso</option>
                                 <option value="paid">Pago</option>
                             </select>
+							<button id="exportOrdersBtn" class="btn btn-secondary" style="padding: 8px 16px;">
+								<i class="fas fa-file-export"></i>
+								<span>Exportar</span>
+							</button>
                         </div>
                     </div>
 
@@ -1699,7 +1702,7 @@
 
             sidebarToggle.addEventListener('click', () => {
                 sidebar.classList.add('open');
-                sidebarOverlay.classList.add('show');
+                sidebarOverlay.style.display = 'block';
             });
 
             sidebarOverlay.addEventListener('click', closeMobileSidebar);
@@ -1709,7 +1712,7 @@
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
             sidebar.classList.remove('open');
-            sidebarOverlay.classList.remove('show');
+            sidebarOverlay.style.display = 'none';
         }
 
         // Utility Functions
@@ -2009,6 +2012,97 @@
             updateDashboardDisplay();
             displayOrders();
         }
+		
+		function exportOrdersToCSV() {
+			if (recentOrders.length === 0) {
+				alert("Não há pedidos para exportar.");
+				return;
+			}
+
+			// 1. Encontra o número máximo de pagadores em todos os pedidos
+			let maxPayers = 0;
+			for (const order of recentOrders) {
+				const numPayers = (order.payersIds || []).length;
+				if (numPayers > maxPayers) {
+					maxPayers = numPayers;
+				}
+			}
+
+			// 2. Gera os cabeçalhos dinamicamente
+			const headers = [
+				"ID do Pedido",
+				"Nome do Pedido",
+				"Valor Total (R$)",
+				"Valor Pago (R$)",
+				"Status",
+				"Data de Criação"
+			];
+
+			for (let i = 1; i <= maxPayers; i++) {
+				headers.push(`Pagador ${i} (Nome)`);
+				headers.push(`Pagador ${i} (CPF/CNPJ)`);
+				headers.push(`Pagador ${i} (Telefone)`);
+				headers.push(`Pagador ${i} (Valor Pago)`);
+			}
+
+			const escapeCSV = (str) => {
+				const val = str === null || str === undefined ? '' : String(str);
+				if (val.search(/("|,|\n)/g) >= 0) {
+					return `"${val.replace(/"/g, '""')}"`;
+				}
+				return val;
+			};
+
+			const csvRows = [headers.join(',')];
+
+			// 3. Gera as linhas da tabela dinamicamente
+			for (const order of recentOrders) {
+				const rowData = [
+					order.orderId,
+					order.name || order.orderName || '',
+					(order.totalValue || 0).toFixed(2).replace('.', ','),
+					(order.paidValue || 0).toFixed(2).replace('.', ','),
+					translateStatus(order.status),
+					new Date(order.createdAt).toLocaleString('pt-BR')
+				];
+
+				const payersNames = order.payersNames || [];
+				const payersIds = order.payersIds || [];
+				const payersPhones = order.payersPhone || [];
+				const payersValues = order.payersValues || [];
+
+				for (let i = 0; i < maxPayers; i++) {
+					if (i < payersIds.length) {
+						// Adiciona os dados do pagador
+						rowData.push(payersNames[i] || '');
+						rowData.push(payersIds[i] || '');
+						rowData.push(payersPhones[i] || '');
+						rowData.push((payersValues[i] || 0).toFixed(2).replace('.', ','));
+					} else {
+						// Adiciona células vazias para manter o alinhamento
+						rowData.push('');
+						rowData.push('');
+						rowData.push('');
+						rowData.push('');
+					}
+				}
+				csvRows.push(rowData.map(escapeCSV).join(','));
+			}
+
+			// 4. Cria o Blob e dispara o download
+			const csvString = csvRows.join('\n');
+			const blob = new Blob([`\uFEFF${csvString}`], { type: 'text/csv;charset=utf-8;' });
+			const link = document.createElement("a");
+			const url = URL.createObjectURL(blob);
+
+			link.setAttribute("href", url);
+			link.setAttribute("download", `pedidos_detalhados_${new Date().toISOString().slice(0,10)}.csv`);
+			link.style.visibility = 'hidden';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -2017,6 +2111,8 @@
             initSearchAndFilter();
             updateDashboardDisplay();
             displayOrders();
+			
+			document.getElementById('exportOrdersBtn').addEventListener('click', exportOrdersToCSV);
 
             document.getElementById('newOrderForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
