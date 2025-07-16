@@ -254,6 +254,21 @@
         .copy-btn { background: var(--accent-primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
         .copy-btn:hover { filter: brightness(1.1); }
         
+        /* NOVO: Estilo para o botão de voltar */
+        .btn-link {
+            background: none;
+            border: none;
+            color: var(--accent-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            padding: 0.5rem;
+        }
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
         /* --- Modals --- */
         .modal {
             display: none; position: fixed; z-index: 1000;
@@ -470,7 +485,7 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // --- Estado Global e Seletores (inalterados) ---
+        // --- Estado Global e Seletores ---
         const TOTAL_VALUE = <%= orderData.totalValue %>;
         let currentPaidValue = <%= orderData.paidValue %>;
         let payers = [
@@ -488,7 +503,7 @@
         const payersCount = document.getElementById('payersCount');
         const actionPane = document.getElementById('actionPane');
         
-        // --- Funções de UI (maioria inalterada) ---
+        // --- Funções de UI ---
         const updateProgress = (paid, total) => {
             const percentage = total > 0 ? (paid / total) * 100 : 0;
             const radius = progressRing.r.baseVal.value;
@@ -529,34 +544,97 @@
             }
         };
         
-        // --- Lógica do Formulário (inalterada) ---
+        // --- Lógica do Formulário e Pagamento ---
         const paymentForm = document.getElementById('paymentForm');
         if (paymentForm) {
-            // ... (toda a lógica do formulário, validações e fetch permanece a mesma)
+            const nameInput = document.getElementById('name');
+            const cpfInput = document.getElementById('cpf');
+            const phoneInput = document.getElementById('phone');
+            const valueInput = document.getElementById('valor');
+            const termsCheckbox = document.getElementById('termsCheckbox');
+            const generateBtn = document.getElementById('generateBtn');
+            const btnText = document.getElementById('btnText');
+            const loader = document.getElementById('loader');
+            const errorMessage = document.getElementById('errorMessage');
+
+            cpfInput.addEventListener('input', e => { let v = e.target.value.replace(/\D/g, '').slice(0, 11); v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2'); e.target.value = v; });
+            phoneInput.addEventListener('input', e => { let v = e.target.value.replace(/\D/g, '').slice(0, 11); if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3'); else if (v.length > 5) v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3'); else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2'); else v = v.replace(/^(\d*)/, '($1'); e.target.value = v; });
+
+            paymentForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                errorMessage.textContent = '';
+                const remainingValue = TOTAL_VALUE - currentPaidValue;
+                const valorFloat = parseFloat(valueInput.value.replace(',', '.'));
+
+                if (!nameInput.value.trim() || nameInput.value.trim().split(' ').length < 2) return errorMessage.textContent = "Informe seu nome completo.";
+                if (cpfInput.value.length !== 14) return errorMessage.textContent = "Informe um CPF válido.";
+                if (phoneInput.value.replace(/\D/g, '').length < 10) return errorMessage.textContent = "Informe um telefone válido com DDD.";
+                if (isNaN(valorFloat) || valorFloat <= 0) return errorMessage.textContent = "Insira um valor de pagamento válido.";
+                if (valorFloat > remainingValue + 0.001) return errorMessage.textContent = `O valor excede o restante (R$ ${remainingValue.toFixed(2).replace('.',',')}).`;
+                if (!termsCheckbox.checked) return errorMessage.textContent = "Você deve concordar com os Termos de Uso.";
+                
+                generateBtn.disabled = true;
+                btnText.textContent = '';
+                loader.style.display = 'block';
+
+                try {
+                    const id2 = window.location.pathname.split('/').filter(Boolean).pop();
+                    const rawPhone = phoneInput.value.replace(/\D/g, '');
+                    const response = await fetch(`<%=process.env.API_SITE_URL%>/payment/create-pix`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: nameInput.value.trim(),
+                            cpf: cpfInput.value.replace(/\D/g, ''),
+                            phone: { country_code: '55', area_code: rawPhone.substring(0, 2), number: rawPhone.substring(2) },
+                            amount: Math.round(valorFloat * 100),
+                            recipient_id: "<%=partnerData.recipient_id%>",
+                            orderId: id2
+                        })
+                    });
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'Erro ao gerar QR Code.');
+                    displayQrCode(data.data.last_transaction.qr_code_url, data.data.last_transaction.qr_code);
+                } catch (error) {
+                    errorMessage.textContent = `Erro: ${error.message}`;
+                    generateBtn.disabled = false;
+                } finally {
+                    btnText.textContent = 'Gerar QR Code';
+                    loader.style.display = 'none';
+                }
+            });
         }
         
-        // --- Lógica de Modais (inalterada) ---
-        const setupModals = () => {
-            // ... (toda a lógica dos modais permanece a mesma)
+        // FUNÇÃO ATUALIZADA para incluir o botão de voltar
+        const displayQrCode = (qrUrl, pixKey) => {
+            const qrWrapper = document.getElementById('qrWrapper');
+            qrWrapper.innerHTML = `
+                <h2 class="action-title">Escaneie para pagar</h2>
+                <p class="action-subtitle">Use o app do seu banco para ler o QR Code.</p>
+                <img src="${qrUrl}" alt="QR Code Pix" />
+                <div class="pix-key-wrapper">
+                    <input type="text" readonly value="${pixKey}" />
+                    <button class="copy-btn" id="qrCopyBtn">Copiar</button>
+                </div>
+                <button class="btn-link" id="backToFormBtn">Alterar valor ou dados</button>
+            `;
+            if (actionPane) actionPane.classList.add('qr-visible');
+
+            document.getElementById('qrCopyBtn').addEventListener('click', (e) => {
+                navigator.clipboard.writeText(pixKey).then(() => {
+                    e.target.textContent = 'Copiado!';
+                    setTimeout(() => { e.target.textContent = 'Copiar'; }, 2000);
+                });
+            });
+
+            // Adiciona o evento para o novo botão de voltar
+            document.getElementById('backToFormBtn').addEventListener('click', () => {
+                actionPane.classList.remove('qr-visible');
+            });
         };
+
+        const setupModals = () => { /* ... Lógica dos modais inalterada ... */ };
         
-        // --- NOVA FUNÇÃO: Mostrar Notificação Toast ---
-        const showToast = (message) => {
-            const toastContainer = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            
-            toastContainer.appendChild(toast);
-
-            // Define um tempo para a notificação desaparecer
-            setTimeout(() => {
-                toast.classList.add('fade-out');
-                // Remove o elemento do DOM após a animação de saída
-                toast.addEventListener('animationend', () => toast.remove());
-            }, 4000); // Notificação visível por 4 segundos
-        };
-
         // --- Lógica do Socket.IO ATUALIZADA ---
         const initializeSocket = () => {
             try {
@@ -568,9 +646,7 @@
                 });
 
                 socket.on('paymentConfirmed', data => {
-                    if (!data || !data.payerName || typeof data.paidValue !== 'number') {
-                        return; // Ignora eventos com formato inválido
-                    }
+                    if (!data || !data.payerName || typeof data.paidValue !== 'number') return;
 
                     // ATUALIZAÇÃO 1: Mostrar notificação Toast
                     showToast(`<b>${data.payerName}</b> pagou <b>R$ ${data.paidValue.toFixed(2).replace('.', ',')}</b>`);
@@ -581,15 +657,12 @@
                         actionPane.classList.remove('qr-visible');
                     }
                     
-                    // Lógica anterior de cálculo e atualização da UI
+                    // Lógica de cálculo e atualização da UI
                     const paymentAmount = data.paidValue;
                     currentPaidValue += paymentAmount;
-                    
                     addPayerToList({ name: data.payerName, value: paymentAmount });
                     payersCount.textContent = parseInt(payersCount.textContent) + 1;
                     updateProgress(currentPaidValue, TOTAL_VALUE);
-
-                    // ATUALIZAÇÃO 3: O recarregamento da página foi REMOVIDO
                 });
 
             } catch (error) { 
@@ -597,7 +670,7 @@
             }
         };
 
-        // --- Inicialização da Página (inalterada) ---
+        // --- Inicialização da Página ---
         updateProgress(currentPaidValue, TOTAL_VALUE);
         renderInitialPayers();
         setupModals();
