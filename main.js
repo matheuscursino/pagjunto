@@ -109,10 +109,10 @@ app.get('/:partnerId/:orderId', (req, res) => {
         }, axiosConfig).then((response2) => {
             res.render('order', {orderData: response2.data, partnerData})
         }).catch((error2) => {
-            res.send("order doesnt exist")
+            res.render('orderNotFound')
         })
     }).catch((error) => {
-        res.send("partner doesnt exist")
+        res.send('orderNotFound')
     })
 })
 
