@@ -129,6 +129,11 @@ app.get('/docs', (req,res) => {
     res.render('docs')
 })
 
+app.use((req, res, next) => {
+  res.render("404")
+});
+
+
 
 app.listen(port, () => {
     console.log(`server started on port: ${port}`)

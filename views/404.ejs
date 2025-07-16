@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Página Não Encontrada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f0f2f5;
+            --text-primary: #1c1c1e;
+            --text-secondary: #636366;
+            --accent-primary: #4A6CFF;
+            --accent-primary-rgb: 74, 108, 255;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 600px;
+        }
+
+        .ghost {
+            margin: 0 auto 2rem;
+            width: 150px;
+            height: 180px;
+            background: #fff;
+            border-radius: 100px 100px 0 0;
+            position: relative;
+            animation: float 3s var(--ease-out-expo) infinite;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .ghost-eyes {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 25px;
+        }
+
+        .ghost-eye {
+            width: 20px;
+            height: 20px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+        }
+
+        .ghost-shadow {
+            width: 100px;
+            height: 15px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 50%;
+            margin: 0 auto;
+            animation: shadow-scale 3s var(--ease-out-expo) infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-25px); }
+        }
+
+        @keyframes shadow-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+        }
+
+        h1 {
+            font-size: 6rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        h2 {
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-home {
+            display: inline-block;
+            background: var(--accent-primary);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s var(--ease-out-expo);
+            box-shadow: 0 4px 16px rgba(var(--accent-primary-rgb), 0.2);
+        }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(var(--accent-primary-rgb), 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ghost-container">
+            <div class="ghost">
+                <div class="ghost-eyes">
+                    <div class="ghost-eye"></div>
+                    <div class="ghost-eye"></div>
+                </div>
+            </div>
+            <div class="ghost-shadow"></div>
+        </div>
+        
+        <h1>404</h1>
+        <h2>Página Não Encontrada</h2>
+        <p>A página que você está tentando acessar não existe ou foi movida. Que tal voltar para um lugar seguro?</p>
+        <a href="/" class="btn-home">Voltar para a Página Inicial</a>
+    </div>
+</body>
+</html>
