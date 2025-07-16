@@ -50,12 +50,14 @@
         }
         /* --- Estilos Base --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { height: 100%; }
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-secondary);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            min-height: 100%;
         }
         .main-container {
             display: flex;
@@ -63,7 +65,6 @@
             align-items: center;
             min-height: 100vh;
             padding: 2rem;
-            overflow: hidden;
         }
         .payment-dashboard {
             display: grid;
@@ -288,36 +289,40 @@
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
-        /* --- RESPONSIVIDADE - CORREÇÃO PARA TELAS PEQUENAS --- */
+        /* --- RESPONSIVIDADE - CORREÇÃO DEFINITIVA --- */
         @media (max-width: 1024px) {
-            body {
-                overflow: auto; /* Permite a rolagem */
+            html, body {
+                height: auto; /* Permite que o documento cresça com o conteúdo */
+                overflow: auto; /* Garante a rolagem vertical */
             }
             .main-container {
-                display: block; /* Remove o flexbox que centraliza */
-                min-height: auto;
+                display: block; /* Remove o flexbox que causava o corte */
+                min-height: auto; /* Remove a altura mínima da viewport */
+                height: auto;
                 padding: 1rem;
-                overflow: visible;
             }
             .payment-dashboard {
-                grid-template-columns: 1fr; /* Transforma em coluna única */
+                display: flex; /* Mais simples para empilhamento */
+                flex-direction: column;
                 height: auto;
                 max-height: none;
-                gap: 1rem;
+                gap: 1.5rem;
             }
-            .context-pane { order: 1; padding: 0.5rem; }
-            .action-pane { order: 2; min-height: auto; padding: 1.5rem; }
+            .context-pane { order: 1; padding: 0.5rem; gap: 1rem; }
+            .action-pane { order: 2; height: auto; min-height: auto; padding: 1.5rem; }
 
             .header .logo { font-size: 1.5rem; }
             .header .title { font-size: 1rem; }
-
+            .action-title { font-size: 1.5rem; }
+            .action-subtitle { margin-bottom: 1.5rem; }
+            
             .progress-container svg {
                 width: 200px;
                 height: 200px;
             }
             .progress-info .paid-value { font-size: 2rem; }
             .progress-info .total-value { font-size: 0.9rem; }
-            .payers-list { max-height: 120px; }
+            .payers-list { max-height: 140px; }
             
             /* Correção da transição para QR Code em telas pequenas */
             .action-pane.qr-visible .form-wrapper,
@@ -325,15 +330,16 @@
                 display: none; /* Simplesmente esconde o form */
             }
             .qr-wrapper, .paid-message-wrapper {
-                position: static; /* Remove posicionamento absoluto */
+                position: static; /* Impede que flutue */
                 transform: none;
                 opacity: 1;
                 padding: 1rem 0;
+                /* Garante que eles só apareçam quando a classe for aplicada */
+                display: none;
             }
-            /* Garante que eles só apareçam quando a classe for aplicada */
-            .action-pane:not(.qr-visible) .qr-wrapper,
-            .action-pane:not(.paid-visible) .paid-message-wrapper {
-                 display: none;
+            .action-pane.qr-visible .qr-wrapper,
+            .action-pane.paid-visible .paid-message-wrapper {
+                 display: block;
             }
         }
     </style>
@@ -378,7 +384,7 @@
             <div class="action-pane" id="actionPane">
                 <div class="action-content">
                     <% if (orderData.paidValue >= orderData.totalValue) { %>
-                        <div class="paid-message-wrapper">
+                        <div class="paid-message-wrapper" style="display: block; position: static; transform: none; opacity: 1;">
                             <div class="icon"><i class="fas fa-check-circle"></i></div>
                             <h2 class="action-title">Cobrança Finalizada</h2>
                             <p class="action-subtitle">Este pagamento já foi totalmente concluído. Obrigado!</p>
@@ -634,20 +640,32 @@
             });
         };
         
-        // --- Socket.IO ---
+        // --- Socket.IO com Diagnósticos ---
         const initializeSocket = () => {
             try {
                 const id2 = window.location.pathname.split('/').filter(Boolean).pop();
                 const socket = io("<%=process.env.API_SITE_URL_BASE%>", { transports: ['websocket', 'polling'] });
-                socket.on('connect', () => socket.emit('joinRoom', id2));
+
+                socket.on('connect', () => {
+                    console.log(`[Socket.IO] Conectado. Entrando na sala: ${id2}`);
+                    socket.emit('joinRoom', id2);
+                });
+
                 socket.on('paymentConfirmed', data => {
+                    console.log("[Socket.IO] Evento 'paymentConfirmed' recebido:", data);
+                    if (!data || typeof data.totalPaidValue !== 'number' || !data.payerName || typeof data.paidValue !== 'number') {
+                        console.error("[Socket.IO] Formato de dados inválido para 'paymentConfirmed'.", data);
+                        return;
+                    }
                     confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
                     currentPaidValue = data.totalPaidValue;
                     addPayerToList({ name: data.payerName, value: data.paidValue });
                     payersCount.textContent = parseInt(payersCount.textContent) + 1;
                     updateProgress(currentPaidValue, TOTAL_VALUE);
                 });
-            } catch (error) { console.error("Erro ao inicializar Socket.IO:", error); }
+            } catch (error) { 
+                console.error("[Socket.IO] Erro crítico na inicialização:", error);
+            }
         };
 
         // --- Inicialização da Página ---
