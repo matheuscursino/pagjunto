@@ -640,7 +640,7 @@
             });
         };
         
-        // --- Socket.IO com Diagnósticos ---
+        // --- Lógica do Socket.IO CORRIGIDA ---
         const initializeSocket = () => {
             try {
                 const id2 = window.location.pathname.split('/').filter(Boolean).pop();
@@ -653,16 +653,29 @@
 
                 socket.on('paymentConfirmed', data => {
                     console.log("[Socket.IO] Evento 'paymentConfirmed' recebido:", data);
-                    if (!data || typeof data.totalPaidValue !== 'number' || !data.payerName || typeof data.paidValue !== 'number') {
-                        console.error("[Socket.IO] Formato de dados inválido para 'paymentConfirmed'.", data);
+                    
+                    // NOVA VALIDAÇÃO - Apenas para os dados que o backend envia
+                    if (!data || !data.payerName || typeof data.paidValue !== 'number') {
+                        console.error("[Socket.IO] Dados recebidos ('payerName', 'paidValue') estão em um formato inválido.", data);
                         return;
                     }
+
                     confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
-                    currentPaidValue = data.totalPaidValue;
-                    addPayerToList({ name: data.payerName, value: data.paidValue });
+                    
+                    // CÁLCULO FEITO NO FRONTEND
+                    const paymentAmount = data.paidValue;
+                    currentPaidValue += paymentAmount;
+                    
+                    // Atualiza UI com o valor calculado
+                    addPayerToList({ name: data.payerName, value: paymentAmount });
                     payersCount.textContent = parseInt(payersCount.textContent) + 1;
                     updateProgress(currentPaidValue, TOTAL_VALUE);
                 });
+
+                socket.on('connect_error', (err) => {
+                    console.error(`[Socket.IO] Erro de conexão:`, err);
+                });
+
             } catch (error) { 
                 console.error("[Socket.IO] Erro crítico na inicialização:", error);
             }
