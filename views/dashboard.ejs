@@ -1595,13 +1595,13 @@
 
                     <div class="settings-card">
                         <div class="settings-header">
-                            <h3 class="settings-title">ID de Recebedor (Recipient ID)</h3>
-                            <p class="settings-description">Este é o seu identificador de recebedor na Pagar.me, para onde os valores são enviados.</p>
+                            <h3 class="settings-title">ID de parceiro (partnerId)</h3>
+                            <p class="settings-description">Este é o seu identificador de parceiro Pagjunto.</p>
                         </div>
                         
                         <div class="api-key-container">
                             <input type="text" id="recipientIdInput" class="form-input api-key-input"
-                                   value="<%= partnerData.recipient_id %>"
+                                   value="<%= partnerData.partnerId %>"
                                    readonly>
                             <button id="copyRecipientIdButton" class="btn btn-primary">
                                 <i class="fas fa-copy"></i>
@@ -2084,7 +2084,7 @@
                 copyToClipboard(localPartnerApiKey, 'Chave de API copiada!');
             });
             document.getElementById('copyRecipientIdButton').addEventListener('click', () => {
-                copyToClipboard(localRecipientId, 'ID de Recebedor copiado!');
+                copyToClipboard(localRecipientId, 'ID de parceiro copiado!');
             });
 
             document.getElementById('closeQrModal').addEventListener('click', () => {
