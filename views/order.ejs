@@ -281,7 +281,7 @@
         #pageQrcodeContainer { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
         #pageQrcodeContainer img { border: 1px solid var(--border-color); border-radius: 16px; }
 
-        /* --- Animações de entrada --- */
+        /* --- Animações --- */
         @keyframes fade-in-down { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fade-in-right { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
@@ -289,20 +289,52 @@
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateY(-30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
-        /* --- RESPONSIVIDADE - CORREÇÃO DEFINITIVA --- */
+        /* --- Tela de Sucesso do Pagamento --- */
+        .payment-success-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            animation: fade-in 0.5s ease;
+        }
+        .payment-success-overlay.show {
+            display: flex;
+        }
+        .payment-success-content .icon {
+            font-size: 5rem;
+            color: var(--accent-success);
+            line-height: 1;
+        }
+        .payment-success-content h2 {
+            font-size: 2rem;
+            margin-top: 1.5rem;
+        }
+        .payment-success-content p {
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* --- RESPONSIVIDADE --- */
         @media (max-width: 1024px) {
             html, body {
-                height: auto; /* Permite que o documento cresça com o conteúdo */
-                overflow: auto; /* Garante a rolagem vertical */
+                height: auto;
+                overflow: auto;
             }
             .main-container {
-                display: block; /* Remove o flexbox que causava o corte */
-                min-height: auto; /* Remove a altura mínima da viewport */
+                display: block;
+                min-height: auto;
                 height: auto;
                 padding: 1rem;
             }
             .payment-dashboard {
-                display: flex; /* Mais simples para empilhamento */
+                display: flex;
                 flex-direction: column;
                 height: auto;
                 max-height: none;
@@ -310,12 +342,10 @@
             }
             .context-pane { order: 1; padding: 0.5rem; gap: 1rem; }
             .action-pane { order: 2; height: auto; min-height: auto; padding: 1.5rem; }
-
             .header .logo { font-size: 1.5rem; }
             .header .title { font-size: 1rem; }
             .action-title { font-size: 1.5rem; }
             .action-subtitle { margin-bottom: 1.5rem; }
-            
             .progress-container svg {
                 width: 200px;
                 height: 200px;
@@ -324,17 +354,15 @@
             .progress-info .total-value { font-size: 0.9rem; }
             .payers-list { max-height: 140px; }
             
-            /* Correção da transição para QR Code em telas pequenas */
             .action-pane.qr-visible .form-wrapper,
             .action-pane.paid-visible .form-wrapper {
-                display: none; /* Simplesmente esconde o form */
+                display: none;
             }
             .qr-wrapper, .paid-message-wrapper {
-                position: static; /* Impede que flutue */
+                position: static;
                 transform: none;
                 opacity: 1;
                 padding: 1rem 0;
-                /* Garante que eles só apareçam quando a classe for aplicada */
                 display: none;
             }
             .action-pane.qr-visible .qr-wrapper,
@@ -460,6 +488,14 @@
                     <button class="copy-btn" id="copyPageLinkBtn">Copiar</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="payment-success-overlay" id="paymentSuccessOverlay">
+        <div class="payment-success-content">
+            <div class="icon"><i class="fas fa-check-circle"></i></div>
+            <h2>Pagamento Confirmado!</h2>
+            <p>A página será atualizada em instantes.</p>
         </div>
     </div>
 
@@ -640,44 +676,42 @@
             });
         };
         
-        // --- Lógica do Socket.IO CORRIGIDA ---
+        // --- Lógica do Socket.IO com Confirmação Visual ---
         const initializeSocket = () => {
             try {
                 const id2 = window.location.pathname.split('/').filter(Boolean).pop();
                 const socket = io("<%=process.env.API_SITE_URL_BASE%>", { transports: ['websocket', 'polling'] });
 
                 socket.on('connect', () => {
-                    console.log(`[Socket.IO] Conectado. Entrando na sala: ${id2}`);
                     socket.emit('joinRoom', id2);
                 });
 
                 socket.on('paymentConfirmed', data => {
-                    console.log("[Socket.IO] Evento 'paymentConfirmed' recebido:", data);
-                    
-                    // NOVA VALIDAÇÃO - Apenas para os dados que o backend envia
+                    // Valida os dados essenciais que vêm do backend
                     if (!data || !data.payerName || typeof data.paidValue !== 'number') {
-                        console.error("[Socket.IO] Dados recebidos ('payerName', 'paidValue') estão em um formato inválido.", data);
-                        return;
+                        return; // Ignora eventos com formato inválido
                     }
 
+                    // ATUALIZAÇÃO 1: Exibe a tela de sucesso e confetes
+                    document.getElementById('paymentSuccessOverlay').classList.add('show');
                     confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
                     
-                    // CÁLCULO FEITO NO FRONTEND
+                    // Lógica anterior de cálculo e atualização da UI
                     const paymentAmount = data.paidValue;
                     currentPaidValue += paymentAmount;
                     
-                    // Atualiza UI com o valor calculado
                     addPayerToList({ name: data.payerName, value: paymentAmount });
                     payersCount.textContent = parseInt(payersCount.textContent) + 1;
                     updateProgress(currentPaidValue, TOTAL_VALUE);
-                });
-
-                socket.on('connect_error', (err) => {
-                    console.error(`[Socket.IO] Erro de conexão:`, err);
+                    
+                    // ATUALIZAÇÃO 2: Recarrega a página após alguns segundos
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 4000); // 4 segundos de delay
                 });
 
             } catch (error) { 
-                console.error("[Socket.IO] Erro crítico na inicialização:", error);
+                // Erro silencioso em produção, mas pode ser logado em um serviço de monitoramento
             }
         };
 
