@@ -58,85 +58,87 @@ app.get('/login', (req, res) => {
     res.render('login')
 })
 
-app.get('/dashboard', (req, res) => {
-    if (req.cookies.access_token == undefined){
-        res
-            .redirect('/login')
-    } else {
-        jwt.verify(req.cookies.access_token, process.env.SEGREDO, function(err, decoded){
-            if (err) {
-                // Se o token for inválido, redireciona para o login
-                return res.redirect('/login');
-            }
-            // A primeira chamada busca os dados do usuário logado (partner ou employee)
-            axios.get(`${process.env.API_SITE_URL}/partner`, {
-                // Nota: Para GET, o correto é usar 'params', não 'data'.
-                // Se sua API não funcionar com 'data', mude para 'params'.
-                data: {
-                    partnerId: decoded.partnerId
-                }
-            }).then((response) => {
-                var partnerData = response.data
-
-                // --- INÍCIO DA ALTERAÇÃO ---
-                let idParaBuscaDePedidos;
-
-                // Verifica se o usuário é um 'employee' e tem um 'partnerRef'
-                if (partnerData.role === 'employee' && partnerData.partnerRef) {
-                    // Se sim, usa o ID do parceiro principal para buscar os pedidos
-                    idParaBuscaDePedidos = partnerData.partnerRef;
-                } else {
-                    // Senão (se for o parceiro principal), usa o próprio ID
-                    idParaBuscaDePedidos = partnerData.partnerId;
-                }
-                // --- FIM DA ALTERAÇÃO ---
-
-                // A segunda chamada agora usa o ID correto para buscar os pedidos
-                axios.get(`${process.env.API_SITE_URL}/order/by-partner`, {
-                    data: {
-                        partnerId: idParaBuscaDePedidos // Usa a variável com o ID correto
-                    }
-                }).then((response2) => {
-                    var dashboardData = response2.data
-
-                    // Se for um funcionário, não busca o saldo e renderiza a página
-                    if (partnerData.role === 'employee') {
-                        return res.render('dashboard', {
-                            partnerData: partnerData,
-                            balance: {}, // Envia um objeto de saldo vazio
-                            stats: dashboardData.stats, 
-                            orders: dashboardData.recentOrders
-                        });
-                    }
-                    
-                    // Se for o parceiro principal, continua para buscar o saldo
-                    axios.get(`${process.env.API_SITE_URL}/partner/balance`, {
-                        data: {
-                            recipient_id: partnerData.recipient_id
-                        }
-                    }).then((response3)=> {
-                        var balance = response3.data
-                        res.render('dashboard', {
-                            partnerData:partnerData,
-                            balance: balance,
-                            stats: dashboardData.stats, 
-                            orders: dashboardData.recentOrders
-                        })
-                    }).catch((e) => {
-                        console.log("Erro ao buscar saldo:", e.message);
-                        res.status(500).send("Erro ao buscar saldo do parceiro.");
-                    })
-                }).catch((e) => {
-                    console.log("Erro ao buscar pedidos:", e.message);
-                    res.status(500).send("Erro ao buscar pedidos.");
-                })
-            }).catch((e) => {
-                console.log("Erro ao buscar dados do parceiro:", e.message);
-                res.status(500).send("Erro ao buscar dados do parceiro.");
-            })
-        })
+app.get('/dashboard', async (req, res) => {
+    const token = req.cookies.access_token;
+    if (!token) {
+        return res.redirect('/login');
     }
-})
+
+    try {
+        // Usa uma Promise para poder usar async/await com a callback do jwt.verify
+        const decoded = await new Promise((resolve, reject) => {
+            jwt.verify(token, process.env.SEGREDO, (err, decodedPayload) => {
+                if (err) return reject(err);
+                resolve(decodedPayload);
+            });
+        });
+        
+        console.log("LOG: Token decodificado. ID do usuário:", decoded.partnerId);
+
+        // 1. Busca os dados do usuário (partner ou employee)
+        const partnerResponse = await axios.get(`${process.env.API_SITE_URL}/partner`, {
+            data: { partnerId: decoded.partnerId }
+        });
+        const partnerData = partnerResponse.data;
+        console.log(`LOG: Dados do usuário encontrados. Role: ${partnerData.role}, PartnerRef: ${partnerData.partnerRef}`);
+
+        // 2. Define o ID correto para a busca de pedidos
+        let idParaBuscaDePedidos;
+        if (partnerData.role === 'employee' && partnerData.partnerRef) {
+            idParaBuscaDePedidos = partnerData.partnerRef;
+        } else {
+            idParaBuscaDePedidos = partnerData.partnerId;
+        }
+        console.log("LOG: ID que será usado para buscar os pedidos:", idParaBuscaDePedidos);
+
+        // 3. Busca os pedidos com o ID correto
+        const ordersResponse = await axios.get(`${process.env.API_SITE_URL}/order/by-partner`, {
+            data: { partnerId: idParaBuscaDePedidos }
+        });
+        const dashboardData = ordersResponse.data;
+        
+        // Verificação importante: Confira se a resposta da API tem o formato esperado
+        console.log(`LOG: Resposta da API de pedidos recebida. A resposta contém a chave 'recentOrders'?`, dashboardData.hasOwnProperty('recentOrders'));
+        if (dashboardData.recentOrders) {
+            console.log(`LOG: Número de pedidos encontrados: ${dashboardData.recentOrders.length}`);
+        }
+
+        // 4. Busca o saldo (apenas para o partner principal)
+        let balance = {};
+        if (partnerData.role !== 'employee') {
+            const balanceResponse = await axios.get(`${process.env.API_SITE_URL}/partner/balance`, {
+                data: { recipient_id: partnerData.recipient_id }
+            });
+            balance = balanceResponse.data;
+        }
+
+        // 5. Renderiza a página
+        res.render('dashboard', {
+            partnerData,
+            balance,
+            stats: dashboardData.stats || {},
+            orders: dashboardData.recentOrders || [] // Garante que 'orders' seja sempre um array
+        });
+
+    } catch (error) {
+        // Se qualquer etapa acima falhar, o erro será capturado aqui
+        console.error("--- ERRO NO FLUXO DO DASHBOARD ---");
+        if (error.response) {
+            console.error("Erro da API:", {
+                status: error.response.status,
+                data: error.response.data,
+                url: error.config.url
+            });
+        } else {
+            console.error("Erro geral:", error.message);
+        }
+        // Redireciona para o login em caso de token inválido, ou mostra erro genérico
+        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+            return res.redirect('/login');
+        }
+        res.status(500).send("Ocorreu um erro ao carregar o dashboard. Verifique o console do servidor.");
+    }
+});
 
 app.get('/:partnerId/:orderId', (req, res) => {
     axios.get('https://api.pagjunto.com/v1/partner', {
