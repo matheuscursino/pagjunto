@@ -1094,26 +1094,36 @@
             <nav class="sidebar-nav">
                 <div class="nav-section">
                     <div class="nav-section-title">Principal</div>
-                    <button class="nav-item active" data-section="overview">
-                        <div class="nav-icon"><i class="fas fa-chart-pie"></i></div>
-                        Visão Geral
-                    </button>
-                    <button class="nav-item" data-section="orders">
+                    
+                    <% if (partnerData.role !== 'employee') { %>
+                        <button class="nav-item active" data-section="overview">
+                            <div class="nav-icon"><i class="fas fa-chart-pie"></i></div>
+                            Visão Geral
+                        </button>
+                    <% } %>
+
+                    <button class="nav-item <% if (partnerData.role === 'employee') { %>active<% } %>" data-section="orders">
                         <div class="nav-icon"><i class="fas fa-list-alt"></i></div>
                         Pedidos
                     </button>
-                    <button class="nav-item" data-section="employees">
-                        <div class="nav-icon"><i class="fas fa-users"></i></div>
-                        Funcionários
-                    </button>
+
+                    <% if (partnerData.role !== 'employee') { %>
+                        <button class="nav-item" data-section="employees">
+                            <div class="nav-icon"><i class="fas fa-users"></i></div>
+                            Funcionários
+                        </button>
+                    <% } %>
                 </div>
-                <div class="nav-section">
-                    <div class="nav-section-title">Conta</div>
-                    <button class="nav-item" data-section="settings">
-                        <div class="nav-icon"><i class="fas fa-cog"></i></div>
-                        Configurações
-                    </button>
-                </div>
+                
+                <% if (partnerData.role !== 'employee') { %>
+                    <div class="nav-section">
+                        <div class="nav-section-title">Conta</div>
+                        <button class="nav-item" data-section="settings">
+                            <div class="nav-icon"><i class="fas fa-cog"></i></div>
+                            Configurações
+                        </button>
+                    </div>
+                <% } %>
             </nav>
             <div class="sidebar-footer">
                 <div class="user-profile">
@@ -1122,7 +1132,7 @@
                     </div>
                     <div class="user-info">
                         <div class="user-name"><% if (typeof partnerData.partnerName !== 'undefined') { %><%= partnerData.partnerName %><% } else { %>Parceiro<% } %></div>
-                        <div class="user-role">Administrador</div>
+                        <div class="user-role"><% if (partnerData.role === 'employee') { %>Funcionário<% } else { %>Administrador<% } %></div>
                     </div>
                 </div>
                 <a href="/logout" class="logout-btn">
@@ -1140,14 +1150,16 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="page-title-section">
-                    <h1 class="page-title" id="pageTitle">Visão Geral</h1>
-                    <p class="page-subtitle" id="pageSubtitle">Dashboard executivo da sua conta</p>
+                    <h1 class="page-title" id="pageTitle"><% if (partnerData.role === 'employee') { %>Pedidos<% } else { %>Visão Geral<% } %></h1>
+                    <p class="page-subtitle" id="pageSubtitle"><% if (partnerData.role === 'employee') { %>Gerencie e acompanhe seus pedidos de pagamento<% } else { %>Dashboard executivo da sua conta<% } %></p>
                 </div>
                 <div class="header-actions">
                 </div>
             </header>
 
             <div class="content-area">
+                
+                <% if (partnerData.role !== 'employee') { %>
                 <section class="content-section active" id="overview-section">
                     <div class="dashboard-filter-bar">
                         <label for="dateRangeFilter">Mostrar dados de:</label>
@@ -1278,8 +1290,9 @@
                         </div>
                     </div>
                 </section>
+                <% } %>
 
-                <section class="content-section" id="orders-section">
+                <section class="content-section <% if (partnerData.role === 'employee') { %>active<% } %>" id="orders-section">
                     <div class="orders-header">
                         <div class="search-filter-bar">
                             <input type="text" class="search-input" placeholder="Buscar pedidos..." id="searchInput">
@@ -1296,10 +1309,12 @@
                                 <option value="90d">Últimos 90 dias</option>
                                 <option value="this_month">Este mês</option>
                             </select>
-                            <button id="exportOrdersBtn" class="btn btn-secondary" style="padding: 8px 16px;">
-                                <i class="fas fa-file-export"></i>
-                                <span>Exportar</span>
-                            </button>
+                            <% if (partnerData.role !== 'employee') { %>
+                                <button id="exportOrdersBtn" class="btn btn-secondary" style="padding: 8px 16px;">
+                                    <i class="fas fa-file-export"></i>
+                                    <span>Exportar</span>
+                                </button>
+                            <% } %>
                         </div>
                         <div class="header-actions">
                             <button id="showCreateOrderBtn" class="btn btn-primary">
@@ -1363,7 +1378,8 @@
                     </div>
                     <div class="mobile-orders-container" id="mobileOrdersContainer"></div>
                 </section>
-
+                
+                <% if (partnerData.role !== 'employee') { %>
                 <section class="content-section" id="employees-section">
                     <div class="employees-header">
                         <div class="search-filter-bar">
@@ -1481,6 +1497,7 @@
                         </form>
                     </div>
                 </section>
+                <% } %>
             </div>
         </main>
     </div>
@@ -1495,7 +1512,8 @@
             <p id="qrLinkText" class="qr-link"></p>
         </div>
     </div>
-
+    
+    <% if (partnerData.role !== 'employee') { %>
     <div id="deleteEmployeeModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" id="closeDeleteModal">&times;</button>
@@ -1509,6 +1527,7 @@
             </div>
         </div>
     </div>
+    <% } %>
 
     <div id="copyToast" class="toast"></div>
 
@@ -1518,14 +1537,18 @@
         const localPartnerApiKey = "<%= partnerData.apiKey %>";
         const localRecipientId = "<%= partnerData.recipient_id %>";
         const allOrders = <%- JSON.stringify(orders || []) %>;
-        const balance = <%- JSON.stringify(balance || { data: {} }) %>;
         
+        // MODIFICAÇÃO: Variáveis do modo 'partner' inicializadas condicionalmente
+        <% if (partnerData.role !== 'employee') { %>
+        const balance = <%- JSON.stringify(balance || { data: {} }) %>;
         let allEmployees = []; // Começa vazio, será populado pela API
-        let filteredOrdersForTable = [...allOrders];
         let filteredEmployeesForTable = [];
         let salesChart, statusChart, dailySalesChart, conversionTrendChart;
         let chartColors = {};
         let employeeToDelete = null;
+        <% } %>
+        
+        let filteredOrdersForTable = [...allOrders];
 
         allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
@@ -1543,6 +1566,9 @@
                 employees: { title: 'Funcionários', subtitle: 'Gerencie logins e acesso dos funcionários' },
                 settings: { title: 'Configurações', subtitle: 'Gerencie suas configurações de conta' }
             };
+            
+            // Se houver apenas um item (caso do funcionário), não há necessidade de navegação
+            if(navItems.length <= 1) return;
 
             navItems.forEach(item => {
                 item.addEventListener('click', () => {
@@ -1614,34 +1640,32 @@
         }
 
 
+        // MODIFICAÇÃO: Todas as funções de funcionários, dashboard e configurações agora estão dentro do bloco condicional
+        <% if (partnerData.role !== 'employee') { %>
         // --- FUNÇÕES PARA FUNCIONÁRIOS (NOVAS E CORRIGIDAS) ---
         async function fetchEmployees() {
-    try {
-        // Construímos a URL com o parâmetro na query string
-        const url = `<%=process.env.API_SITE_URL%>/partner/employee?partnerId=${localPartnerId}`;
+            try {
+                const url = `<%=process.env.API_SITE_URL%>/partner/employee?partnerId=${localPartnerId}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                });
 
-        // Agora a requisição não tem mais 'body'
-        const response = await fetch(url, {
-            method: 'GET', // Método GET
-            headers: { 'Content-Type': 'application/json' },
-            // NENHUM 'body' AQUI
-        });
+                if (!response.ok) {
+                    console.log(response)
+                }
+                const data = await response.json();
+                allEmployees = data.employees || [];
+                filteredEmployeesForTable = [...allEmployees];
+                
+                updateEmployeeStats();
+                displayEmployees();
 
-        if (!response.ok) {
-            console.log(response)
+            } catch (error) {
+                console.error("Error fetching employees from API:", error);
+                showToast("Erro ao carregar funcionários.");
+            }
         }
-        const data = await response.json();
-        allEmployees = data.employees || [];
-        filteredEmployeesForTable = [...allEmployees];
-        
-        updateEmployeeStats();
-        displayEmployees();
-
-    } catch (error) {
-        console.error("Error fetching employees from API:", error);
-        showToast("Erro ao carregar funcionários.");
-    }
-}
 
         function updateEmployeeStats() {
             const totalEmployees = allEmployees.length;
@@ -1965,6 +1989,7 @@
             const ordersForDashboard = allOrders.filter(order => new Date(order.createdAt) >= startDate);
             updateDashboard(ordersForDashboard);
         }
+        <% } %>
 
         // --- LÓGICA DA TABELA DE PEDIDOS ---
         function displayOrders(orders = filteredOrdersForTable) {
@@ -2106,10 +2131,13 @@
         function updateDashboardWithNewOrder(newOrder) {
             allOrders.unshift(newOrder);
             initSearchAndFilterForTable();
+            <% if (partnerData.role !== 'employee') { %>
             handleDateFilterChange();
+            <% } %>
             displayOrders();
         }
-
+        
+        <% if (partnerData.role !== 'employee') { %>
         function exportOrdersToCSV() {
             if (filteredOrdersForTable.length === 0) {
                 alert("Não há pedidos na visualização atual para exportar.");
@@ -2167,23 +2195,167 @@
             link.click();
             document.body.removeChild(link);
         }
+        <% } %>
 
         // --- INICIALIZAÇÃO E EVENT LISTENERS ---
         document.addEventListener('DOMContentLoaded', function() {
             initNavigation();
             initMobileSidebar();
-            initializeChartColors();
             initSearchAndFilterForTable();
-            initEmployeeSearchAndFilter();
-            
-            // Inicializa a busca de dados
-            fetchEmployees();
             displayOrders(filteredOrdersForTable);
-            
-            document.getElementById('dateRangeFilter').addEventListener('change', handleDateFilterChange);
-            handleDateFilterChange();
 
-            // Event listeners para pedidos
+            // MODIFICAÇÃO: A inicialização específica do modo 'partner' está agora aqui dentro
+            <% if (partnerData.role !== 'employee') { %>
+                initializeChartColors();
+                initEmployeeSearchAndFilter();
+                fetchEmployees();
+                document.getElementById('dateRangeFilter').addEventListener('change', handleDateFilterChange);
+                handleDateFilterChange(); // Chama para carregar os dados iniciais do dashboard
+                document.getElementById('exportOrdersBtn').addEventListener('click', exportOrdersToCSV);
+
+                // Listeners de Funcionários
+                const createEmployeeContainer = document.getElementById('create-employee-container');
+                const showCreateEmployeeBtn = document.getElementById('showCreateEmployeeBtn');
+                showCreateEmployeeBtn.addEventListener('click', () => {
+                    const isVisible = createEmployeeContainer.style.display === 'block';
+                    createEmployeeContainer.style.display = isVisible ? 'none' : 'block';
+                    showCreateEmployeeBtn.innerHTML = isVisible
+                        ? '<i class="fas fa-user-plus"></i> <span>Criar Login</span>'
+                        : '<i class="fas fa-times"></i> <span>Cancelar</span>';
+                    if (!isVisible) {
+                        createEmployeeContainer.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+
+                // Listeners de Configurações
+                document.getElementById('copyApiKeyButton').addEventListener('click', () => {
+                    copyToClipboard(localPartnerApiKey, 'Chave de API copiada!');
+                });
+                document.getElementById('copyRecipientIdButton').addEventListener('click', () => {
+                    copyToClipboard(localPartnerId, 'ID de parceiro copiado!');
+                });
+
+                // Modal de exclusão
+                document.getElementById('closeDeleteModal').addEventListener('click', () => {
+                    document.getElementById('deleteEmployeeModal').classList.remove('show');
+                });
+                document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+                    document.getElementById('deleteEmployeeModal').classList.remove('show');
+                });
+                document.getElementById('confirmDeleteBtn').addEventListener('click', deleteEmployee);
+                document.getElementById('deleteEmployeeModal').addEventListener('click', (event) => {
+                    if (event.target === event.currentTarget) {
+                        event.currentTarget.classList.remove('show');
+                    }
+                });
+
+                // FORM DE NOVO FUNCIONÁRIO
+                document.getElementById('newEmployeeForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const nameInput = document.getElementById('employeeName');
+                    const emailInput = document.getElementById('employeeEmail');
+                    const passwordInput = document.getElementById('employeePassword');
+                    const submitButton = e.target.querySelector('button[type="submit"]');
+
+                    const name = nameInput.value.trim();
+                    const email = emailInput.value.trim();
+                    const password = passwordInput.value;
+
+                    if (!name || !email || !password) {
+                        showToast('Todos os campos são obrigatórios!');
+                        return;
+                    }
+                    if (password.length < 5) {
+                        showToast('A senha deve ter pelo menos 5 caracteres!');
+                        return;
+                    }
+                    if (allEmployees.some(emp => emp.email === email)) {
+                        showToast('Este email já está cadastrado!');
+                        return;
+                    }
+
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
+                    submitButton.disabled = true;
+
+                    try {
+                        const newEmployeeData = {
+                            partnerName: name, email: email, partnerPassword: password,
+                            adminPassword: "matheus", recipient_id: localRecipientId, partnerRef: localPartnerId
+                        };
+                        
+                        const response = await fetch(`<%=process.env.API_SITE_URL%>/partner/employee`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ newEmployee: newEmployeeData })
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.message || 'Falha ao criar funcionário.');
+                        }
+
+                        showToast('Funcionário criado com sucesso!');
+                        await fetchEmployees();
+
+                        nameInput.value = ''; emailInput.value = ''; passwordInput.value = '';
+
+                        setTimeout(() => {
+                            createEmployeeContainer.style.display = 'none';
+                            showCreateEmployeeBtn.innerHTML = '<i class="fas fa-user-plus"></i> <span>Criar Login</span>';
+                        }, 3000);
+                        
+                    } catch (error) {
+                        console.error("Error creating employee:", error);
+                        showToast(`Erro: ${error.message}`);
+                    } finally {
+                        submitButton.innerHTML = '<i class="fas fa-user-plus"></i> Criar Login do Funcionário';
+                        submitButton.disabled = false;
+                    }
+                });
+                
+                // WEBHOOK FORM
+                const webhookForm = document.getElementById('webhookForm');
+                const webhookUrlInput = document.getElementById('webhookUrlInput');
+                const saveButton = document.getElementById('saveWebhookButton');
+                const statusText = document.getElementById('webhookSaveStatus');
+
+                webhookForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const urlValue = webhookUrlInput.value.trim();
+                    const originalButtonText = saveButton.innerHTML;
+                    saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+                    saveButton.disabled = true;
+                    statusText.textContent = '';
+                    
+                    try {
+                        const response = await fetch(`<%=process.env.API_SITE_URL%>/partner/webhook`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                partnerId: localPartnerId, apiKey: localPartnerApiKey, webhookUrl: urlValue
+                            })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Falha ao salvar a URL.');
+                        }
+                        
+                        statusText.textContent = 'URL do webhook salva com sucesso!';
+                        statusText.style.color = 'var(--success)';
+                    } catch (error) {
+                        console.error('Erro ao salvar webhook:', error);
+                        statusText.textContent = `Erro: ${error.message}`;
+                        statusText.style.color = 'var(--error)';
+                    } finally {
+                        saveButton.innerHTML = originalButtonText;
+                        saveButton.disabled = false;
+                        setTimeout(() => { statusText.textContent = ''; }, 5000);
+                    }
+                });
+            <% } %>
+
+            // --- LISTENERS GERAIS ---
             const createOrderContainer = document.getElementById('create-order-container');
             const showCreateOrderBtn = document.getElementById('showCreateOrderBtn');
             showCreateOrderBtn.addEventListener('click', () => {
@@ -2196,22 +2368,6 @@
                     createOrderContainer.scrollIntoView({ behavior: 'smooth' });
                 }
             });
-
-            // Event listeners para funcionários
-            const createEmployeeContainer = document.getElementById('create-employee-container');
-            const showCreateEmployeeBtn = document.getElementById('showCreateEmployeeBtn');
-            showCreateEmployeeBtn.addEventListener('click', () => {
-                const isVisible = createEmployeeContainer.style.display === 'block';
-                createEmployeeContainer.style.display = isVisible ? 'none' : 'block';
-                showCreateEmployeeBtn.innerHTML = isVisible
-                    ? '<i class="fas fa-user-plus"></i> <span>Criar Login</span>'
-                    : '<i class="fas fa-times"></i> <span>Cancelar</span>';
-                if (!isVisible) {
-                    createEmployeeContainer.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-
-            document.getElementById('exportOrdersBtn').addEventListener('click', exportOrdersToCSV);
 
             // FORM DE NOVO PEDIDO
             document.getElementById('newOrderForm').addEventListener('submit', async function(e) {
@@ -2276,77 +2432,6 @@
                 }
             });
 
-            // FORM DE NOVO FUNCIONÁRIO
-            document.getElementById('newEmployeeForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const nameInput = document.getElementById('employeeName');
-                const emailInput = document.getElementById('employeeEmail');
-                const passwordInput = document.getElementById('employeePassword');
-                const submitButton = e.target.querySelector('button[type="submit"]');
-
-                const name = nameInput.value.trim();
-                const email = emailInput.value.trim();
-                const password = passwordInput.value;
-
-                if (!name || !email || !password) {
-                    showToast('Todos os campos são obrigatórios!');
-                    return;
-                }
-                if (password.length < 5) {
-                    showToast('A senha deve ter pelo menos 5 caracteres!');
-                    return;
-                }
-                if (allEmployees.some(emp => emp.email === email)) {
-                    showToast('Este email já está cadastrado!');
-                    return;
-                }
-
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
-                submitButton.disabled = true;
-
-                try {
-                    const newEmployeeData = {
-                        partnerName: name,
-                        email: email,
-                        partnerPassword: password,
-                        adminPassword: "matheus", // Considere não deixar hardcoded
-                        partnerRef: localPartnerId
-                    };
-                    
-                    const response = await fetch(`<%=process.env.API_SITE_URL%>/partner/employee`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ newEmployee: newEmployeeData })
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || 'Falha ao criar funcionário.');
-                    }
-
-                    showToast('Funcionário criado com sucesso!');
-                    await fetchEmployees(); // Recarrega a lista da API
-
-                    nameInput.value = '';
-                    emailInput.value = '';
-                    passwordInput.value = '';
-
-                    setTimeout(() => {
-                        createEmployeeContainer.style.display = 'none';
-                        showCreateEmployeeBtn.innerHTML = '<i class="fas fa-user-plus"></i> <span>Criar Login</span>';
-                    }, 3000);
-                    
-                } catch (error) {
-                    console.error("Error creating employee:", error);
-                    showToast(`Erro: ${error.message}`);
-                } finally {
-                    submitButton.innerHTML = '<i class="fas fa-user-plus"></i> Criar Login do Funcionário';
-                    submitButton.disabled = false;
-                }
-            });
-            
-            // LISTENERS DE AÇÕES E MODAIS
             document.getElementById('copyLinkButton').addEventListener('click', () => {
                 const link = document.getElementById('orderLink').href;
                 copyToClipboard(link, 'Link do pedido copiado!');
@@ -2355,14 +2440,6 @@
             document.getElementById('qrCodeNewOrderButton').addEventListener('click', () => {
                 const link = document.getElementById('orderLink').href;
                 generateAndShowQrModal(link);
-            });
-
-            document.getElementById('copyApiKeyButton').addEventListener('click', () => {
-                copyToClipboard(localPartnerApiKey, 'Chave de API copiada!');
-            });
-
-            document.getElementById('copyRecipientIdButton').addEventListener('click', () => {
-                copyToClipboard(localPartnerId, 'ID de parceiro copiado!');
             });
 
             document.getElementById('closeQrModal').addEventListener('click', () => {
@@ -2374,70 +2451,17 @@
                 }
             });
             
-            document.getElementById('closeDeleteModal').addEventListener('click', () => {
-                document.getElementById('deleteEmployeeModal').classList.remove('show');
-            });
-            document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
-                document.getElementById('deleteEmployeeModal').classList.remove('show');
-            });
-            document.getElementById('confirmDeleteBtn').addEventListener('click', deleteEmployee);
-            document.getElementById('deleteEmployeeModal').addEventListener('click', (event) => {
-                if (event.target === event.currentTarget) {
-                    event.currentTarget.classList.remove('show');
-                }
-            });
-            
-            // WEBHOOK FORM
-            const webhookForm = document.getElementById('webhookForm');
-            const webhookUrlInput = document.getElementById('webhookUrlInput');
-            const saveButton = document.getElementById('saveWebhookButton');
-            const statusText = document.getElementById('webhookSaveStatus');
-
-            webhookForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const urlValue = webhookUrlInput.value.trim();
-                const originalButtonText = saveButton.innerHTML;
-                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
-                saveButton.disabled = true;
-                statusText.textContent = '';
-                
-                try {
-                    const response = await fetch(`<%=process.env.API_SITE_URL%>/partner/webhook`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            partnerId: localPartnerId, apiKey: localPartnerApiKey, webhookUrl: urlValue
-                        })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Falha ao salvar a URL.');
-                    }
-                    
-                    statusText.textContent = 'URL do webhook salva com sucesso!';
-                    statusText.style.color = 'var(--success)';
-                } catch (error) {
-                    console.error('Erro ao salvar webhook:', error);
-                    statusText.textContent = `Erro: ${error.message}`;
-                    statusText.style.color = 'var(--error)';
-                } finally {
-                    saveButton.innerHTML = originalButtonText;
-                    saveButton.disabled = false;
-                    setTimeout(() => { statusText.textContent = ''; }, 5000);
-                }
-            });
-
             // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     document.getElementById('qrCodeModal').classList.remove('show');
-                    document.getElementById('deleteEmployeeModal').classList.remove('show');
                     closeMobileSidebar();
+                    <% if (partnerData.role !== 'employee') { %>
+                    document.getElementById('deleteEmployeeModal').classList.remove('show');
+                    <% } %>
                 }
             });
         });
-
-        fetchEmployees();
     </script>
 </body>
 </html>
