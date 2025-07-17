@@ -1397,12 +1397,6 @@
                     <div class="employees-header">
                         <div class="search-filter-bar">
                             <input type="text" class="search-input" placeholder="Buscar funcionários..." id="employeeSearchInput">
-                            <select class="filter-select" id="employeeRoleFilter">
-                                <option value="">Todos os cargos</option>
-                                <option value="admin">Administrador</option>
-                                <option value="operator">Operador</option>
-                                <option value="viewer">Visualizador</option>
-                            </select>
                             <select class="filter-select" id="employeeStatusFilter">
                                 <option value="">Todos os status</option>
                                 <option value="active">Ativo</option>
@@ -1452,15 +1446,6 @@
                                 <div class="form-group">
                                     <label for="employeeEmail" class="form-label">Email</label>
                                     <input type="email" id="employeeEmail" name="employeeEmail" class="form-input" required placeholder="Ex: joao@empresa.com">
-                                </div>
-                                <div class="form-group">
-                                    <label for="employeeRole" class="form-label">Cargo/Função</label>
-                                    <select id="employeeRole" name="employeeRole" class="form-select" required>
-                                        <option value="">Selecione o cargo</option>
-                                        <option value="admin">Administrador - Acesso completo</option>
-                                        <option value="operator">Operador - Criar e gerenciar pedidos</option>
-                                        <option value="viewer">Visualizador - Apenas visualizar</option>
-                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="employeePassword" class="form-label">Senha Temporária</label>
@@ -1807,12 +1792,10 @@
 
         function initEmployeeSearchAndFilter() {
             const searchInput = document.getElementById('employeeSearchInput');
-            const roleFilter = document.getElementById('employeeRoleFilter');
             const statusFilter = document.getElementById('employeeStatusFilter');
 
             function filterEmployees() {
                 const searchTerm = searchInput.value.toLowerCase();
-                const role = roleFilter.value;
                 const status = statusFilter.value;
 
                 filteredEmployeesForTable = allEmployees.filter(employee => {
@@ -1830,7 +1813,6 @@
             }
 
             searchInput.addEventListener('input', filterEmployees);
-            roleFilter.addEventListener('change', filterEmployees);
             statusFilter.addEventListener('change', filterEmployees);
         }
 
@@ -2425,23 +2407,21 @@
                 
                 const nameInput = document.getElementById('employeeName');
                 const emailInput = document.getElementById('employeeEmail');
-                const roleInput = document.getElementById('employeeRole');
                 const passwordInput = document.getElementById('employeePassword');
                 const submitButton = e.target.querySelector('button[type="submit"]');
 
                 const name = nameInput.value.trim();
                 const email = emailInput.value.trim();
-                const role = roleInput.value;
                 const password = passwordInput.value;
 
                 // Validações
-                if (!name || !email || !role || !password) {
+                if (!name || !email || !password) {
                     showToast('Todos os campos são obrigatórios!');
                     return;
                 }
 
-                if (password.length < 8) {
-                    showToast('A senha deve ter pelo menos 8 caracteres!');
+                if (password.length < 5) {
+                    showToast('A senha deve ter pelo menos 5 caracteres!');
                     return;
                 }
 
@@ -2456,15 +2436,22 @@
 
                 // Simular criação (em produção seria uma chamada à API)
                 setTimeout(() => {
+                    var partnerRefId = "<%=partnerData.partnerId%>"
                     const newEmployee = {
-                        id: Date.now().toString(),
-                        name: name,
+                        partnerName: name,
                         email: email,
-                        role: role,
-                        status: 'active',
-                        createdAt: new Date().toISOString().split('T')[0],
-                        lastLogin: null
+                        partnerPassword: password,
+                        adminPassword: "matheus",
+                        partnerRef: partnerRefId
                     };
+
+                    const response = fetch(`<%=process.env.API_SITE_URL%>/partner/employee`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            newEmployee
+                        })
+                    });
 
                     allEmployees.push(newEmployee);
                     filteredEmployeesForTable = [...allEmployees];
@@ -2475,13 +2462,12 @@
                     // Mostrar resultado
                     const resultDiv = document.getElementById('employeeCreationResult');
                     const resultMessage = document.getElementById('employeeResultMessage');
-                    resultMessage.textContent = `Login criado para ${name}. Credenciais de acesso enviadas para ${email}.`;
+                    resultMessage.textContent = `Login criado para ${name}.`;
                     resultDiv.classList.add('show');
 
                     // Limpar formulário
                     nameInput.value = '';
                     emailInput.value = '';
-                    roleInput.value = '';
                     passwordInput.value = '';
 
                     showToast('Funcionário criado com sucesso!');
