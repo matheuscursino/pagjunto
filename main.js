@@ -58,6 +58,8 @@ app.get('/login', (req, res) => {
     res.render('login')
 })
 
+// Substitua sua rota app.get('/dashboard', ...) em main.js por esta:
+
 app.get('/dashboard', async (req, res) => {
     const token = req.cookies.access_token;
     if (!token) {
@@ -65,78 +67,64 @@ app.get('/dashboard', async (req, res) => {
     }
 
     try {
-        // Usa uma Promise para poder usar async/await com a callback do jwt.verify
         const decoded = await new Promise((resolve, reject) => {
             jwt.verify(token, process.env.SEGREDO, (err, decodedPayload) => {
                 if (err) return reject(err);
                 resolve(decodedPayload);
             });
         });
-        
-        console.log("LOG: Token decodificado. ID do usuário:", decoded.partnerId);
 
-        // 1. Busca os dados do usuário (partner ou employee)
-        const partnerResponse = await axios.get(`${process.env.API_SITE_URL}/partner`, {
+        // 1. Busca os dados do usuário logado (o funcionário)
+        const employeeResponse = await axios.get(`${process.env.API_SITE_URL}/partner`, {
             data: { partnerId: decoded.partnerId }
         });
-        const partnerData = partnerResponse.data;
-        console.log(`LOG: Dados do usuário encontrados. Role: ${partnerData.role}, PartnerRef: ${partnerData.partnerRef}`);
+        const employeeData = employeeResponse.data;
 
-        // 2. Define o ID correto para a busca de pedidos
-        let idParaBuscaDePedidos;
-        if (partnerData.role === 'employee' && partnerData.partnerRef) {
-            idParaBuscaDePedidos = partnerData.partnerRef;
-        } else {
-            idParaBuscaDePedidos = partnerData.partnerId;
+        // Prepara os dados que serão enviados para o template
+        let dataParaTemplate = { ...employeeData };
+        let idParaBuscaDePedidos = employeeData.partnerId;
+
+        // 2. SE for um funcionário, busca os dados do parceiro principal
+        if (employeeData.role === 'employee' && employeeData.partnerRef) {
+            idParaBuscaDePedidos = employeeData.partnerRef; // Pedidos são do chefe
+
+            const partnerResponse = await axios.get(`${process.env.API_SITE_URL}/partner`, {
+                data: { partnerId: employeeData.partnerRef }
+            });
+            const partnerData = partnerResponse.data;
+
+            // 3. SOBRESCREVE a apiKey no objeto que vai para o template
+            // Agora o frontend terá a apiKey do chefe para usar na criação de pedidos
+            dataParaTemplate.apiKey = partnerData.apiKey;
         }
-        console.log("LOG: ID que será usado para buscar os pedidos:", idParaBuscaDePedidos);
 
-        // 3. Busca os pedidos com o ID correto
+        // 4. Busca os pedidos com o ID correto (do chefe ou do próprio parceiro)
         const ordersResponse = await axios.get(`${process.env.API_SITE_URL}/order/by-partner`, {
             data: { partnerId: idParaBuscaDePedidos }
         });
         const dashboardData = ordersResponse.data;
-        
-        // Verificação importante: Confira se a resposta da API tem o formato esperado
-        console.log(`LOG: Resposta da API de pedidos recebida. A resposta contém a chave 'recentOrders'?`, dashboardData.hasOwnProperty('recentOrders'));
-        if (dashboardData.recentOrders) {
-            console.log(`LOG: Número de pedidos encontrados: ${dashboardData.recentOrders.length}`);
-        }
 
-        // 4. Busca o saldo (apenas para o partner principal)
+        // 5. Busca o saldo (apenas para o partner principal)
         let balance = {};
-        if (partnerData.role !== 'employee') {
+        if (employeeData.role !== 'employee') {
             const balanceResponse = await axios.get(`${process.env.API_SITE_URL}/partner/balance`, {
-                data: { recipient_id: partnerData.recipient_id }
+                data: { recipient_id: employeeData.recipient_id }
             });
             balance = balanceResponse.data;
         }
 
-        // 5. Renderiza a página
+        // 6. Renderiza a página com os dados corretos
         res.render('dashboard', {
-            partnerData,
+            partnerData: dataParaTemplate, // Envia o objeto com a apiKey correta!
             balance,
             stats: dashboardData.stats || {},
-            orders: dashboardData.recentOrders || [] // Garante que 'orders' seja sempre um array
+            orders: dashboardData.recentOrders || []
         });
 
     } catch (error) {
-        // Se qualquer etapa acima falhar, o erro será capturado aqui
-        console.error("--- ERRO NO FLUXO DO DASHBOARD ---");
-        if (error.response) {
-            console.error("Erro da API:", {
-                status: error.response.status,
-                data: error.response.data,
-                url: error.config.url
-            });
-        } else {
-            console.error("Erro geral:", error.message);
-        }
-        // Redireciona para o login em caso de token inválido, ou mostra erro genérico
-        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-            return res.redirect('/login');
-        }
-        res.status(500).send("Ocorreu um erro ao carregar o dashboard. Verifique o console do servidor.");
+        console.error("--- ERRO NO FLUXO DO DASHBOARD ---", error.message);
+        if (error.name === 'JsonWebTokenError') return res.redirect('/login');
+        res.status(500).send("Ocorreu um erro ao carregar o dashboard.");
     }
 });
 
