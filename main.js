@@ -88,6 +88,8 @@ app.get('/dashboard', (req, res) => {
                             stats: dashboardData.stats, 
                             orders: dashboardData.recentOrders})
 
+                    }).catch((e) => {
+                        console.log(e)
                     })
                 })
             })
