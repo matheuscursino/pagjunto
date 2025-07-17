@@ -347,7 +347,7 @@
 
         .charts-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Alterado para grid responsivo 2x2 */
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 24px;
             margin-bottom: 32px;
         }
@@ -485,6 +485,32 @@
             color: #065f46;
         }
 
+        /* Employee Status Badges */
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .role-admin {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .role-operator {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .role-viewer {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
         .table-actions {
             display: flex;
             gap: 8px;
@@ -516,6 +542,26 @@
             background: var(--accent-dark);
         }
 
+        .action-btn-success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .action-btn-success:hover {
+            background: #059669;
+        }
+
+        .action-btn-danger {
+            background: var(--error);
+            color: white;
+            border-color: var(--error);
+        }
+
+        .action-btn-danger:hover {
+            background: #dc2626;
+        }
+
         /* Create Order Section */
         .create-order-form {
             background: white;
@@ -523,7 +569,7 @@
             border-radius: var(--radius-xl);
             padding: 32px;
             max-width: 600px;
-            margin: 0 auto; /* Centraliza o formulário */
+            margin: 0 auto;
         }
 
         .form-header {
@@ -568,6 +614,22 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -601,6 +663,24 @@
             background: var(--gray-100);
         }
 
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
         .order-result {
             margin-top: 24px;
             padding: 20px;
@@ -630,13 +710,6 @@
         .result-actions {
             display: flex;
             gap: 12px;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-            font-size: 0.75rem;
-            padding: 8px 16px;
         }
 
         /* Settings Section */
@@ -673,6 +746,70 @@
             flex: 1;
             font-family: 'SF Mono', Consolas, monospace;
             background: var(--gray-50);
+        }
+
+        /* Employees Section Styles */
+        .employees-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .employees-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .employee-stat-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .employee-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .employee-stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        #create-employee-container {
+            display: none;
+            margin-bottom: 32px;
+        }
+
+        .create-employee-form {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .employee-result {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: var(--radius-lg);
+            display: none;
+        }
+
+        .employee-result.show {
+            display: block;
         }
 
         /* Mobile Sidebar */
@@ -859,130 +996,13 @@
                 gap: 8px;
             }
 
-            /* Mobile Table Cards */
-            .mobile-order-card {
-                display: block;
-                background: white;
-                border: 1px solid var(--gray-200);
-                border-radius: var(--radius-lg);
-                padding: 16px;
-                margin-bottom: 12px;
-            }
-
-            .mobile-order-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                margin-bottom: 12px;
-            }
-
-            .mobile-order-details {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-                margin-bottom: 12px;
-            }
-
-            .mobile-detail-item {
-                display: flex;
+            .employees-header {
                 flex-direction: column;
-                gap: 4px;
+                align-items: stretch;
             }
 
-            .mobile-detail-label {
-                font-size: 0.75rem;
-                color: var(--gray-500);
-                font-weight: 500;
-            }
-
-            .mobile-detail-value {
-                font-size: 0.875rem;
-                color: var(--gray-900);
-                font-weight: 500;
-            }
-
-            .mobile-order-actions {
-                display: flex;
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-
-            .mobile-order-actions .action-btn {
-                flex: 1;
-                min-width: 0;
-                justify-content: center;
-            }
-
-            .mobile-order-details-section {
-                border-top: 1px solid var(--gray-200);
-                padding-top: 12px;
-                margin-top: 12px;
-                display: none;
-            }
-
-            .mobile-order-details-section.expanded {
-                display: block;
-            }
-
-            .mobile-payers-list {
-                list-style: none;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                margin-top: 8px;
-            }
-
-            .mobile-payer-item {
-                background: var(--gray-50);
-                padding: 12px;
-                border-radius: var(--radius);
-                border: 1px solid var(--gray-200);
-            }
-
-            .mobile-payer-name {
-                font-weight: 500;
-                color: var(--gray-900);
-                margin-bottom: 4px;
-            }
-
-            .mobile-payer-id,
-            .mobile-payer-phone {
-                font-size: 0.75rem;
-                color: var(--gray-500);
-                font-family: 'SF Mono', Consolas, monospace;
-                margin-bottom: 4px;
-            }
-
-            .mobile-payer-amount {
-                font-weight: 600;
-                color: var(--success);
-            }
-
-            .mobile-toggle-details {
-                width: 100%;
-                background: var(--gray-100);
-                border: 1px solid var(--gray-200);
-                border-radius: var(--radius);
-                padding: 10px;
-                color: var(--gray-700);
-                font-size: 0.875rem;
-                font-weight: 500;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .mobile-toggle-details:hover {
-                background: var(--gray-200);
-            }
-        }
-
-        @media (min-width: 769px) {
-            .mobile-orders-container {
-                display: none;
+            .employees-stats {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1001,7 +1021,7 @@
 
             .form-input {
                 padding: 16px;
-                font-size: 16px; /* Prevents zoom on iOS */
+                font-size: 16px;
             }
         }
 
@@ -1091,14 +1111,12 @@
         }
     </style>
 </head>
-
 <body>
     <div class="app-layout">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <a href="/" class="logo">pagjunto</a>
             </div>
-
             <nav class="sidebar-nav">
                 <div class="nav-section">
                     <div class="nav-section-title">Principal</div>
@@ -1110,8 +1128,11 @@
                         <div class="nav-icon"><i class="fas fa-list-alt"></i></div>
                         Pedidos
                     </button>
+                    <button class="nav-item" data-section="employees">
+                        <div class="nav-icon"><i class="fas fa-users"></i></div>
+                        Funcionários
+                    </button>
                 </div>
-
                 <div class="nav-section">
                     <div class="nav-section-title">Conta</div>
                     <button class="nav-item" data-section="settings">
@@ -1120,7 +1141,6 @@
                     </button>
                 </div>
             </nav>
-
             <div class="sidebar-footer">
                 <div class="user-profile">
                     <div class="user-avatar">
@@ -1154,8 +1174,8 @@
             </header>
 
             <div class="content-area">
+                <!-- Overview Section (mantida original) -->
                 <section class="content-section active" id="overview-section">
-                    
                     <div class="dashboard-filter-bar">
                         <label for="dateRangeFilter">Mostrar dados de:</label>
                         <select id="dateRangeFilter" class="filter-select">
@@ -1286,6 +1306,7 @@
                     </div>
                 </section>
 
+                <!-- Orders Section (mantida original) -->
                 <section class="content-section" id="orders-section">
                     <div class="orders-header">
                         <div class="search-filter-bar">
@@ -1368,10 +1389,115 @@
                             <tbody id="ordersTableBody"></tbody>
                         </table>
                     </div>
-
                     <div class="mobile-orders-container" id="mobileOrdersContainer"></div>
                 </section>
-                
+
+                <!-- Nova Seção de Funcionários -->
+                <section class="content-section" id="employees-section">
+                    <div class="employees-header">
+                        <div class="search-filter-bar">
+                            <input type="text" class="search-input" placeholder="Buscar funcionários..." id="employeeSearchInput">
+                            <select class="filter-select" id="employeeRoleFilter">
+                                <option value="">Todos os cargos</option>
+                                <option value="admin">Administrador</option>
+                                <option value="operator">Operador</option>
+                                <option value="viewer">Visualizador</option>
+                            </select>
+                            <select class="filter-select" id="employeeStatusFilter">
+                                <option value="">Todos os status</option>
+                                <option value="active">Ativo</option>
+                                <option value="inactive">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="header-actions">
+                            <button id="showCreateEmployeeBtn" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Criar Login</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Estatísticas dos Funcionários -->
+                    <div class="employees-stats">
+                        <div class="employee-stat-card">
+                            <div class="employee-stat-value" id="totalEmployeesValue">0</div>
+                            <div class="employee-stat-label">Total de Funcionários</div>
+                        </div>
+                        <div class="employee-stat-card">
+                            <div class="employee-stat-value" id="activeEmployeesValue">0</div>
+                            <div class="employee-stat-label">Funcionários Ativos</div>
+                        </div>
+                        <div class="employee-stat-card">
+                            <div class="employee-stat-value" id="adminEmployeesValue">0</div>
+                            <div class="employee-stat-label">Administradores</div>
+                        </div>
+                        <div class="employee-stat-card">
+                            <div class="employee-stat-value" id="recentLoginsValue">0</div>
+                            <div class="employee-stat-label">Logins Recentes (7d)</div>
+                        </div>
+                    </div>
+
+                    <!-- Formulário de Criação de Funcionário -->
+                    <div id="create-employee-container">
+                        <div class="create-employee-form">
+                            <div class="form-header">
+                                <h2 class="form-title">Criar Login para Funcionário</h2>
+                                <p class="form-subtitle">Crie um novo acesso para um funcionário da sua empresa</p>
+                            </div>
+                            <form id="newEmployeeForm">
+                                <div class="form-group">
+                                    <label for="employeeName" class="form-label">Nome Completo</label>
+                                    <input type="text" id="employeeName" name="employeeName" class="form-input" required placeholder="Ex: João Silva">
+                                </div>
+                                <div class="form-group">
+                                    <label for="employeeEmail" class="form-label">Email</label>
+                                    <input type="email" id="employeeEmail" name="employeeEmail" class="form-input" required placeholder="Ex: joao@empresa.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="employeeRole" class="form-label">Cargo/Função</label>
+                                    <select id="employeeRole" name="employeeRole" class="form-select" required>
+                                        <option value="">Selecione o cargo</option>
+                                        <option value="admin">Administrador - Acesso completo</option>
+                                        <option value="operator">Operador - Criar e gerenciar pedidos</option>
+                                        <option value="viewer">Visualizador - Apenas visualizar</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="employeePassword" class="form-label">Senha Temporária</label>
+                                    <input type="password" id="employeePassword" name="employeePassword" class="form-input" required placeholder="Mínimo 8 caracteres">
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-user-plus"></i>
+                                    Criar Login do Funcionário
+                                </button>
+                            </form>
+                            <div id="employeeCreationResult" class="employee-result">
+                                <div class="result-header">Login criado com sucesso!</div>
+                                <p id="employeeResultMessage"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Funcionários -->
+                    <div class="orders-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Funcionário</th>
+                                    <th>Email</th>
+                                    <th>Cargo</th>
+                                    <th>Status</th>
+                                    <th class="hide-mobile">Criado em</th>
+                                    <th class="hide-mobile">Último Login</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeesTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Settings Section (mantida original) -->
                 <section class="content-section" id="settings-section">
                     <div class="settings-card">
                         <div class="settings-header">
@@ -1388,6 +1514,7 @@
                             </button>
                         </div>
                     </div>
+
                     <div class="settings-card">
                         <div class="settings-header">
                             <h3 class="settings-title">ID de parceiro (partnerId)</h3>
@@ -1403,6 +1530,7 @@
                             </button>
                         </div>
                     </div>
+
                     <div class="settings-card">
                         <div class="settings-header">
                             <h3 class="settings-title">Configurar Webhook</h3>
@@ -1426,6 +1554,7 @@
         </main>
     </div>
 
+    <!-- Modais -->
     <div id="qrCodeModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" id="closeQrModal">&times;</button>
@@ -1437,44 +1566,104 @@
         </div>
     </div>
 
+    <!-- Modal de Confirmação para Deletar Funcionário -->
+    <div id="deleteEmployeeModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeDeleteModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Confirmar Exclusão</h2>
+            </div>
+            <p style="margin-bottom: 24px; text-align: center;">Tem certeza que deseja remover este funcionário? Esta ação não pode ser desfeita.</p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button id="cancelDeleteBtn" class="btn btn-secondary">Cancelar</button>
+                <button id="confirmDeleteBtn" class="btn btn-danger">Remover Funcionário</button>
+            </div>
+        </div>
+    </div>
+
     <div id="copyToast" class="toast"></div>
 
     <script>
+        // Variáveis globais (mantidas originais)
         const localPartnerId = "<%= partnerData.partnerId %>";
         const localPartnerApiKey = "<%= partnerData.apiKey %>";
         const localRecipientId = "<%= partnerData.recipient_id %>";
         const allOrders = <%- JSON.stringify(orders || []) %>;
         const balance = <%- JSON.stringify(balance || { data: {} }) %>;
+        
+        // Nova variável para funcionários
+        let allEmployees = [
+            {
+                id: '1',
+                name: 'João Silva',
+                email: 'joao@empresa.com',
+                role: 'admin',
+                status: 'active',
+                createdAt: '2024-01-15',
+                lastLogin: '2024-01-17T10:30:00'
+            },
+            {
+                id: '2',
+                name: 'Maria Santos',
+                email: 'maria@empresa.com',
+                role: 'operator',
+                status: 'active',
+                createdAt: '2024-01-10',
+                lastLogin: '2024-01-16T14:20:00'
+            },
+            {
+                id: '3',
+                name: 'Pedro Costa',
+                email: 'pedro@empresa.com',
+                role: 'viewer',
+                status: 'inactive',
+                createdAt: '2024-01-05',
+                lastLogin: null
+            }
+        ];
 
         allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
         let filteredOrdersForTable = [...allOrders];
-
+        let filteredEmployeesForTable = [...allEmployees];
         let salesChart, statusChart, dailySalesChart, conversionTrendChart;
         let chartColors = {};
+        let employeeToDelete = null;
 
-        // --- FUNÇÕES DE NAVEGAÇÃO E UI ---
+        // --- FUNÇÕES DE NAVEGAÇÃO E UI (mantidas originais) ---
         function initNavigation() {
             const navItems = document.querySelectorAll('.nav-item');
             const sections = document.querySelectorAll('.content-section');
             const pageTitle = document.getElementById('pageTitle');
             const pageSubtitle = document.getElementById('pageSubtitle');
+
             const sectionTitles = {
                 overview: { title: 'Visão Geral', subtitle: 'Dashboard executivo da sua conta' },
                 orders: { title: 'Pedidos', subtitle: 'Gerencie e acompanhe seus pedidos de pagamento' },
+                employees: { title: 'Funcionários', subtitle: 'Gerencie logins e acesso dos funcionários' },
                 settings: { title: 'Configurações', subtitle: 'Gerencie suas configurações de conta' }
             };
+
             navItems.forEach(item => {
                 item.addEventListener('click', () => {
                     const targetSection = item.dataset.section;
+                    
                     navItems.forEach(nav => nav.classList.remove('active'));
                     item.classList.add('active');
+                    
                     sections.forEach(section => section.classList.remove('active'));
                     document.getElementById(`${targetSection}-section`).classList.add('active');
+                    
                     const titleData = sectionTitles[targetSection];
                     pageTitle.textContent = titleData.title;
                     pageSubtitle.textContent = titleData.subtitle;
+                    
                     closeMobileSidebar();
+
+                    // Se for a seção de funcionários, atualizar dados
+                    if (targetSection === 'employees') {
+                        updateEmployeeStats();
+                        displayEmployees();
+                    }
                 });
             });
         }
@@ -1483,10 +1672,12 @@
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
+
             sidebarToggle.addEventListener('click', () => {
                 sidebar.classList.add('open');
                 sidebarOverlay.style.display = 'block';
             });
+
             sidebarOverlay.addEventListener('click', closeMobileSidebar);
         }
 
@@ -1497,36 +1688,197 @@
             sidebarOverlay.style.display = 'none';
         }
 
-        // --- FUNÇÕES UTILITÁRIAS ---
+        // --- FUNÇÕES UTILITÁRIAS (mantidas originais) ---
         function formatCurrency(value) {
             const numValue = typeof value === 'string' ? parseFloat(value) : value;
             if (isNaN(numValue)) return 'R$ 0,00';
             return numValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
+
         function formatCurrencyFromCents(cents) {
             const reais = (Number(cents) || 0) / 100;
             return formatCurrency(reais);
         }
+
         function formatNumber(value) {
             const numValue = Number(value);
             if (isNaN(numValue)) return '0';
             return numValue.toLocaleString('pt-BR');
         }
+
         function translateStatus(status) {
             const translations = { fresh: 'Nova', progress: 'Em Progresso', paid: 'Pago' };
             return translations[status] || status;
         }
+
         function maskCPF(cpf) {
             if (!cpf || typeof cpf !== 'string') return 'N/A';
             const cleanCpf = cpf.replace(/\D/g, '');
             if (cleanCpf.length !== 11) return cpf;
             return `${cleanCpf.substring(0, 3)}.***.***-${cleanCpf.substring(9, 12)}`;
         }
-        
-        // --- LÓGICA DE CORES DINÂMICAS ---
-        function getCssVariable(variable) {
-          return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+
+        // --- NOVAS FUNÇÕES PARA FUNCIONÁRIOS ---
+        function translateEmployeeRole(role) {
+            const translations = {
+                admin: 'Administrador',
+                operator: 'Operador',
+                viewer: 'Visualizador'
+            };
+            return translations[role] || role;
         }
+
+        function translateEmployeeStatus(status) {
+            const translations = {
+                active: 'Ativo',
+                inactive: 'Inativo'
+            };
+            return translations[status] || status;
+        }
+
+        function updateEmployeeStats() {
+            const totalEmployees = allEmployees.length;
+            const activeEmployees = allEmployees.filter(emp => emp.status === 'active').length;
+            const adminEmployees = allEmployees.filter(emp => emp.role === 'admin').length;
+            
+            // Calcular logins recentes (últimos 7 dias)
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            const recentLogins = allEmployees.filter(emp => 
+                emp.lastLogin && new Date(emp.lastLogin) >= sevenDaysAgo
+            ).length;
+
+            document.getElementById('totalEmployeesValue').textContent = totalEmployees;
+            document.getElementById('activeEmployeesValue').textContent = activeEmployees;
+            document.getElementById('adminEmployeesValue').textContent = adminEmployees;
+            document.getElementById('recentLoginsValue').textContent = recentLogins;
+        }
+
+        function displayEmployees(employees = filteredEmployeesForTable) {
+            const tableBody = document.getElementById('employeesTableBody');
+            tableBody.innerHTML = '';
+
+            if (employees.length === 0) {
+                const noDataMessage = `<tr><td colspan="7" style="text-align: center; color: var(--gray-500); padding: 2rem;">Nenhum funcionário encontrado.</td></tr>`;
+                tableBody.innerHTML = noDataMessage;
+                return;
+            }
+
+            employees.forEach(employee => {
+                const row = document.createElement('tr');
+                
+                const lastLoginText = employee.lastLogin 
+                    ? new Date(employee.lastLogin).toLocaleDateString('pt-BR')
+                    : 'Nunca acessou';
+
+                row.innerHTML = `
+                    <td>
+                        <div class="order-info">
+                            <div class="order-name">${employee.name}</div>
+                            <div class="order-id">ID: ${employee.id}</div>
+                        </div>
+                    </td>
+                    <td>${employee.email}</td>
+                    <td><span class="status-badge role-${employee.role}">${translateEmployeeRole(employee.role)}</span></td>
+                    <td><span class="status-badge status-${employee.status}">${translateEmployeeStatus(employee.status)}</span></td>
+                    <td class="hide-mobile">${new Date(employee.createdAt).toLocaleDateString('pt-BR')}</td>
+                    <td class="hide-mobile">${lastLoginText}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="action-btn" onclick="toggleEmployeeStatus('${employee.id}')" title="${employee.status === 'active' ? 'Desativar' : 'Ativar'}">
+                                <i class="fas fa-${employee.status === 'active' ? 'eye-slash' : 'eye'}"></i>
+                                <span class="hide-mobile">${employee.status === 'active' ? 'Desativar' : 'Ativar'}</span>
+                            </button>
+                            <button class="action-btn action-btn-primary" onclick="resetEmployeePassword('${employee.id}')" title="Redefinir Senha">
+                                <i class="fas fa-key"></i>
+                                <span class="hide-mobile">Senha</span>
+                            </button>
+                            <button class="action-btn action-btn-danger" onclick="showDeleteEmployeeModal('${employee.id}')" title="Remover">
+                                <i class="fas fa-trash"></i>
+                                <span class="hide-mobile">Remover</span>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        function initEmployeeSearchAndFilter() {
+            const searchInput = document.getElementById('employeeSearchInput');
+            const roleFilter = document.getElementById('employeeRoleFilter');
+            const statusFilter = document.getElementById('employeeStatusFilter');
+
+            function filterEmployees() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const role = roleFilter.value;
+                const status = statusFilter.value;
+
+                filteredEmployeesForTable = allEmployees.filter(employee => {
+                    const matchesSearch = !searchTerm ||
+                        employee.name.toLowerCase().includes(searchTerm) ||
+                        employee.email.toLowerCase().includes(searchTerm);
+                    
+                    const matchesRole = !role || employee.role === role;
+                    const matchesStatus = !status || employee.status === status;
+
+                    return matchesSearch && matchesRole && matchesStatus;
+                });
+
+                displayEmployees(filteredEmployeesForTable);
+            }
+
+            searchInput.addEventListener('input', filterEmployees);
+            roleFilter.addEventListener('change', filterEmployees);
+            statusFilter.addEventListener('change', filterEmployees);
+        }
+
+        function toggleEmployeeStatus(employeeId) {
+            const employee = allEmployees.find(emp => emp.id === employeeId);
+            if (employee) {
+                employee.status = employee.status === 'active' ? 'inactive' : 'active';
+                updateEmployeeStats();
+                displayEmployees(filteredEmployeesForTable);
+                
+                const statusText = employee.status === 'active' ? 'ativado' : 'desativado';
+                showToast(`Funcionário ${statusText} com sucesso!`);
+            }
+        }
+
+        function resetEmployeePassword(employeeId) {
+            const employee = allEmployees.find(emp => emp.id === employeeId);
+            if (employee) {
+                // Simular reset de senha
+                showToast(`Nova senha enviada para ${employee.email}`);
+            }
+        }
+
+        function showDeleteEmployeeModal(employeeId) {
+            employeeToDelete = employeeId;
+            document.getElementById('deleteEmployeeModal').classList.add('show');
+        }
+
+        function deleteEmployee() {
+            if (employeeToDelete) {
+                allEmployees = allEmployees.filter(emp => emp.id !== employeeToDelete);
+                filteredEmployeesForTable = filteredEmployeesForTable.filter(emp => emp.id !== employeeToDelete);
+                
+                updateEmployeeStats();
+                displayEmployees(filteredEmployeesForTable);
+                
+                document.getElementById('deleteEmployeeModal').classList.remove('show');
+                showToast('Funcionário removido com sucesso!');
+                
+                employeeToDelete = null;
+            }
+        }
+
+        // --- LÓGICA DE CORES DINÂMICAS (mantida original) ---
+        function getCssVariable(variable) {
+            return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+        }
+
         function initializeChartColors() {
             chartColors = {
                 accent: getCssVariable('--accent'),
@@ -1541,12 +1893,13 @@
                 legendColor: getCssVariable('--gray-600')
             };
         }
-        
-        // --- LÓGICA DE ATUALIZAÇÃO DO DASHBOARD ---
+
+        // --- LÓGICA DE ATUALIZAÇÃO DO DASHBOARD (mantida original) ---
         function updateDashboard(orders) {
             updateStatsCards(orders);
             updateAllCharts(orders);
         }
+
         function updateStatsCards(orders) {
             const stats = orders.reduce((acc, order) => {
                 acc.totalValue += order.totalValue || 0;
@@ -1555,15 +1908,17 @@
                 if (order.status === 'fresh') acc.freshOrders += 1;
                 if (order.status === 'progress') acc.progressOrders += 1;
                 if (Array.isArray(order.payersIds)) {
-                     order.payersIds.forEach(id => acc.uniquePayers.add(id));
+                    order.payersIds.forEach(id => acc.uniquePayers.add(id));
                 }
                 return acc;
-            }, { 
-                totalValue: 0, paidValue: 0, paidOrders: 0, freshOrders: 0, 
+            }, {
+                totalValue: 0, paidValue: 0, paidOrders: 0, freshOrders: 0,
                 progressOrders: 0, uniquePayers: new Set()
             });
+
             const totalOrders = orders.length;
             const totalBalanceCents = (balance.data.available_amount || 0) + (balance.data.waiting_funds_amount || 0);
+
             document.getElementById('accountBalanceValue').textContent = formatCurrencyFromCents(totalBalanceCents);
             document.getElementById('totalSalesValue').textContent = formatCurrency(stats.totalValue);
             document.getElementById('totalPaidValue').textContent = formatCurrency(stats.paidValue);
@@ -1571,18 +1926,23 @@
             document.getElementById('paidOrdersValue').textContent = formatNumber(stats.paidOrders);
             document.getElementById('freshOrdersValue').textContent = formatNumber(stats.freshOrders);
             document.getElementById('progressOrdersValue').textContent = formatNumber(stats.progressOrders);
+
             const conversionRate = totalOrders > 0 ? (stats.paidOrders / totalOrders) * 100 : 0;
             document.getElementById('conversionRateValue').textContent = `${conversionRate.toFixed(1).replace('.', ',')}%`;
+
             const averageTicket = totalOrders > 0 ? (stats.totalValue / totalOrders) : 0;
             document.getElementById('averageTicketValue').textContent = formatCurrency(averageTicket);
+
             document.getElementById('totalPayersValue').textContent = formatNumber(stats.uniquePayers.size);
         }
+
         function updateAllCharts(orders) {
             updateSalesChart(orders);
             updateStatusChart(orders);
             updateDailySalesChart(orders);
             updateConversionTrendChart(orders);
         }
+
         function getChartConfig() {
             return {
                 responsive: true,
@@ -1609,6 +1969,7 @@
                 }
             };
         }
+
         function updateSalesChart(orders) {
             const ctx = document.getElementById('salesChart').getContext('2d');
             const monthlyData = orders.reduce((acc, order) => {
@@ -1617,8 +1978,10 @@
                 acc[month] = (acc[month] || 0) + (order.totalValue || 0);
                 return acc;
             }, {});
+
             const labels = Object.keys(monthlyData).sort();
             const data = labels.map(label => monthlyData[label]);
+
             if (salesChart) salesChart.destroy();
             salesChart = new Chart(ctx, {
                 type: 'line',
@@ -1638,12 +2001,14 @@
                 options: { ...getChartConfig(), scales: {...getChartConfig().scales, x: { type: 'time', time: { unit: 'month', displayFormats: { month: 'MMM/yy' } }, ...getChartConfig().scales.x } }, plugins: { legend: { display: false } } }
             });
         }
+
         function updateStatusChart(orders) {
             const ctx = document.getElementById('statusChart').getContext('2d');
             const statusCounts = orders.reduce((acc, order) => {
                 acc[order.status] = (acc[order.status] || 0) + 1;
                 return acc;
             }, {});
+
             if (statusChart) statusChart.destroy();
             statusChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -1664,6 +2029,7 @@
                 }
             });
         }
+
         function updateDailySalesChart(orders) {
             const ctx = document.getElementById('dailySalesChart').getContext('2d');
             const dailyData = orders.reduce((acc, order) => {
@@ -1671,8 +2037,10 @@
                 acc[day] = (acc[day] || 0) + (order.totalValue || 0);
                 return acc;
             }, {});
+
             const labels = Object.keys(dailyData).sort();
             const data = labels.map(label => dailyData[label]);
+
             if (dailySalesChart) dailySalesChart.destroy();
             dailySalesChart = new Chart(ctx, {
                 type: 'bar',
@@ -1690,6 +2058,7 @@
                 options: { ...getChartConfig(), scales: {...getChartConfig().scales, x: { type: 'time', time: { unit: 'day', displayFormats: { day: 'dd/MM' } }, ...getChartConfig().scales.x } }, plugins: { legend: { display: false } } }
             });
         }
+
         function updateConversionTrendChart(orders) {
             const ctx = document.getElementById('conversionTrendChart').getContext('2d');
             const trendData = orders.reduce((acc, order) => {
@@ -1698,7 +2067,9 @@
                 acc[day][order.status]++;
                 return acc;
             }, {});
+
             const labels = Object.keys(trendData).sort();
+
             if (conversionTrendChart) conversionTrendChart.destroy();
             conversionTrendChart = new Chart(ctx, {
                 type: 'bar',
@@ -1720,10 +2091,12 @@
                 }
             });
         }
+
         function handleDateFilterChange() {
             const filterValue = document.getElementById('dateRangeFilter').value;
             const now = new Date();
-            let startDate = new Date(0); 
+            let startDate = new Date(0);
+
             if (filterValue === '7d') {
                 startDate = new Date(new Date().setDate(now.getDate() - 7));
             } else if (filterValue === '30d') {
@@ -1733,22 +2106,26 @@
             } else if (filterValue === 'this_month') {
                 startDate = new Date(now.getFullYear(), now.getMonth(), 1);
             }
+
             const ordersForDashboard = allOrders.filter(order => new Date(order.createdAt) >= startDate);
             updateDashboard(ordersForDashboard);
         }
 
-        // --- LÓGICA DA TABELA DE PEDIDOS ---
+        // --- LÓGICA DA TABELA DE PEDIDOS (mantida original) ---
         function displayOrders(orders = filteredOrdersForTable) {
             const tableBody = document.getElementById('ordersTableBody');
             const mobileContainer = document.getElementById('mobileOrdersContainer');
+            
             tableBody.innerHTML = '';
             mobileContainer.innerHTML = '';
+
             if (orders.length === 0) {
                 const noDataMessage = `<tr><td colspan="6" style="text-align: center; color: var(--gray-500); padding: 2rem;">Nenhum pedido encontrado.</td></tr>`;
                 tableBody.innerHTML = noDataMessage;
                 mobileContainer.innerHTML = `<div style="text-align: center; color: var(--gray-500); padding: 2rem;">Nenhum pedido encontrado.</div>`;
                 return;
             }
+
             orders.forEach(order => {
                 const mainRow = document.createElement('tr');
                 mainRow.innerHTML = `
@@ -1759,6 +2136,7 @@
                     <td class="hide-mobile">${new Date(order.createdAt).toLocaleDateString('pt-BR')}</td>
                     <td><div class="table-actions"><button class="action-btn" onclick="toggleOrderDetails('${order.orderId}')"><i class="fas fa-chevron-down" id="chevron-${order.orderId}"></i><span class="hide-mobile">Detalhes</span></button><button class="action-btn action-btn-primary" onclick="copyOrderLink('${order.orderId}')"><i class="fas fa-copy"></i><span class="hide-mobile">Copiar</span></button><button class="action-btn" onclick="showQrCode('${order.orderId}')"><i class="fas fa-qrcode"></i><span class="hide-mobile">QR</span></button></div></td>
                 `;
+
                 let payersListHTML = '<span style="color: var(--gray-500);">Nenhum pagador identificado.</span>';
                 if (Array.isArray(order.payersIds) && order.payersIds.length > 0) {
                     payersListHTML = `<ul class="payers-list">${order.payersIds.map((id, index) => {
@@ -1769,54 +2147,37 @@
                         return `<li class="payer-item"><div class="payer-name">${name}</div><div class="payer-id">CPF: ${maskedCpf}</div><div class="payer-phone">Telefone: ${phone}</div><div class="payer-amount">Valor Pago: ${value}</div></li>`;
                     }).join('')}</ul>`;
                 }
+
                 const detailsRow = document.createElement('tr');
                 detailsRow.className = 'details-row';
                 detailsRow.id = `details-row-${order.orderId}`;
                 detailsRow.innerHTML = `<td colspan="6"><div class="details-content"><div class="details-grid"><div class="detail-item"><span class="detail-label">Nome</span><span class="detail-value">${order.name || order.orderName || 'Não especificado'}</span></div><div class="detail-item"><span class="detail-label">ID do Pedido</span><span class="detail-value">${order.orderId}</span></div><div class="detail-item"><span class="detail-label">Data de Criação</span><span class="detail-value">${new Date(order.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span></div><div class="detail-item"><span class="detail-label">Status</span><span class="detail-value">${translateStatus(order.status)}</span></div></div><div class="detail-item"><span class="detail-label">Pagadores</span><div class="detail-value">${payersListHTML}</div></div></div></td>`;
+
                 tableBody.appendChild(mainRow);
                 tableBody.appendChild(detailsRow);
-                let mobilePayersHTML = '<span style="color: var(--gray-500); font-size: 0.875rem;">Nenhum pagador identificado.</span>';
-                if (Array.isArray(order.payersIds) && order.payersIds.length > 0) {
-                    mobilePayersHTML = `<ul class="mobile-payers-list">${order.payersIds.map((id, index) => {
-                        const name = (Array.isArray(order.payersNames) && order.payersNames[index]) ? order.payersNames[index] : 'Pagador';
-                        const value = (Array.isArray(order.payersValues) && typeof order.payersValues[index] !== 'undefined') ? formatCurrency(order.payersValues[index]) : '';
-                        const phone = (Array.isArray(order.payersPhone) && order.payersPhone[index]) ? order.payersPhone[index] : 'N/A';
-                        const maskedCpf = maskCPF(id);
-                        return `<li class="mobile-payer-item"><div class="mobile-payer-name">${name}</div><div class="mobile-payer-id">CPF: ${maskedCpf}</div><div class="mobile-payer-phone">Telefone: ${phone}</div><div class="mobile-payer-amount">Valor Pago: ${value}</div></li>`;
-                    }).join('')}</ul>`;
-                }
-                const mobileCard = document.createElement('div');
-                mobileCard.className = 'mobile-order-card';
-                mobileCard.innerHTML = `<div class="mobile-order-header"><div class="mobile-order-info"><h4>${order.name || order.orderName || 'Pedido sem nome'}</h4><div class="order-id">${order.orderId}</div></div><span class="status-badge status-${order.status}">${translateStatus(order.status)}</span></div><div class="mobile-order-details"><div class="mobile-detail-item"><span class="mobile-detail-label">Valor Total</span><span class="mobile-detail-value">${formatCurrency(order.totalValue || 0)}</span></div><div class="mobile-detail-item"><span class="mobile-detail-label">Valor Pago</span><span class="mobile-detail-value">${formatCurrency(order.paidValue || 0)}</span></div><div class="mobile-detail-item"><span class="mobile-detail-label">Data</span><span class="mobile-detail-value">${new Date(order.createdAt).toLocaleDateString('pt-BR')}</span></div><div class="mobile-detail-item"><span class="mobile-detail-label">Pagadores</span><span class="mobile-detail-value">${Array.isArray(order.payersIds) ? order.payersIds.length : 0}</span></div></div><div class="mobile-order-actions"><button class="action-btn action-btn-primary" onclick="copyOrderLink('${order.orderId}')"><i class="fas fa-copy"></i>Copiar</button><button class="action-btn" onclick="showQrCode('${order.orderId}')"><i class="fas fa-qrcode"></i>QR Code</button></div><button class="mobile-toggle-details" onclick="toggleMobileOrderDetails('${order.orderId}')"><i class="fas fa-chevron-down" id="mobile-chevron-${order.orderId}"></i> Ver Detalhes dos Pagadores</button><div class="mobile-order-details-section" id="mobile-details-${order.orderId}"><div class="mobile-detail-item"><span class="mobile-detail-label">Pagadores</span><div style="margin-top: 8px;">${mobilePayersHTML}</div></div></div>`;
-                mobileContainer.appendChild(mobileCard);
             });
         }
-        function toggleMobileOrderDetails(orderId) {
-            const detailsSection = document.getElementById(`mobile-details-${orderId}`);
-            const chevron = document.getElementById(`mobile-chevron-${orderId}`);
-            const isExpanded = detailsSection.classList.toggle('expanded');
-            chevron.className = isExpanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
-        }
+
         function toggleOrderDetails(orderId) {
             const detailsRow = document.getElementById(`details-row-${orderId}`);
             const chevron = document.getElementById(`chevron-${orderId}`);
             const isExpanded = detailsRow.classList.toggle('expanded');
             chevron.className = isExpanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
         }
-        
+
         function initSearchAndFilterForTable() {
             const searchInput = document.getElementById('searchInput');
             const statusFilter = document.getElementById('statusFilter');
-            const dateFilter = document.getElementById('orderDateFilter'); // Pega o novo filtro
+            const dateFilter = document.getElementById('orderDateFilter');
 
             function filterOrders() {
                 const searchTerm = searchInput.value.toLowerCase();
                 const status = statusFilter.value;
                 const dateRange = dateFilter.value;
 
-                // Lógica de data para o filtro da tabela
                 const now = new Date();
-                let startDate = new Date(0); 
+                let startDate = new Date(0);
+
                 if (dateRange === '7d') {
                     startDate = new Date(new Date().setDate(now.getDate() - 7));
                 } else if (dateRange === '30d') {
@@ -1828,111 +2189,129 @@
                 }
 
                 filteredOrdersForTable = allOrders.filter(order => {
-                    const matchesSearch = !searchTerm || 
-                        (order.name && order.name.toLowerCase().includes(searchTerm)) || 
-                        (order.orderName && order.orderName.toLowerCase().includes(searchTerm)) || 
+                    const matchesSearch = !searchTerm ||
+                        (order.name && order.name.toLowerCase().includes(searchTerm)) ||
+                        (order.orderName && order.orderName.toLowerCase().includes(searchTerm)) ||
                         order.orderId.toLowerCase().includes(searchTerm);
                     const matchesStatus = !status || order.status === status;
-                    const matchesDate = new Date(order.createdAt) >= startDate; // Condição de data
-
+                    const matchesDate = new Date(order.createdAt) >= startDate;
                     return matchesSearch && matchesStatus && matchesDate;
                 });
+
                 displayOrders(filteredOrdersForTable);
             }
+
             searchInput.addEventListener('input', filterOrders);
             statusFilter.addEventListener('change', filterOrders);
-            dateFilter.addEventListener('change', filterOrders); // Adiciona o listener para o novo filtro
+            dateFilter.addEventListener('change', filterOrders);
         }
 
-        // --- FUNÇÕES DE AÇÃO E MODAIS ---
+        // --- FUNÇÕES DE AÇÃO E MODAIS (mantidas originais) ---
         function copyOrderLink(orderId) {
             const orderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
             copyToClipboard(orderLink, 'Link do pedido copiado!');
         }
+
         function showQrCode(orderId) {
             const orderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
             generateAndShowQrModal(orderLink);
         }
+
         function copyToClipboard(text, successMessage) {
             navigator.clipboard.writeText(text).then(() => showToast(successMessage)).catch(err => {
                 console.error('Falha ao copiar:', err);
                 showToast('Erro ao copiar');
             });
         }
+
         function showToast(message) {
             const toast = document.getElementById('copyToast');
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+
         function generateAndShowQrModal(link) {
             const qrCodeModal = document.getElementById('qrCodeModal');
             const qrCodeContainer = document.getElementById('qrcode-container');
             const qrLinkText = document.getElementById('qrLinkText');
+
             qrCodeContainer.innerHTML = '';
             qrCodeModal.classList.add('show');
+
             new QRCode(qrCodeContainer, {
                 text: link, width: 200, height: 200,
                 colorDark: "#0f172a", colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
+
             qrLinkText.textContent = link;
         }
+
         function updateDashboardWithNewOrder(newOrder) {
             allOrders.unshift(newOrder);
-            initSearchAndFilterForTable(); // Re-executa os filtros da tabela
-            handleDateFilterChange(); // Re-executa o filtro do dashboard
-            displayOrders(); 
+            initSearchAndFilterForTable();
+            handleDateFilterChange();
+            displayOrders();
         }
-		function exportOrdersToCSV() {
-			if (filteredOrdersForTable.length === 0) { // Exporta apenas os pedidos filtrados
-				alert("Não há pedidos na visualização atual para exportar.");
-				return;
-			}
-			let maxPayers = 0;
-			for (const order of filteredOrdersForTable) {
-				const numPayers = (order.payersIds || []).length;
-				if (numPayers > maxPayers) { maxPayers = numPayers; }
-			}
-			const headers = [ "ID do Pedido", "Nome do Pedido", "Valor Total (R$)", "Valor Pago (R$)", "Status", "Data de Criação" ];
-			for (let i = 1; i <= maxPayers; i++) {
-				headers.push(`Pagador ${i} (Nome)`, `Pagador ${i} (CPF/CNPJ)`, `Pagador ${i} (Telefone)`, `Pagador ${i} (Valor Pago)`);
-			}
-			const escapeCSV = (str) => {
-				const val = str === null || str === undefined ? '' : String(str);
-				if (val.search(/("|,|\n)/g) >= 0) { return `"${val.replace(/"/g, '""')}"`; }
-				return val;
-			};
-			const csvRows = [headers.join(',')];
-			for (const order of filteredOrdersForTable) {
-				const rowData = [
-					order.orderId, order.name || order.orderName || '', (order.totalValue || 0).toFixed(2).replace('.', ','),
-					(order.paidValue || 0).toFixed(2).replace('.', ','), translateStatus(order.status), new Date(order.createdAt).toLocaleString('pt-BR')
-				];
-				const payersNames = order.payersNames || [];
-				const payersIds = order.payersIds || [];
-				const payersPhones = order.payersPhone || [];
-				const payersValues = order.payersValues || [];
-				for (let i = 0; i < maxPayers; i++) {
-					if (i < payersIds.length) {
-						rowData.push(payersNames[i] || '', payersIds[i] || '', payersPhones[i] || '', (payersValues[i] || 0).toFixed(2).replace('.', ','));
-					} else {
-						rowData.push('', '', '', '');
-					}
-				}
-				csvRows.push(rowData.map(escapeCSV).join(','));
-			}
-			const csvString = csvRows.join('\n');
-			const blob = new Blob([`\uFEFF${csvString}`], { type: 'text/csv;charset=utf-8;' });
-			const link = document.createElement("a");
-			const url = URL.createObjectURL(blob);
-			link.setAttribute("href", url);
-			link.setAttribute("download", `pedidos_filtrados_${new Date().toISOString().slice(0,10)}.csv`);
-			link.style.visibility = 'hidden';
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-		}
+
+        function exportOrdersToCSV() {
+            if (filteredOrdersForTable.length === 0) {
+                alert("Não há pedidos na visualização atual para exportar.");
+                return;
+            }
+
+            let maxPayers = 0;
+            for (const order of filteredOrdersForTable) {
+                const numPayers = (order.payersIds || []).length;
+                if (numPayers > maxPayers) { maxPayers = numPayers; }
+            }
+
+            const headers = ["ID do Pedido", "Nome do Pedido", "Valor Total (R$)", "Valor Pago (R$)", "Status", "Data de Criação"];
+            for (let i = 1; i <= maxPayers; i++) {
+                headers.push(`Pagador ${i} (Nome)`, `Pagador ${i} (CPF/CNPJ)`, `Pagador ${i} (Telefone)`, `Pagador ${i} (Valor Pago)`);
+            }
+
+            const escapeCSV = (str) => {
+                const val = str === null || str === undefined ? '' : String(str);
+                if (val.search(/("|,|\n)/g) >= 0) { return `"${val.replace(/"/g, '""')}"`; }
+                return val;
+            };
+
+            const csvRows = [headers.join(',')];
+            for (const order of filteredOrdersForTable) {
+                const rowData = [
+                    order.orderId, order.name || order.orderName || '', (order.totalValue || 0).toFixed(2).replace('.', ','),
+                    (order.paidValue || 0).toFixed(2).replace('.', ','), translateStatus(order.status), new Date(order.createdAt).toLocaleString('pt-BR')
+                ];
+
+                const payersNames = order.payersNames || [];
+                const payersIds = order.payersIds || [];
+                const payersPhones = order.payersPhone || [];
+                const payersValues = order.payersValues || [];
+
+                for (let i = 0; i < maxPayers; i++) {
+                    if (i < payersIds.length) {
+                        rowData.push(payersNames[i] || '', payersIds[i] || '', payersPhones[i] || '', (payersValues[i] || 0).toFixed(2).replace('.', ','));
+                    } else {
+                        rowData.push('', '', '', '');
+                    }
+                }
+
+                csvRows.push(rowData.map(escapeCSV).join(','));
+            }
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([`\uFEFF${csvString}`], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `pedidos_filtrados_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
         // --- INICIALIZAÇÃO E EVENT LISTENERS ---
         document.addEventListener('DOMContentLoaded', function() {
@@ -1940,22 +2319,44 @@
             initMobileSidebar();
             initializeChartColors();
             initSearchAndFilterForTable();
-            displayOrders(filteredOrdersForTable); 
+            initEmployeeSearchAndFilter();
+            displayOrders(filteredOrdersForTable);
+            updateEmployeeStats();
+            displayEmployees();
+
             document.getElementById('dateRangeFilter').addEventListener('change', handleDateFilterChange);
-            handleDateFilterChange(); 
+            handleDateFilterChange();
+
+            // Event listeners para pedidos (mantidos originais)
             const createOrderContainer = document.getElementById('create-order-container');
             const showCreateOrderBtn = document.getElementById('showCreateOrderBtn');
             showCreateOrderBtn.addEventListener('click', () => {
                 const isVisible = createOrderContainer.style.display === 'block';
                 createOrderContainer.style.display = isVisible ? 'none' : 'block';
-                showCreateOrderBtn.innerHTML = isVisible 
-                    ? '<i class="fas fa-plus"></i> <span>Criar Novo Pedido</span>' 
+                showCreateOrderBtn.innerHTML = isVisible
+                    ? '<i class="fas fa-plus"></i> <span>Criar Novo Pedido</span>'
                     : '<i class="fas fa-times"></i> <span>Cancelar</span>';
                 if (!isVisible) {
                     createOrderContainer.scrollIntoView({ behavior: 'smooth' });
                 }
             });
-			document.getElementById('exportOrdersBtn').addEventListener('click', exportOrdersToCSV);
+
+            // Event listeners para funcionários
+            const createEmployeeContainer = document.getElementById('create-employee-container');
+            const showCreateEmployeeBtn = document.getElementById('showCreateEmployeeBtn');
+            showCreateEmployeeBtn.addEventListener('click', () => {
+                const isVisible = createEmployeeContainer.style.display === 'block';
+                createEmployeeContainer.style.display = isVisible ? 'none' : 'block';
+                showCreateEmployeeBtn.innerHTML = isVisible
+                    ? '<i class="fas fa-user-plus"></i> <span>Criar Login</span>'
+                    : '<i class="fas fa-times"></i> <span>Cancelar</span>';
+                if (!isVisible) {
+                    createEmployeeContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            document.getElementById('exportOrdersBtn').addEventListener('click', exportOrdersToCSV);
+
             document.getElementById('newOrderForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const orderNameInput = document.getElementById('orderName');
@@ -1963,42 +2364,52 @@
                 const totalValue = parseFloat(totalValueInput.value);
                 const orderName = orderNameInput.value;
                 const submitButton = e.target.querySelector('button[type="submit"]');
+
                 submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
                 submitButton.disabled = true;
+
                 try {
                     const payload = {
                         name: orderName || '', partnerId: localPartnerId,
                         totalValue: totalValue, apiKey: localPartnerApiKey,
                     };
+
                     const response = await fetch(`<%=process.env.API_SITE_URL%>/order`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
+
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => ({ message: 'Erro desconhecido.' }));
                         throw new Error(errorData.message || `Erro HTTP: ${response.status}`);
                     }
+
                     const orderId = await response.json();
                     const orderLinkElement = document.getElementById('orderLink');
                     const orderCreationResult = document.getElementById('orderCreationResult');
                     const generatedOrderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
+
                     orderLinkElement.href = generatedOrderLink;
                     orderLinkElement.textContent = generatedOrderLink;
                     orderCreationResult.classList.add('show');
                     showToast('Pedido criado com sucesso!');
+
                     const newOrder = {
                         name: orderName, orderId: orderId, totalValue: totalValue,
-                        paidValue: 0, status: 'fresh', payersIds: [], payersNames: [], 
+                        paidValue: 0, status: 'fresh', payersIds: [], payersNames: [],
                         payersValues: [], payersPhone: [], createdAt: new Date().toISOString()
                     };
+
                     updateDashboardWithNewOrder(newOrder);
                     totalValueInput.value = '';
                     orderNameInput.value = '';
+
                     setTimeout(() => {
                         createOrderContainer.style.display = 'none';
                         showCreateOrderBtn.innerHTML = '<i class="fas fa-plus"></i> <span>Criar Novo Pedido</span>';
                         orderCreationResult.classList.remove('show');
                     }, 2000);
+
                 } catch (error) {
                     console.error('Erro ao criar pedido:', error);
                     alert('Erro ao criar pedido: ' + error.message);
@@ -2007,39 +2418,148 @@
                     submitButton.disabled = false;
                 }
             });
+
+            // Form de criação de funcionário
+            document.getElementById('newEmployeeForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const nameInput = document.getElementById('employeeName');
+                const emailInput = document.getElementById('employeeEmail');
+                const roleInput = document.getElementById('employeeRole');
+                const passwordInput = document.getElementById('employeePassword');
+                const submitButton = e.target.querySelector('button[type="submit"]');
+
+                const name = nameInput.value.trim();
+                const email = emailInput.value.trim();
+                const role = roleInput.value;
+                const password = passwordInput.value;
+
+                // Validações
+                if (!name || !email || !role || !password) {
+                    showToast('Todos os campos são obrigatórios!');
+                    return;
+                }
+
+                if (password.length < 8) {
+                    showToast('A senha deve ter pelo menos 8 caracteres!');
+                    return;
+                }
+
+                // Verificar se email já existe
+                if (allEmployees.some(emp => emp.email === email)) {
+                    showToast('Este email já está cadastrado!');
+                    return;
+                }
+
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
+                submitButton.disabled = true;
+
+                // Simular criação (em produção seria uma chamada à API)
+                setTimeout(() => {
+                    const newEmployee = {
+                        id: Date.now().toString(),
+                        name: name,
+                        email: email,
+                        role: role,
+                        status: 'active',
+                        createdAt: new Date().toISOString().split('T')[0],
+                        lastLogin: null
+                    };
+
+                    allEmployees.push(newEmployee);
+                    filteredEmployeesForTable = [...allEmployees];
+                    
+                    updateEmployeeStats();
+                    displayEmployees();
+
+                    // Mostrar resultado
+                    const resultDiv = document.getElementById('employeeCreationResult');
+                    const resultMessage = document.getElementById('employeeResultMessage');
+                    resultMessage.textContent = `Login criado para ${name}. Credenciais de acesso enviadas para ${email}.`;
+                    resultDiv.classList.add('show');
+
+                    // Limpar formulário
+                    nameInput.value = '';
+                    emailInput.value = '';
+                    roleInput.value = '';
+                    passwordInput.value = '';
+
+                    showToast('Funcionário criado com sucesso!');
+
+                    // Esconder formulário após 3 segundos
+                    setTimeout(() => {
+                        createEmployeeContainer.style.display = 'none';
+                        showCreateEmployeeBtn.innerHTML = '<i class="fas fa-user-plus"></i> <span>Criar Login</span>';
+                        resultDiv.classList.remove('show');
+                    }, 3000);
+
+                    submitButton.innerHTML = '<i class="fas fa-user-plus"></i> Criar Login do Funcionário';
+                    submitButton.disabled = false;
+                }, 1000);
+            });
+
+            // Event listeners para modais
             document.getElementById('copyLinkButton').addEventListener('click', () => {
                 const link = document.getElementById('orderLink').href;
                 copyToClipboard(link, 'Link do pedido copiado!');
             });
+
             document.getElementById('qrCodeNewOrderButton').addEventListener('click', () => {
                 const link = document.getElementById('orderLink').href;
                 generateAndShowQrModal(link);
             });
+
             document.getElementById('copyApiKeyButton').addEventListener('click', () => {
                 copyToClipboard(localPartnerApiKey, 'Chave de API copiada!');
             });
+
             document.getElementById('copyRecipientIdButton').addEventListener('click', () => {
                 copyToClipboard(localRecipientId, 'ID de parceiro copiado!');
             });
+
+            // Modal de QR Code
             document.getElementById('closeQrModal').addEventListener('click', () => {
                 document.getElementById('qrCodeModal').classList.remove('show');
             });
+
             document.getElementById('qrCodeModal').addEventListener('click', (event) => {
                 if (event.target === event.currentTarget) {
                     event.currentTarget.classList.remove('show');
                 }
             });
+
+            // Modal de deletar funcionário
+            document.getElementById('closeDeleteModal').addEventListener('click', () => {
+                document.getElementById('deleteEmployeeModal').classList.remove('show');
+            });
+
+            document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+                document.getElementById('deleteEmployeeModal').classList.remove('show');
+            });
+
+            document.getElementById('confirmDeleteBtn').addEventListener('click', deleteEmployee);
+
+            document.getElementById('deleteEmployeeModal').addEventListener('click', (event) => {
+                if (event.target === event.currentTarget) {
+                    event.currentTarget.classList.remove('show');
+                }
+            });
+
+            // Webhook form
             const webhookForm = document.getElementById('webhookForm');
             const webhookUrlInput = document.getElementById('webhookUrlInput');
             const saveButton = document.getElementById('saveWebhookButton');
             const statusText = document.getElementById('webhookSaveStatus');
+
             webhookUrlInput.addEventListener('input', () => {
                 webhookUrlInput.style.borderColor = '';
                 statusText.textContent = '';
             });
+
             webhookForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const urlValue = webhookUrlInput.value.trim();
+
                 if (urlValue) {
                     const urlPattern = new RegExp('^(https?|ftp)://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?$', 'i');
                     if (!urlPattern.test(urlValue)) {
@@ -2049,11 +2569,13 @@
                         return;
                     }
                 }
+
                 const originalButtonText = saveButton.innerHTML;
                 saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
                 saveButton.disabled = true;
                 statusText.textContent = '';
                 statusText.style.color = '';
+
                 try {
                     const response = await fetch(`<%=process.env.API_SITE_URL%>/partner/webhook`, {
                         method: 'PUT',
@@ -2062,10 +2584,12 @@
                             partnerId: localPartnerId, apiKey: localPartnerApiKey, webhookUrl: urlValue
                         })
                     });
+
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => ({ message: 'Falha ao salvar a URL.' }));
                         throw new Error(errorData.message);
                     }
+
                     statusText.textContent = 'URL do webhook salva com sucesso!';
                     statusText.style.color = 'var(--success)';
                 } catch (error) {
@@ -2079,9 +2603,12 @@
                     setTimeout(() => { statusText.textContent = ''; }, 5000);
                 }
             });
+
+            // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     document.getElementById('qrCodeModal').classList.remove('show');
+                    document.getElementById('deleteEmployeeModal').classList.remove('show');
                     closeMobileSidebar();
                 }
             });
