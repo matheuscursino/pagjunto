@@ -72,7 +72,7 @@ app.get('/dashboard', (req, res) => {
             axios.get(`${process.env.API_SITE_URL}/partner`, {
                 // Nota: Para GET, o correto é usar 'params', não 'data'.
                 // Se sua API não funcionar com 'data', mude para 'params'.
-                params: {
+                data: {
                     partnerId: decoded.partnerId
                 }
             }).then((response) => {
@@ -93,7 +93,7 @@ app.get('/dashboard', (req, res) => {
 
                 // A segunda chamada agora usa o ID correto para buscar os pedidos
                 axios.get(`${process.env.API_SITE_URL}/order/by-partner`, {
-                    params: {
+                    data: {
                         partnerId: idParaBuscaDePedidos // Usa a variável com o ID correto
                     }
                 }).then((response2) => {
@@ -111,7 +111,7 @@ app.get('/dashboard', (req, res) => {
                     
                     // Se for o parceiro principal, continua para buscar o saldo
                     axios.get(`${process.env.API_SITE_URL}/partner/balance`, {
-                        params: {
+                        data: {
                             recipient_id: partnerData.recipient_id
                         }
                     }).then((response3)=> {
@@ -140,13 +140,13 @@ app.get('/dashboard', (req, res) => {
 
 app.get('/:partnerId/:orderId', (req, res) => {
     axios.get('https://api.pagjunto.com/v1/partner', {
-        params: {
+        data: {
             'partnerId': req.params.partnerId
         }
     }).then((response) => {
         var partnerData = response.data
         axios.get('https://api.pagjunto.com/v1/order', {
-            params: {
+            data: {
                 orderId: req.params.orderId
             }
         }).then((response2) => {
