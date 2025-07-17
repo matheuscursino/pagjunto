@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     
@@ -274,6 +275,20 @@
         }
 
         /* Overview Section */
+        .dashboard-filter-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 24px;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .dashboard-filter-bar label {
+            font-weight: 500;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+        }
+        
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -332,7 +347,7 @@
 
         .charts-container {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Alterado para grid responsivo 2x2 */
             gap: 24px;
             margin-bottom: 32px;
         }
@@ -751,7 +766,7 @@
             padding: 16px 20px;
             border-radius: var(--radius-lg);
             font-weight: 500;
-            transform: translateX(100%);
+            transform: translateX(calc(100% + 20px));
             transition: transform 0.3s ease;
             z-index: 200;
         }
@@ -1073,240 +1088,6 @@
             .mobile-orders-container {
                 display: block;
             }
-
-            .mobile-order-card {
-                background: white;
-                border: 1px solid var(--gray-200);
-                border-radius: var(--radius-lg);
-                padding: 16px;
-                margin-bottom: 12px;
-                box-shadow: var(--shadow-sm);
-            }
-
-            .mobile-order-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                margin-bottom: 12px;
-            }
-
-            .mobile-order-info h4 {
-                font-size: 0.875rem;
-                font-weight: 600;
-                color: var(--gray-900);
-                margin-bottom: 4px;
-            }
-
-            .mobile-order-info .order-id {
-                font-size: 0.75rem;
-                color: var(--gray-500);
-                font-family: 'SF Mono', Consolas, monospace;
-            }
-
-            .mobile-order-details {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-                margin-bottom: 16px;
-            }
-
-            .mobile-detail-item {
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .mobile-detail-label {
-                font-size: 0.75rem;
-                color: var(--gray-500);
-                font-weight: 500;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-
-            .mobile-detail-value {
-                font-size: 0.875rem;
-                color: var(--gray-900);
-                font-weight: 500;
-            }
-
-            .mobile-order-actions {
-                display: flex;
-                gap: 8px;
-                flex-wrap: wrap;
-                margin-bottom: 12px;
-            }
-
-            .mobile-order-actions .action-btn {
-                flex: 1;
-                min-width: 0;
-                justify-content: center;
-                padding: 10px 12px;
-            }
-
-            .mobile-order-details-section {
-                border-top: 1px solid var(--gray-200);
-                padding-top: 12px;
-                margin-top: 12px;
-                display: none;
-            }
-
-            .mobile-order-details-section.expanded {
-                display: block;
-            }
-
-            .mobile-payers-list {
-                list-style: none;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                margin-top: 8px;
-            }
-
-            .mobile-payer-item {
-                background: var(--gray-50);
-                padding: 12px;
-                border-radius: var(--radius);
-                border: 1px solid var(--gray-200);
-            }
-
-            .mobile-payer-name {
-                font-weight: 500;
-                color: var(--gray-900);
-                margin-bottom: 4px;
-            }
-
-            .mobile-payer-id {
-                font-size: 0.75rem;
-                color: var(--gray-500);
-                font-family: 'SF Mono', Consolas, monospace;
-                margin-bottom: 4px;
-            }
-
-            .mobile-payer-amount {
-                font-weight: 600;
-                color: var(--success);
-            }
-
-            .mobile-toggle-details {
-                width: 100%;
-                background: var(--gray-100);
-                border: 1px solid var(--gray-200);
-                border-radius: var(--radius);
-                padding: 10px;
-                color: var(--gray-700);
-                font-size: 0.875rem;
-                font-weight: 500;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .mobile-toggle-details:hover {
-                background: var(--gray-200);
-            }
-        }
-
-        @media (min-width: 769px) {
-            .mobile-orders-container {
-                display: none;
-            }
-        }
-
-        /* Touch-friendly improvements */
-        @media (hover: none) and (pointer: coarse) {
-            .nav-item, .action-btn, .btn {
-                min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .stat-card {
-                padding: 20px;
-            }
-
-            .form-input {
-                padding: 16px;
-                font-size: 16px; /* Prevents zoom on iOS */
-            }
-        }
-
-        /* Details Row Styles */
-        .details-row {
-            display: none;
-        }
-
-        .details-row.expanded {
-            display: table-row;
-        }
-
-        .details-content {
-            background: var(--gray-50);
-            padding: 20px;
-            border-radius: var(--radius-lg);
-            margin: 12px;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .detail-label {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--gray-500);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .detail-value {
-            font-size: 0.875rem;
-            color: var(--gray-900);
-        }
-
-        .payers-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .payer-item {
-            background: white;
-            padding: 12px;
-            border-radius: var(--radius);
-            border: 1px solid var(--gray-200);
-        }
-
-        .payer-name {
-            font-weight: 500;
-            color: var(--gray-900);
-            margin-bottom: 4px;
-        }
-
-        .payer-id {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-            font-family: 'SF Mono', Consolas, monospace;
-            margin-bottom: 4px;
-        }
-
-        .payer-amount {
-            font-weight: 600;
-            color: var(--success);
         }
     </style>
 </head>
@@ -1369,139 +1150,137 @@
                     <p class="page-subtitle" id="pageSubtitle">Dashboard executivo da sua conta</p>
                 </div>
                 <div class="header-actions">
-                    </div>
+                </div>
             </header>
 
             <div class="content-area">
                 <section class="content-section active" id="overview-section">
+                    
+                    <div class="dashboard-filter-bar">
+                        <label for="dateRangeFilter">Mostrar dados de:</label>
+                        <select id="dateRangeFilter" class="filter-select">
+                            <option value="all">Todo o período</option>
+                            <option value="7d">Últimos 7 dias</option>
+                            <option value="30d" selected>Últimos 30 dias</option>
+                            <option value="90d">Últimos 90 dias</option>
+                            <option value="this_month">Este mês</option>
+                        </select>
+                    </div>
+
                     <div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Saldo da Conta</span>
-            <div class="stat-icon">
-                <i class="fas fa-wallet"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="accountBalanceValue">R$ 0,00</div>
-        <div class="stat-description">Disponível + A receber</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Vendas Totais</span>
-            <div class="stat-icon">
-                <i class="fas fa-chart-line"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="totalSalesValue">R$ 0,00</div>
-        <div class="stat-description">Valor bruto de todos os pedidos</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Valor Recebido</span>
-            <div class="stat-icon">
-                <i class="fas fa-money-bill-wave"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="totalPaidValue">R$ 0,00</div>
-        <div class="stat-description">Valor já pago pelos clientes</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Total de Pedidos</span>
-            <div class="stat-icon">
-                <i class="fas fa-box"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="totalOrdersValue">0</div>
-        <div class="stat-description">Pedidos criados</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Pedidos Pagos</span>
-            <div class="stat-icon">
-                <i class="fas fa-check-double"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="paidOrdersValue">0</div>
-        <div class="stat-description">Finalizados com sucesso</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Pedidos Novos</span>
-            <div class="stat-icon">
-                <i class="fas fa-plus-square"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="freshOrdersValue">0</div>
-        <div class="stat-description">Aguardando pagamento</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Pedidos em Progresso</span>
-            <div class="stat-icon">
-                <i class="fas fa-clock"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="progressOrdersValue">0</div>
-        <div class="stat-description">Pagamento parcial</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Ticket Médio</span>
-            <div class="stat-icon">
-                <i class="fas fa-calculator"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="averageTicketValue">R$ 0,00</div>
-        <div class="stat-description">Valor médio por pedido</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Taxa de Conversão</span>
-            <div class="stat-icon">
-                <i class="fas fa-bullseye"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="conversionRateValue">0%</div>
-        <div class="stat-description">% de pedidos pagos</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-title">Total de Pagadores</span>
-            <div class="stat-icon">
-                <i class="fas fa-users"></i>
-            </div>
-        </div>
-        <div class="stat-value" id="totalPayersValue">0</div>
-        <div class="stat-description">Clientes únicos</div>
-    </div>
-</div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Saldo da Conta</span>
+                                <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                            </div>
+                            <div class="stat-value" id="accountBalanceValue">R$ 0,00</div>
+                            <div class="stat-description">Disponível + A receber</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Vendas Totais</span>
+                                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                            </div>
+                            <div class="stat-value" id="totalSalesValue">R$ 0,00</div>
+                            <div class="stat-description">Valor bruto no período</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Valor Recebido</span>
+                                <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                            </div>
+                            <div class="stat-value" id="totalPaidValue">R$ 0,00</div>
+                            <div class="stat-description">Valor pago no período</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Total de Pedidos</span>
+                                <div class="stat-icon"><i class="fas fa-box"></i></div>
+                            </div>
+                            <div class="stat-value" id="totalOrdersValue">0</div>
+                            <div class="stat-description">Pedidos criados no período</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Pedidos Pagos</span>
+                                <div class="stat-icon"><i class="fas fa-check-double"></i></div>
+                            </div>
+                            <div class="stat-value" id="paidOrdersValue">0</div>
+                            <div class="stat-description">Finalizados no período</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Pedidos Novos</span>
+                                <div class="stat-icon"><i class="fas fa-plus-square"></i></div>
+                            </div>
+                            <div class="stat-value" id="freshOrdersValue">0</div>
+                            <div class="stat-description">Aguardando pag. no período</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Pedidos em Progresso</span>
+                                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            </div>
+                            <div class="stat-value" id="progressOrdersValue">0</div>
+                            <div class="stat-description">Pagamento parcial no período</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Ticket Médio</span>
+                                <div class="stat-icon"><i class="fas fa-calculator"></i></div>
+                            </div>
+                            <div class="stat-value" id="averageTicketValue">R$ 0,00</div>
+                            <div class="stat-description">Valor médio por pedido no período</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Taxa de Conversão</span>
+                                <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                            </div>
+                            <div class="stat-value" id="conversionRateValue">0%</div>
+                            <div class="stat-description">% de pedidos pagos no período</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-title">Total de Pagadores</span>
+                                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                            </div>
+                            <div class="stat-value" id="totalPayersValue">0</div>
+                            <div class="stat-description">Clientes únicos no período</div>
+                        </div>
+                    </div>
 
                     <div class="charts-container">
                         <div class="chart-card">
                             <div class="chart-header">
-                                <h3 class="chart-title">Tendência de Vendas</h3>
+                                <h3 class="chart-title">Tendência de Vendas Mensal</h3>
                             </div>
                             <div class="chart-container">
                                 <canvas id="salesChart"></canvas>
                             </div>
                         </div>
-
                         <div class="chart-card">
                             <div class="chart-header">
                                 <h3 class="chart-title">Status dos Pedidos</h3>
                             </div>
                             <div class="chart-container">
                                 <canvas id="statusChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Vendas por Dia</h3>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="dailySalesChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Conversão de Pedidos</h3>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="conversionTrendChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -1517,10 +1296,17 @@
                                 <option value="progress">Em Progresso</option>
                                 <option value="paid">Pago</option>
                             </select>
+                            <select class="filter-select" id="orderDateFilter">
+                                <option value="all">Todas as datas</option>
+                                <option value="7d">Últimos 7 dias</option>
+                                <option value="30d">Últimos 30 dias</option>
+                                <option value="90d">Últimos 90 dias</option>
+                                <option value="this_month">Este mês</option>
+                            </select>
                             <button id="exportOrdersBtn" class="btn btn-secondary" style="padding: 8px 16px;">
-								<i class="fas fa-file-export"></i>
-								<span>Exportar</span>
-							</button>
+                                <i class="fas fa-file-export"></i>
+                                <span>Exportar</span>
+                            </button>
                         </div>
                         <div class="header-actions">
                             <button id="showCreateOrderBtn" class="btn btn-primary">
@@ -1536,24 +1322,20 @@
                                 <h2 class="form-title">Criar Novo Pedido</h2>
                                 <p class="form-subtitle">Gere um novo pedido de pagamento para seus clientes</p>
                             </div>
-    
                             <form id="newOrderForm">
                                 <div class="form-group">
                                     <label for="orderName" class="form-label">Nome do Pedido (Opcional)</label>
                                     <input type="text" id="orderName" name="orderName" class="form-input" placeholder="Ex: Pedido mesa 7">
                                 </div>
-    
                                 <div class="form-group">
                                     <label for="totalValue" class="form-label">Valor Total do Pedido</label>
                                     <input type="number" id="totalValue" name="totalValue" class="form-input" step="0.01" min="0.01" required placeholder="Ex: 150.00">
                                 </div>
-    
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-plus"></i>
                                     Gerar Pedido de Pagamento
                                 </button>
                             </form>
-    
                             <div id="orderCreationResult" class="order-result">
                                 <div class="result-header">Pedido criado com sucesso!</div>
                                 <a id="orderLink" href="#" target="_blank" class="result-link"></a>
@@ -1596,7 +1378,6 @@
                             <h3 class="settings-title">Chave de API</h3>
                             <p class="settings-description">Use esta chave para integrar seus sistemas com nossa plataforma. Mantenha-a segura.</p>
                         </div>
-                        
                         <div class="api-key-container">
                             <input type="text" id="apiKeyInput" class="form-input api-key-input"
                                    value="<%= partnerData.apiKey.substring(0, 8) + '••••••••••••••••••••' + partnerData.apiKey.substring(partnerData.apiKey.length - 4) %>"
@@ -1607,13 +1388,11 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="settings-card">
                         <div class="settings-header">
                             <h3 class="settings-title">ID de parceiro (partnerId)</h3>
                             <p class="settings-description">Este é o seu identificador de parceiro Pagjunto.</p>
                         </div>
-                        
                         <div class="api-key-container">
                             <input type="text" id="recipientIdInput" class="form-input api-key-input"
                                    value="<%= partnerData.partnerId %>"
@@ -1624,13 +1403,11 @@
                             </button>
                         </div>
                     </div>
-                    
                     <div class="settings-card">
                         <div class="settings-header">
                             <h3 class="settings-title">Configurar Webhook</h3>
                             <p class="settings-description">Informe uma URL para receber notificações automáticas sempre que um pedido for totalmente pago.</p>
                         </div>
-                        
                         <form id="webhookForm">
                             <div class="api-key-container">
                                 <input type="url" id="webhookUrlInput" class="form-input api-key-input"
@@ -1666,56 +1443,50 @@
         const localPartnerId = "<%= partnerData.partnerId %>";
         const localPartnerApiKey = "<%= partnerData.apiKey %>";
         const localRecipientId = "<%= partnerData.recipient_id %>";
-        const stats = <%- JSON.stringify(stats || {}) %>;
-        const recentOrders = <%- JSON.stringify(orders || []) %>;
+        const allOrders = <%- JSON.stringify(orders || []) %>;
         const balance = <%- JSON.stringify(balance || { data: {} }) %>;
 
-        let salesChart, statusChart;
-        let filteredOrders = [...recentOrders];
+        allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        // Navigation
+        let filteredOrdersForTable = [...allOrders];
+
+        let salesChart, statusChart, dailySalesChart, conversionTrendChart;
+        let chartColors = {};
+
+        // --- FUNÇÕES DE NAVEGAÇÃO E UI ---
         function initNavigation() {
             const navItems = document.querySelectorAll('.nav-item');
             const sections = document.querySelectorAll('.content-section');
             const pageTitle = document.getElementById('pageTitle');
             const pageSubtitle = document.getElementById('pageSubtitle');
-
             const sectionTitles = {
                 overview: { title: 'Visão Geral', subtitle: 'Dashboard executivo da sua conta' },
                 orders: { title: 'Pedidos', subtitle: 'Gerencie e acompanhe seus pedidos de pagamento' },
                 settings: { title: 'Configurações', subtitle: 'Gerencie suas configurações de conta' }
             };
-
             navItems.forEach(item => {
                 item.addEventListener('click', () => {
                     const targetSection = item.dataset.section;
-                    
                     navItems.forEach(nav => nav.classList.remove('active'));
                     item.classList.add('active');
-                    
                     sections.forEach(section => section.classList.remove('active'));
                     document.getElementById(`${targetSection}-section`).classList.add('active');
-                    
                     const titleData = sectionTitles[targetSection];
                     pageTitle.textContent = titleData.title;
                     pageSubtitle.textContent = titleData.subtitle;
-
                     closeMobileSidebar();
                 });
             });
         }
 
-        // Mobile Sidebar
         function initMobileSidebar() {
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
-
             sidebarToggle.addEventListener('click', () => {
                 sidebar.classList.add('open');
                 sidebarOverlay.style.display = 'block';
             });
-
             sidebarOverlay.addEventListener('click', closeMobileSidebar);
         }
 
@@ -1726,178 +1497,258 @@
             sidebarOverlay.style.display = 'none';
         }
 
-        // Utility Functions
+        // --- FUNÇÕES UTILITÁRIAS ---
         function formatCurrency(value) {
             const numValue = typeof value === 'string' ? parseFloat(value) : value;
             if (isNaN(numValue)) return 'R$ 0,00';
             return numValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
-
         function formatCurrencyFromCents(cents) {
             const reais = (Number(cents) || 0) / 100;
             return formatCurrency(reais);
         }
-
         function formatNumber(value) {
             const numValue = Number(value);
             if (isNaN(numValue)) return '0';
             return numValue.toLocaleString('pt-BR');
         }
-
         function translateStatus(status) {
-            const translations = {
-                fresh: 'Nova',
-                progress: 'Em Progresso',
-                paid: 'Pago'
-            };
+            const translations = { fresh: 'Nova', progress: 'Em Progresso', paid: 'Pago' };
             return translations[status] || status;
         }
-
         function maskCPF(cpf) {
             if (!cpf || typeof cpf !== 'string') return 'N/A';
             const cleanCpf = cpf.replace(/\D/g, '');
             if (cleanCpf.length !== 11) return cpf;
             return `${cleanCpf.substring(0, 3)}.***.***-${cleanCpf.substring(9, 12)}`;
         }
-
-        function updateDashboardDisplay() {
+        
+        // --- LÓGICA DE CORES DINÂMICAS ---
+        function getCssVariable(variable) {
+          return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+        }
+        function initializeChartColors() {
+            chartColors = {
+                accent: getCssVariable('--accent'),
+                accentLight: getCssVariable('--accent-light'),
+                accentTransparent: getCssVariable('--accent').replace(')', ', 0.1)').replace('rgb', 'rgba'),
+                success: getCssVariable('--success'),
+                warning: getCssVariable('--warning'),
+                gray400: getCssVariable('--gray-400'),
+                white: '#ffffff',
+                gridColor: getCssVariable('--gray-100'),
+                textColor: getCssVariable('--gray-500'),
+                legendColor: getCssVariable('--gray-600')
+            };
+        }
+        
+        // --- LÓGICA DE ATUALIZAÇÃO DO DASHBOARD ---
+        function updateDashboard(orders) {
+            updateStatsCards(orders);
+            updateAllCharts(orders);
+        }
+        function updateStatsCards(orders) {
+            const stats = orders.reduce((acc, order) => {
+                acc.totalValue += order.totalValue || 0;
+                acc.paidValue += order.paidValue || 0;
+                if (order.status === 'paid') acc.paidOrders += 1;
+                if (order.status === 'fresh') acc.freshOrders += 1;
+                if (order.status === 'progress') acc.progressOrders += 1;
+                if (Array.isArray(order.payersIds)) {
+                     order.payersIds.forEach(id => acc.uniquePayers.add(id));
+                }
+                return acc;
+            }, { 
+                totalValue: 0, paidValue: 0, paidOrders: 0, freshOrders: 0, 
+                progressOrders: 0, uniquePayers: new Set()
+            });
+            const totalOrders = orders.length;
             const totalBalanceCents = (balance.data.available_amount || 0) + (balance.data.waiting_funds_amount || 0);
             document.getElementById('accountBalanceValue').textContent = formatCurrencyFromCents(totalBalanceCents);
-            document.getElementById('totalSalesValue').textContent = formatCurrency(stats.totalValue || 0);
-            document.getElementById('totalPaidValue').textContent = formatCurrency(stats.paidValue || 0);
-            document.getElementById('totalOrdersValue').textContent = formatNumber(stats.totalOrders || 0);
-            document.getElementById('paidOrdersValue').textContent = formatNumber(stats.paidOrders || 0);
-            document.getElementById('freshOrdersValue').textContent = formatNumber(stats.freshOrders || 0);
-            document.getElementById('progressOrdersValue').textContent = formatNumber(stats.progressOrders || 0);
-            const conversionRate = (stats.totalOrders > 0) ? (stats.paidOrders / stats.totalOrders) * 100 : 0;
-            document.getElementById('conversionRateValue').textContent = conversionRate.toFixed(1).replace('.', ',') + '%';
-            const averageTicket = (stats.totalOrders > 0) ? (stats.totalValue / stats.totalOrders) : 0;
+            document.getElementById('totalSalesValue').textContent = formatCurrency(stats.totalValue);
+            document.getElementById('totalPaidValue').textContent = formatCurrency(stats.paidValue);
+            document.getElementById('totalOrdersValue').textContent = formatNumber(totalOrders);
+            document.getElementById('paidOrdersValue').textContent = formatNumber(stats.paidOrders);
+            document.getElementById('freshOrdersValue').textContent = formatNumber(stats.freshOrders);
+            document.getElementById('progressOrdersValue').textContent = formatNumber(stats.progressOrders);
+            const conversionRate = totalOrders > 0 ? (stats.paidOrders / totalOrders) * 100 : 0;
+            document.getElementById('conversionRateValue').textContent = `${conversionRate.toFixed(1).replace('.', ',')}%`;
+            const averageTicket = totalOrders > 0 ? (stats.totalValue / totalOrders) : 0;
             document.getElementById('averageTicketValue').textContent = formatCurrency(averageTicket);
-            const uniquePayers = new Set();
-            recentOrders.forEach(order => {
-                if (Array.isArray(order.payersIds)) {
-                    order.payersIds.forEach(id => uniquePayers.add(id));
-                }
-            });
-            document.getElementById('totalPayersValue').textContent = formatNumber(uniquePayers.size);
-            updateSalesChart();
-            updateStatusChart();
+            document.getElementById('totalPayersValue').textContent = formatNumber(stats.uniquePayers.size);
         }
-
-        function calculateMonthlySalesData(orders) {
-            const monthlyData = {};
-            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-            const currentMonth = new Date().getMonth();
-            const currentYear = new Date().getFullYear();
-            const labels = [];
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date(currentYear, currentMonth - i, 1);
-                const monthName = months[date.getMonth()];
-                labels.push(monthName);
-                monthlyData[monthName] = 0;
-            }
-            orders.forEach((order) => {
-                if (order.createdAt && order.totalValue) {
-                    const orderDate = new Date(order.createdAt);
-                    const monthName = months[orderDate.getMonth()];
-                    if (monthlyData.hasOwnProperty(monthName)) {
-                        monthlyData[monthName] += order.totalValue;
+        function updateAllCharts(orders) {
+            updateSalesChart(orders);
+            updateStatusChart(orders);
+            updateDailySalesChart(orders);
+            updateConversionTrendChart(orders);
+        }
+        function getChartConfig() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: chartColors.gridColor },
+                        ticks: { color: chartColors.textColor }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: chartColors.textColor }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: chartColors.legendColor,
+                            usePointStyle: true,
+                            boxWidth: 8,
+                        }
                     }
                 }
-            });
-            const data = labels.map(label => monthlyData[label]);
-            return { labels, data };
+            };
         }
-
-        function updateSalesChart() {
+        function updateSalesChart(orders) {
             const ctx = document.getElementById('salesChart').getContext('2d');
-            const monthlySales = calculateMonthlySalesData(recentOrders);
-            if (salesChart) {
-                salesChart.destroy();
-            }
+            const monthlyData = orders.reduce((acc, order) => {
+                const date = new Date(order.createdAt);
+                const month = new Date(date.getFullYear(), date.getMonth()).toISOString();
+                acc[month] = (acc[month] || 0) + (order.totalValue || 0);
+                return acc;
+            }, {});
+            const labels = Object.keys(monthlyData).sort();
+            const data = labels.map(label => monthlyData[label]);
+            if (salesChart) salesChart.destroy();
             salesChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: monthlySales.labels,
+                    labels: labels,
                     datasets: [{
                         label: 'Vendas Totais (R$)',
-                        data: monthlySales.data,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        data: data,
+                        borderColor: chartColors.accent,
+                        backgroundColor: chartColors.accentTransparent,
                         tension: 0.4,
                         fill: true,
-                        borderWidth: 2,
-                        pointBackgroundColor: '#3b82f6',
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 2,
-                        pointRadius: 4
+                        pointBackgroundColor: chartColors.accent,
+                        pointBorderColor: chartColors.white,
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { callback: value => formatCurrency(value) },
-                            grid: { color: '#f1f5f9' }
-                        },
-                        x: { grid: { color: '#f1f5f9' } }
-                    }
-                }
+                options: { ...getChartConfig(), scales: {...getChartConfig().scales, x: { type: 'time', time: { unit: 'month', displayFormats: { month: 'MMM/yy' } }, ...getChartConfig().scales.x } }, plugins: { legend: { display: false } } }
             });
         }
-
-        function updateStatusChart() {
+        function updateStatusChart(orders) {
             const ctx = document.getElementById('statusChart').getContext('2d');
-            const statusData = [stats.freshOrders || 0, stats.progressOrders || 0, stats.paidOrders || 0];
-            if (statusChart) {
-                statusChart.destroy();
-            }
+            const statusCounts = orders.reduce((acc, order) => {
+                acc[order.status] = (acc[order.status] || 0) + 1;
+                return acc;
+            }, {});
+            if (statusChart) statusChart.destroy();
             statusChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: ['Novos', 'Em Progresso', 'Pagos'],
                     datasets: [{
-                        data: statusData,
-                        backgroundColor: ['#94a3b8', '#f59e0b', '#10b981'],
-                        borderColor: '#ffffff',
-                        borderWidth: 2
+                        data: [statusCounts.fresh || 0, statusCounts.progress || 0, statusCounts.paid || 0],
+                        backgroundColor: [chartColors.gray400, chartColors.warning, chartColors.success],
+                        borderColor: chartColors.white,
+                        borderWidth: 4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '60%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                usePointStyle: true,
-                                boxWidth: 6,
-                                padding: 15,
-                                font: { size: 12 }
-                            }
-                        }
-                    }
+                    cutout: '70%',
+                    plugins: { legend: { position: 'bottom', ...getChartConfig().plugins.legend } }
                 }
             });
         }
+        function updateDailySalesChart(orders) {
+            const ctx = document.getElementById('dailySalesChart').getContext('2d');
+            const dailyData = orders.reduce((acc, order) => {
+                const day = new Date(order.createdAt).toISOString().split('T')[0];
+                acc[day] = (acc[day] || 0) + (order.totalValue || 0);
+                return acc;
+            }, {});
+            const labels = Object.keys(dailyData).sort();
+            const data = labels.map(label => dailyData[label]);
+            if (dailySalesChart) dailySalesChart.destroy();
+            dailySalesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Faturamento Diário (R$)',
+                        data: data,
+                        backgroundColor: chartColors.accentLight,
+                        borderColor: chartColors.accent,
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: { ...getChartConfig(), scales: {...getChartConfig().scales, x: { type: 'time', time: { unit: 'day', displayFormats: { day: 'dd/MM' } }, ...getChartConfig().scales.x } }, plugins: { legend: { display: false } } }
+            });
+        }
+        function updateConversionTrendChart(orders) {
+            const ctx = document.getElementById('conversionTrendChart').getContext('2d');
+            const trendData = orders.reduce((acc, order) => {
+                const day = new Date(order.createdAt).toISOString().split('T')[0];
+                if (!acc[day]) acc[day] = { fresh: 0, progress: 0, paid: 0 };
+                acc[day][order.status]++;
+                return acc;
+            }, {});
+            const labels = Object.keys(trendData).sort();
+            if (conversionTrendChart) conversionTrendChart.destroy();
+            conversionTrendChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Pago', data: labels.map(l => trendData[l].paid), backgroundColor: chartColors.success },
+                        { label: 'Em Progresso', data: labels.map(l => trendData[l].progress), backgroundColor: chartColors.warning },
+                        { label: 'Novo', data: labels.map(l => trendData[l].fresh), backgroundColor: chartColors.gray400 }
+                    ]
+                },
+                options: {
+                    ...getChartConfig(),
+                    scales: {
+                        y: { ...getChartConfig().scales.y, stacked: true },
+                        x: { type: 'time', time: { unit: 'day', displayFormats: { day: 'dd/MM' } }, ...getChartConfig().scales.x, stacked: true }
+                    },
+                    plugins: { legend: { position: 'bottom', ...getChartConfig().plugins.legend } }
+                }
+            });
+        }
+        function handleDateFilterChange() {
+            const filterValue = document.getElementById('dateRangeFilter').value;
+            const now = new Date();
+            let startDate = new Date(0); 
+            if (filterValue === '7d') {
+                startDate = new Date(new Date().setDate(now.getDate() - 7));
+            } else if (filterValue === '30d') {
+                startDate = new Date(new Date().setDate(now.getDate() - 30));
+            } else if (filterValue === '90d') {
+                startDate = new Date(new Date().setDate(now.getDate() - 90));
+            } else if (filterValue === 'this_month') {
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            }
+            const ordersForDashboard = allOrders.filter(order => new Date(order.createdAt) >= startDate);
+            updateDashboard(ordersForDashboard);
+        }
 
-        function displayOrders(orders = filteredOrders) {
+        // --- LÓGICA DA TABELA DE PEDIDOS ---
+        function displayOrders(orders = filteredOrdersForTable) {
             const tableBody = document.getElementById('ordersTableBody');
             const mobileContainer = document.getElementById('mobileOrdersContainer');
-            
             tableBody.innerHTML = '';
             mobileContainer.innerHTML = '';
-
             if (orders.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gray-500); padding: 2rem;">Nenhum pedido encontrado.</td></tr>`;
+                const noDataMessage = `<tr><td colspan="6" style="text-align: center; color: var(--gray-500); padding: 2rem;">Nenhum pedido encontrado.</td></tr>`;
+                tableBody.innerHTML = noDataMessage;
                 mobileContainer.innerHTML = `<div style="text-align: center; color: var(--gray-500); padding: 2rem;">Nenhum pedido encontrado.</div>`;
                 return;
             }
-
             orders.forEach(order => {
                 const mainRow = document.createElement('tr');
                 mainRow.innerHTML = `
@@ -1908,7 +1759,6 @@
                     <td class="hide-mobile">${new Date(order.createdAt).toLocaleDateString('pt-BR')}</td>
                     <td><div class="table-actions"><button class="action-btn" onclick="toggleOrderDetails('${order.orderId}')"><i class="fas fa-chevron-down" id="chevron-${order.orderId}"></i><span class="hide-mobile">Detalhes</span></button><button class="action-btn action-btn-primary" onclick="copyOrderLink('${order.orderId}')"><i class="fas fa-copy"></i><span class="hide-mobile">Copiar</span></button><button class="action-btn" onclick="showQrCode('${order.orderId}')"><i class="fas fa-qrcode"></i><span class="hide-mobile">QR</span></button></div></td>
                 `;
-
                 let payersListHTML = '<span style="color: var(--gray-500);">Nenhum pagador identificado.</span>';
                 if (Array.isArray(order.payersIds) && order.payersIds.length > 0) {
                     payersListHTML = `<ul class="payers-list">${order.payersIds.map((id, index) => {
@@ -1919,14 +1769,12 @@
                         return `<li class="payer-item"><div class="payer-name">${name}</div><div class="payer-id">CPF: ${maskedCpf}</div><div class="payer-phone">Telefone: ${phone}</div><div class="payer-amount">Valor Pago: ${value}</div></li>`;
                     }).join('')}</ul>`;
                 }
-
                 const detailsRow = document.createElement('tr');
                 detailsRow.className = 'details-row';
                 detailsRow.id = `details-row-${order.orderId}`;
                 detailsRow.innerHTML = `<td colspan="6"><div class="details-content"><div class="details-grid"><div class="detail-item"><span class="detail-label">Nome</span><span class="detail-value">${order.name || order.orderName || 'Não especificado'}</span></div><div class="detail-item"><span class="detail-label">ID do Pedido</span><span class="detail-value">${order.orderId}</span></div><div class="detail-item"><span class="detail-label">Data de Criação</span><span class="detail-value">${new Date(order.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span></div><div class="detail-item"><span class="detail-label">Status</span><span class="detail-value">${translateStatus(order.status)}</span></div></div><div class="detail-item"><span class="detail-label">Pagadores</span><div class="detail-value">${payersListHTML}</div></div></div></td>`;
                 tableBody.appendChild(mainRow);
                 tableBody.appendChild(detailsRow);
-
                 let mobilePayersHTML = '<span style="color: var(--gray-500); font-size: 0.875rem;">Nenhum pagador identificado.</span>';
                 if (Array.isArray(order.payersIds) && order.payersIds.length > 0) {
                     mobilePayersHTML = `<ul class="mobile-payers-list">${order.payersIds.map((id, index) => {
@@ -1937,69 +1785,86 @@
                         return `<li class="mobile-payer-item"><div class="mobile-payer-name">${name}</div><div class="mobile-payer-id">CPF: ${maskedCpf}</div><div class="mobile-payer-phone">Telefone: ${phone}</div><div class="mobile-payer-amount">Valor Pago: ${value}</div></li>`;
                     }).join('')}</ul>`;
                 }
-
                 const mobileCard = document.createElement('div');
                 mobileCard.className = 'mobile-order-card';
                 mobileCard.innerHTML = `<div class="mobile-order-header"><div class="mobile-order-info"><h4>${order.name || order.orderName || 'Pedido sem nome'}</h4><div class="order-id">${order.orderId}</div></div><span class="status-badge status-${order.status}">${translateStatus(order.status)}</span></div><div class="mobile-order-details"><div class="mobile-detail-item"><span class="mobile-detail-label">Valor Total</span><span class="mobile-detail-value">${formatCurrency(order.totalValue || 0)}</span></div><div class="mobile-detail-item"><span class="mobile-detail-label">Valor Pago</span><span class="mobile-detail-value">${formatCurrency(order.paidValue || 0)}</span></div><div class="mobile-detail-item"><span class="mobile-detail-label">Data</span><span class="mobile-detail-value">${new Date(order.createdAt).toLocaleDateString('pt-BR')}</span></div><div class="mobile-detail-item"><span class="mobile-detail-label">Pagadores</span><span class="mobile-detail-value">${Array.isArray(order.payersIds) ? order.payersIds.length : 0}</span></div></div><div class="mobile-order-actions"><button class="action-btn action-btn-primary" onclick="copyOrderLink('${order.orderId}')"><i class="fas fa-copy"></i>Copiar</button><button class="action-btn" onclick="showQrCode('${order.orderId}')"><i class="fas fa-qrcode"></i>QR Code</button></div><button class="mobile-toggle-details" onclick="toggleMobileOrderDetails('${order.orderId}')"><i class="fas fa-chevron-down" id="mobile-chevron-${order.orderId}"></i> Ver Detalhes dos Pagadores</button><div class="mobile-order-details-section" id="mobile-details-${order.orderId}"><div class="mobile-detail-item"><span class="mobile-detail-label">Pagadores</span><div style="margin-top: 8px;">${mobilePayersHTML}</div></div></div>`;
                 mobileContainer.appendChild(mobileCard);
             });
         }
-
         function toggleMobileOrderDetails(orderId) {
             const detailsSection = document.getElementById(`mobile-details-${orderId}`);
             const chevron = document.getElementById(`mobile-chevron-${orderId}`);
             const isExpanded = detailsSection.classList.toggle('expanded');
             chevron.className = isExpanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
         }
-
         function toggleOrderDetails(orderId) {
             const detailsRow = document.getElementById(`details-row-${orderId}`);
             const chevron = document.getElementById(`chevron-${orderId}`);
             const isExpanded = detailsRow.classList.toggle('expanded');
             chevron.className = isExpanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
         }
-
-        function initSearchAndFilter() {
+        
+        function initSearchAndFilterForTable() {
             const searchInput = document.getElementById('searchInput');
             const statusFilter = document.getElementById('statusFilter');
+            const dateFilter = document.getElementById('orderDateFilter'); // Pega o novo filtro
+
             function filterOrders() {
                 const searchTerm = searchInput.value.toLowerCase();
-                const statusFilterValue = document.getElementById('statusFilter').value;
-                filteredOrders = recentOrders.filter(order => {
-                    const matchesSearch = !searchTerm || (order.name && order.name.toLowerCase().includes(searchTerm)) || (order.orderName && order.orderName.toLowerCase().includes(searchTerm)) || order.orderId.toLowerCase().includes(searchTerm);
-                    const matchesStatus = !statusFilterValue || order.status === statusFilterValue;
-                    return matchesSearch && matchesStatus;
+                const status = statusFilter.value;
+                const dateRange = dateFilter.value;
+
+                // Lógica de data para o filtro da tabela
+                const now = new Date();
+                let startDate = new Date(0); 
+                if (dateRange === '7d') {
+                    startDate = new Date(new Date().setDate(now.getDate() - 7));
+                } else if (dateRange === '30d') {
+                    startDate = new Date(new Date().setDate(now.getDate() - 30));
+                } else if (dateRange === '90d') {
+                    startDate = new Date(new Date().setDate(now.getDate() - 90));
+                } else if (dateRange === 'this_month') {
+                    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                }
+
+                filteredOrdersForTable = allOrders.filter(order => {
+                    const matchesSearch = !searchTerm || 
+                        (order.name && order.name.toLowerCase().includes(searchTerm)) || 
+                        (order.orderName && order.orderName.toLowerCase().includes(searchTerm)) || 
+                        order.orderId.toLowerCase().includes(searchTerm);
+                    const matchesStatus = !status || order.status === status;
+                    const matchesDate = new Date(order.createdAt) >= startDate; // Condição de data
+
+                    return matchesSearch && matchesStatus && matchesDate;
                 });
-                displayOrders(filteredOrders);
+                displayOrders(filteredOrdersForTable);
             }
             searchInput.addEventListener('input', filterOrders);
             statusFilter.addEventListener('change', filterOrders);
+            dateFilter.addEventListener('change', filterOrders); // Adiciona o listener para o novo filtro
         }
 
+        // --- FUNÇÕES DE AÇÃO E MODAIS ---
         function copyOrderLink(orderId) {
             const orderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
             copyToClipboard(orderLink, 'Link do pedido copiado!');
         }
-
         function showQrCode(orderId) {
             const orderLink = `<%=process.env.SITE_URL%>/${localPartnerId}/${orderId}`;
             generateAndShowQrModal(orderLink);
         }
-
         function copyToClipboard(text, successMessage) {
             navigator.clipboard.writeText(text).then(() => showToast(successMessage)).catch(err => {
                 console.error('Falha ao copiar:', err);
                 showToast('Erro ao copiar');
             });
         }
-
         function showToast(message) {
             const toast = document.getElementById('copyToast');
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
-
         function generateAndShowQrModal(link) {
             const qrCodeModal = document.getElementById('qrCodeModal');
             const qrCodeContainer = document.getElementById('qrcode-container');
@@ -2013,119 +1878,73 @@
             });
             qrLinkText.textContent = link;
         }
-
         function updateDashboardWithNewOrder(newOrder) {
-            recentOrders.unshift(newOrder);
-            filteredOrders = [...recentOrders];
-            stats.totalValue = (stats.totalValue || 0) + newOrder.totalValue;
-            stats.totalOrders = (stats.totalOrders || 0) + 1;
-            stats.freshOrders = (stats.freshOrders || 0) + 1;
-            updateDashboardDisplay();
-            displayOrders();
+            allOrders.unshift(newOrder);
+            initSearchAndFilterForTable(); // Re-executa os filtros da tabela
+            handleDateFilterChange(); // Re-executa o filtro do dashboard
+            displayOrders(); 
         }
-		
 		function exportOrdersToCSV() {
-			if (recentOrders.length === 0) {
-				alert("Não há pedidos para exportar.");
+			if (filteredOrdersForTable.length === 0) { // Exporta apenas os pedidos filtrados
+				alert("Não há pedidos na visualização atual para exportar.");
 				return;
 			}
-
-			// 1. Encontra o número máximo de pagadores em todos os pedidos
 			let maxPayers = 0;
-			for (const order of recentOrders) {
+			for (const order of filteredOrdersForTable) {
 				const numPayers = (order.payersIds || []).length;
-				if (numPayers > maxPayers) {
-					maxPayers = numPayers;
-				}
+				if (numPayers > maxPayers) { maxPayers = numPayers; }
 			}
-
-			// 2. Gera os cabeçalhos dinamicamente
-			const headers = [
-				"ID do Pedido",
-				"Nome do Pedido",
-				"Valor Total (R$)",
-				"Valor Pago (R$)",
-				"Status",
-				"Data de Criação"
-			];
-
+			const headers = [ "ID do Pedido", "Nome do Pedido", "Valor Total (R$)", "Valor Pago (R$)", "Status", "Data de Criação" ];
 			for (let i = 1; i <= maxPayers; i++) {
-				headers.push(`Pagador ${i} (Nome)`);
-				headers.push(`Pagador ${i} (CPF/CNPJ)`);
-				headers.push(`Pagador ${i} (Telefone)`);
-				headers.push(`Pagador ${i} (Valor Pago)`);
+				headers.push(`Pagador ${i} (Nome)`, `Pagador ${i} (CPF/CNPJ)`, `Pagador ${i} (Telefone)`, `Pagador ${i} (Valor Pago)`);
 			}
-
 			const escapeCSV = (str) => {
 				const val = str === null || str === undefined ? '' : String(str);
-				if (val.search(/("|,|\n)/g) >= 0) {
-					return `"${val.replace(/"/g, '""')}"`;
-				}
+				if (val.search(/("|,|\n)/g) >= 0) { return `"${val.replace(/"/g, '""')}"`; }
 				return val;
 			};
-
 			const csvRows = [headers.join(',')];
-
-			// 3. Gera as linhas da tabela dinamicamente
-			for (const order of recentOrders) {
+			for (const order of filteredOrdersForTable) {
 				const rowData = [
-					order.orderId,
-					order.name || order.orderName || '',
-					(order.totalValue || 0).toFixed(2).replace('.', ','),
-					(order.paidValue || 0).toFixed(2).replace('.', ','),
-					translateStatus(order.status),
-					new Date(order.createdAt).toLocaleString('pt-BR')
+					order.orderId, order.name || order.orderName || '', (order.totalValue || 0).toFixed(2).replace('.', ','),
+					(order.paidValue || 0).toFixed(2).replace('.', ','), translateStatus(order.status), new Date(order.createdAt).toLocaleString('pt-BR')
 				];
-
 				const payersNames = order.payersNames || [];
 				const payersIds = order.payersIds || [];
 				const payersPhones = order.payersPhone || [];
 				const payersValues = order.payersValues || [];
-
 				for (let i = 0; i < maxPayers; i++) {
 					if (i < payersIds.length) {
-						// Adiciona os dados do pagador
-						rowData.push(payersNames[i] || '');
-						rowData.push(payersIds[i] || '');
-						rowData.push(payersPhones[i] || '');
-						rowData.push((payersValues[i] || 0).toFixed(2).replace('.', ','));
+						rowData.push(payersNames[i] || '', payersIds[i] || '', payersPhones[i] || '', (payersValues[i] || 0).toFixed(2).replace('.', ','));
 					} else {
-						// Adiciona células vazias para manter o alinhamento
-						rowData.push('');
-						rowData.push('');
-						rowData.push('');
-						rowData.push('');
+						rowData.push('', '', '', '');
 					}
 				}
 				csvRows.push(rowData.map(escapeCSV).join(','));
 			}
-
-			// 4. Cria o Blob e dispara o download
 			const csvString = csvRows.join('\n');
 			const blob = new Blob([`\uFEFF${csvString}`], { type: 'text/csv;charset=utf-8;' });
 			const link = document.createElement("a");
 			const url = URL.createObjectURL(blob);
-
 			link.setAttribute("href", url);
-			link.setAttribute("download", `pedidos_detalhados_${new Date().toISOString().slice(0,10)}.csv`);
+			link.setAttribute("download", `pedidos_filtrados_${new Date().toISOString().slice(0,10)}.csv`);
 			link.style.visibility = 'hidden';
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
 		}
 
-
-        // Initialize
+        // --- INICIALIZAÇÃO E EVENT LISTENERS ---
         document.addEventListener('DOMContentLoaded', function() {
             initNavigation();
             initMobileSidebar();
-            initSearchAndFilter();
-            updateDashboardDisplay();
-            displayOrders();
-			
-			const createOrderContainer = document.getElementById('create-order-container');
+            initializeChartColors();
+            initSearchAndFilterForTable();
+            displayOrders(filteredOrdersForTable); 
+            document.getElementById('dateRangeFilter').addEventListener('change', handleDateFilterChange);
+            handleDateFilterChange(); 
+            const createOrderContainer = document.getElementById('create-order-container');
             const showCreateOrderBtn = document.getElementById('showCreateOrderBtn');
-
             showCreateOrderBtn.addEventListener('click', () => {
                 const isVisible = createOrderContainer.style.display === 'block';
                 createOrderContainer.style.display = isVisible ? 'none' : 'block';
@@ -2136,9 +1955,7 @@
                     createOrderContainer.scrollIntoView({ behavior: 'smooth' });
                 }
             });
-
 			document.getElementById('exportOrdersBtn').addEventListener('click', exportOrdersToCSV);
-
             document.getElementById('newOrderForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const orderNameInput = document.getElementById('orderName');
@@ -2150,14 +1967,11 @@
                 submitButton.disabled = true;
                 try {
                     const payload = {
-                        name: orderName || '',
-                        partnerId: localPartnerId,
-                        totalValue: totalValue,
-                        apiKey: localPartnerApiKey,
+                        name: orderName || '', partnerId: localPartnerId,
+                        totalValue: totalValue, apiKey: localPartnerApiKey,
                     };
                     const response = await fetch(`<%=process.env.API_SITE_URL%>/order`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
                     if (!response.ok) {
@@ -2173,13 +1987,9 @@
                     orderCreationResult.classList.add('show');
                     showToast('Pedido criado com sucesso!');
                     const newOrder = {
-                        name: orderName,
-                        orderId: orderId,
-                        totalValue: totalValue,
-                        paidValue: 0,
-                        status: 'fresh',
-                        payersIds: [], payersNames: [], payersValues: [], payersPhone: [],
-                        createdAt: new Date().toISOString()
+                        name: orderName, orderId: orderId, totalValue: totalValue,
+                        paidValue: 0, status: 'fresh', payersIds: [], payersNames: [], 
+                        payersValues: [], payersPhone: [], createdAt: new Date().toISOString()
                     };
                     updateDashboardWithNewOrder(newOrder);
                     totalValueInput.value = '';
@@ -2189,7 +1999,6 @@
                         showCreateOrderBtn.innerHTML = '<i class="fas fa-plus"></i> <span>Criar Novo Pedido</span>';
                         orderCreationResult.classList.remove('show');
                     }, 2000);
-
                 } catch (error) {
                     console.error('Erro ao criar pedido:', error);
                     alert('Erro ao criar pedido: ' + error.message);
@@ -2198,7 +2007,6 @@
                     submitButton.disabled = false;
                 }
             });
-
             document.getElementById('copyLinkButton').addEventListener('click', () => {
                 const link = document.getElementById('orderLink').href;
                 copyToClipboard(link, 'Link do pedido copiado!');
@@ -2213,7 +2021,6 @@
             document.getElementById('copyRecipientIdButton').addEventListener('click', () => {
                 copyToClipboard(localRecipientId, 'ID de parceiro copiado!');
             });
-
             document.getElementById('closeQrModal').addEventListener('click', () => {
                 document.getElementById('qrCodeModal').classList.remove('show');
             });
@@ -2222,22 +2029,17 @@
                     event.currentTarget.classList.remove('show');
                 }
             });
-
-            // Lógica para o formulário de Webhook com tratamento de erro
             const webhookForm = document.getElementById('webhookForm');
             const webhookUrlInput = document.getElementById('webhookUrlInput');
             const saveButton = document.getElementById('saveWebhookButton');
             const statusText = document.getElementById('webhookSaveStatus');
-
             webhookUrlInput.addEventListener('input', () => {
                 webhookUrlInput.style.borderColor = '';
                 statusText.textContent = '';
             });
-
             webhookForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const urlValue = webhookUrlInput.value.trim();
-                
                 if (urlValue) {
                     const urlPattern = new RegExp('^(https?|ftp)://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?$', 'i');
                     if (!urlPattern.test(urlValue)) {
@@ -2247,7 +2049,6 @@
                         return;
                     }
                 }
-                
                 const originalButtonText = saveButton.innerHTML;
                 saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
                 saveButton.disabled = true;
@@ -2258,9 +2059,7 @@
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            partnerId: localPartnerId,
-                            apiKey: localPartnerApiKey,
-                            webhookUrl: urlValue
+                            partnerId: localPartnerId, apiKey: localPartnerApiKey, webhookUrl: urlValue
                         })
                     });
                     if (!response.ok) {
@@ -2280,7 +2079,6 @@
                     setTimeout(() => { statusText.textContent = ''; }, 5000);
                 }
             });
-            
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     document.getElementById('qrCodeModal').classList.remove('show');
