@@ -1536,6 +1536,8 @@
         const localPartnerId = "<%= partnerData.partnerId %>";
         const localPartnerApiKey = "<%= partnerData.apiKey %>";
         const localRecipientId = "<%= partnerData.recipient_id %>";
+        const localPartnerRefId = "<%= partnerData.partnerRef %>";
+        const localPartnerRole = "<%= partnerData.role %>";
         const allOrders = <%- JSON.stringify(orders || []) %>;
         
         // MODIFICAÇÃO: Variáveis do modo 'partner' inicializadas condicionalmente
@@ -2382,10 +2384,20 @@
                 submitButton.disabled = true;
 
                 try {
-                    const payload = {
-                        name: orderName || '', partnerId: localPartnerId,
-                        totalValue: totalValue, apiKey: localPartnerApiKey,
-                    };
+
+                    var payload;
+
+                    if(localPartnerRole == "employee"){
+                        payload = {
+                            name: orderName || '', partnerId: localPartnerRefId,
+                            totalValue: totalValue, apiKey: localPartnerApiKey, partnerRefId: localPartnerRefId
+                        };
+                    } else {
+                        payload = {
+                            name: orderName || '', partnerId: localPartnerId,
+                            totalValue: totalValue, apiKey: localPartnerApiKey, partnerRefId: localPartnerRefId
+                        };
+                    }
 
                     const response = await fetch(`<%=process.env.API_SITE_URL%>/order`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -2410,7 +2422,7 @@
                     const newOrder = {
                         name: orderName, orderId: orderId, totalValue: totalValue,
                         paidValue: 0, status: 'fresh', payersIds: [], payersNames: [],
-                        payersValues: [], payersPhone: [], createdAt: new Date().toISOString()
+                        payersValues: [], payersPhone: [], createdAt: new Date().toISOString(),
                     };
 
                     updateDashboardWithNewOrder(newOrder);
