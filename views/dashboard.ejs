@@ -1560,11 +1560,53 @@ function showQrCode(orderId) { const orderLink = `<%=process.env.SITE_URL%>/${lo
 function copyToClipboard(text, successMessage) { navigator.clipboard.writeText(text) .then(() => showToast(successMessage)) .catch(err => { console.error('Falha ao copiar:', err); showToast('Erro ao copiar', 'error'); }); }
 function showToast(message, type = 'success') { const toast = document.getElementById('copyToast'); toast.textContent = message; toast.style.backgroundColor = type === 'success' ? 'var(--success)' : 'var(--error)'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
 function generateAndShowQrModal(link) { const qrCodeModal = document.getElementById('qrCodeModal'); const qrCodeContainer = document.getElementById('qrcode-container'); document.getElementById('qrLinkText').textContent = link; qrCodeContainer.innerHTML = ''; qrCodeModal.classList.add('show'); new QRCode(qrCodeContainer, { text: link, width: 200, height: 200, colorDark: "#0f172a", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H }); }
-function updateDashboardWithNewOrder(newOrder) { allOrders.unshift(newOrder); initSearchAndFilterForTable(); <% if (partnerData.role !== 'employee') { %> handleDateFilterChange(); <% } %> displayOrders(); }
 
+// Lógica de filtragem agora em uma função reutilizável
+function filterAndDisplayOrders() {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const dateFilter = document.getElementById('orderDateFilter');
+
+    const searchTerm = searchInput.value.toLowerCase();
+    const status = statusFilter.value;
+    const dateRange = dateFilter.value;
+
+    const now = new Date();
+    let startDate = new Date(0);
+
+    if (dateRange === '7d') startDate = new Date(new Date().setDate(now.getDate() - 7));
+    else if (dateRange === '30d') startDate = new Date(new Date().setDate(now.getDate() - 30));
+    else if (dateRange === '90d') startDate = new Date(new Date().setDate(now.getDate() - 90));
+    else if (dateRange === 'this_month') startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    filteredOrdersForTable = allOrders.filter(order => {
+        const nameMatch = order.name ? order.name.toLowerCase().includes(searchTerm) : false;
+        const orderNameMatch = order.orderName ? order.orderName.toLowerCase().includes(searchTerm) : false;
+        const idMatch = order.orderId ? order.orderId.toLowerCase().includes(searchTerm) : false;
+        
+        const matchesSearch = !searchTerm || nameMatch || orderNameMatch || idMatch;
+        const matchesStatus = !status || order.status === status;
+        const matchesDate = new Date(order.createdAt) >= startDate;
+        
+        return matchesSearch && matchesStatus && matchesDate;
+    });
+
+    displayOrders(filteredOrdersForTable);
+}
+function updateDashboardWithNewOrder(newOrder) {
+    allOrders.unshift(newOrder); // Adiciona o novo pedido no topo da lista principal
+    filterAndDisplayOrders(); // Re-filtra e re-exibe a lista, agora incluindo o novo pedido
+
+    // Atualiza os cards de estatísticas do dashboard, se aplicável
+    <% if (partnerData.role !== 'employee') { %>
+    handleDateFilterChange();
+    <% } %>
+}
 <% if (partnerData.role !== 'employee') { %>
 function exportOrdersToCSV() { if (filteredOrdersForTable.length === 0) { alert("Não há pedidos para exportar."); return; } let maxPayers = Math.max(0, ...filteredOrdersForTable.map(o => (o.payersIds || []).length)); const headers = ["ID Pedido", "Nome Pedido", "Valor Total", "Valor Pago", "Status", "Data Criação"]; for (let i = 1; i <= maxPayers; i++) { headers.push(`Pagador ${i} (Nome)`, `Pagador ${i} (CPF/CNPJ)`, `Pagador ${i} (Telefone)`, `Pagador ${i} (Valor Pago)`); } const escapeCSV = (str) => `"${String(str || '').replace(/"/g, '""')}"`; const csvRows = [headers.join(',')]; for (const order of filteredOrdersForTable) { const row = [ order.orderId, order.name || order.orderName || '', (order.totalValue || 0).toFixed(2), (order.paidValue || 0).toFixed(2), translateStatus(order.status), new Date(order.createdAt).toLocaleString('pt-BR') ]; for (let i = 0; i < maxPayers; i++) { row.push( (order.payersNames || [])[i] || '', (order.payersIds || [])[i] || '', (order.payersPhone || [])[i] || '', ((order.payersValues || [])[i] || 0).toFixed(2) ); } csvRows.push(row.map(escapeCSV).join(',')); } const blob = new Blob([`\uFEFF${csvRows.join('\n')}`], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `pedidos_${new Date().toISOString().slice(0,10)}.csv`; link.click(); URL.revokeObjectURL(link.href); }
 <% } %>
+
+
 
 // --- INICIALIZAÇÃO E EVENT LISTENERS ---
 document.addEventListener('DOMContentLoaded', function() {
