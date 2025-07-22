@@ -51,7 +51,60 @@
             font-family: var(--font-sans);
             line-height: 1.7;
             font-size: 17px;
+            position: relative;
         }
+
+        /* --- Animated Gradient Background --- */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .gradient-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+
+        .blob1 {
+            width: 500px;
+            height: 500px;
+            background: #ffc3a0;
+            animation: move 25s infinite alternate;
+        }
+
+        .blob2 {
+            width: 400px;
+            height: 400px;
+            background: #c471ed;
+            animation: move 30s infinite alternate-reverse;
+        }
+
+        .blob3 {
+            width: 300px;
+            height: 300px;
+            background: #12c2e9;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(-100px, -50px) scale(1);
+            }
+            50% {
+                transform: translate(200px, 100px) scale(1.2);
+            }
+            100% {
+                transform: translate(50px, -150px) scale(0.9);
+            }
+        }
+
 
         /* ------------------- */
         /* --- Layout & Typography --- */
@@ -69,6 +122,8 @@
             padding-top: var(--section-padding);
             padding-bottom: var(--section-padding);
             transition: background-color 0.6s ease-in-out;
+            position: relative;
+            z-index: 1;
         }
         
         .section-content {
@@ -196,7 +251,7 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            background: #fcfdff;
+            background: transparent;
         }
         
         .hero .container {
@@ -565,6 +620,43 @@
             color: var(--text-light);
         }
 
+        /* --- Toast Notifications --- */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            animation: toast-slide-in 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+        }
+        .toast.fade-out {
+            animation: toast-fade-out 0.5s ease-out forwards;
+        }
+        .toast i {
+            color: var(--success);
+        }
+        @keyframes toast-slide-in {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes toast-fade-out {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
         /* ------------------- */
         /* --- Responsive Design --- */
         /* ------------------- */
@@ -599,6 +691,11 @@
     </style>
 </head>
 <body>
+    <div class="gradient-bg">
+        <div class="gradient-blob blob1"></div>
+        <div class="gradient-blob blob2"></div>
+        <div class="gradient-blob blob3"></div>
+    </div>
     <header id="main-header" class="main-header">
         <div class="container">
             <a href="#" class="logo">pagjunto</a>
@@ -767,6 +864,8 @@
         </div>
     </footer>
 
+    <div class="toast-container" id="toastContainer"></div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
@@ -884,6 +983,20 @@
                 });
             });
 
+            // --- Toast Notification Function ---
+            const showToast = (message) => {
+                const toastContainer = document.getElementById('toastContainer');
+                if(!toastContainer) return;
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+                toastContainer.appendChild(toast);
+                setTimeout(() => {
+                    toast.classList.add('fade-out');
+                    toast.addEventListener('animationend', () => toast.remove());
+                }, 4000);
+            };
+
             // --- Original Form Submission Logic ---
             const contactForm = document.querySelector('.contact-form');
             if(contactForm) {
@@ -897,6 +1010,7 @@
                     const btnText = submitBtn.querySelector('.btn-text');
                     const originalText = btnText.innerHTML;
 
+                    submitBtn.classList.add('is-loading');
                     btnText.innerHTML = 'Enviando...';
                     submitBtn.disabled = true;
                     
@@ -909,6 +1023,8 @@
                         submitBtn.style.backgroundColor = 'var(--success)';
                         submitBtn.style.borderColor = 'var(--success)';
                         
+                        showToast('Mensagem enviada com sucesso!');
+
                         setTimeout(() => {
                             submitBtn.classList.remove('is-loading');
                             btnText.innerHTML = originalText;
@@ -921,6 +1037,7 @@
                     }).catch(error => {
                         console.error('Form submission error:', error);
                         btnText.innerHTML = 'Erro ao enviar';
+                        showToast('Ocorreu um erro ao enviar a mensagem.');
                         setTimeout(() => {
                             submitBtn.classList.remove('is-loading');
                             btnText.innerHTML = originalText;
