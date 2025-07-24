@@ -41,7 +41,7 @@
         }
 
         body {
-            background-color: var(--bg-secondary);
+            background-color: var(--bg-light);
             color: var(--text-dark);
             font-family: var(--font-sans);
             line-height: 1.6;
@@ -51,6 +51,52 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+        
+        /* --- Animated Gradient Background --- */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .gradient-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+
+        .blob1 {
+            width: 500px;
+            height: 500px;
+            background: #ffc3a0;
+            animation: move 25s infinite alternate;
+        }
+
+        .blob2 {
+            width: 400px;
+            height: 400px;
+            background: #c471ed;
+            animation: move 30s infinite alternate-reverse;
+        }
+
+        .blob3 {
+            width: 300px;
+            height: 300px;
+            background: #12c2e9;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            0% { transform: translate(-100px, -50px) scale(1); }
+            50% { transform: translate(200px, 100px) scale(1.2); }
+            100% { transform: translate(50px, -150px) scale(0.9); }
         }
 
         /* ------------------- */
@@ -58,8 +104,15 @@
         /* ------------------- */
         .main-header {
             padding: 1.25rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.7);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-light);
-            background-color: var(--bg-light);
         }
 
         .container {
@@ -83,23 +136,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 4rem 0;
+            padding: 8rem 2rem 4rem; /* Add padding top to account for fixed header */
         }
 
         .form-container {
             width: 100%;
             max-width: 480px;
-            background-color: var(--bg-light);
+            background-color: rgba(255, 255, 255, 0.8);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
             padding: 3rem;
             border-radius: 24px;
-            border: 1px solid var(--border-light);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             text-align: center;
         }
 
         h1 {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2.25rem;
+            font-weight: 800;
             letter-spacing: -0.03em;
             margin-bottom: 1rem;
         }
@@ -107,6 +162,7 @@
         .form-container p {
             color: var(--text-muted-dark);
             margin-bottom: 2.5rem;
+            font-size: 1.1rem;
         }
 
         /* ------------------- */
@@ -143,7 +199,7 @@
             padding: 0.9rem 1rem 0.9rem 2.75rem; /* Padding for icon */
             border-radius: 10px;
             border: 1px solid var(--border-light);
-            background: #FDFDFD;
+            background: rgba(255, 255, 255, 0.7);
             font-family: inherit;
             font-size: 1rem;
             transition: all 0.2s ease;
@@ -252,10 +308,29 @@
         #copy-button:hover {
             background-color: var(--accent-hover);
         }
+        
+        /* ------------------- */
+        /* --- Footer --- */
+        /* ------------------- */
+        footer {
+            padding: 3rem 0;
+            background-color: transparent;
+            color: var(--text-muted-dark);
+            text-align: center;
+        }
+        footer p {
+            font-size: 0.9rem;
+        }
 
     </style>
 </head>
 <body>
+    <div class="gradient-bg">
+        <div class="gradient-blob blob1"></div>
+        <div class="gradient-blob blob2"></div>
+        <div class="gradient-blob blob3"></div>
+    </div>
+
     <header class="main-header">
         <div class="container">
             <a href="/" class="logo">pagjunto</a>
@@ -265,7 +340,7 @@
     <main>
         <div class="form-container">
             <h1>Crie sua vaquinha</h1>
-            <p>Preencha os dados abaixo para gerar seu link de pagamento compartilhado.</p>
+            <p>Preencha os dados e gere seu link de pagamento na hora.</p>
             
             <form id="vaquinha-form">
                 <div class="form-group">
@@ -306,6 +381,12 @@
             </div>
         </div>
     </main>
+
+    <footer>
+        <div class="container">
+             <p>&copy; 2025 Pagjunto. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -355,12 +436,12 @@
 
             // Adiciona validação em tempo real enquanto o usuário digita
             pixInput.addEventListener('input', () => {
-                if (validarChavePix(pixInput.value)) {
-                    pixInput.classList.remove('is-invalid');
-                    pixError.style.display = 'none';
-                } else {
+                if (pixInput.value && !validarChavePix(pixInput.value)) {
                     pixInput.classList.add('is-invalid');
                     pixError.style.display = 'block';
+                } else {
+                    pixInput.classList.remove('is-invalid');
+                    pixError.style.display = 'none';
                 }
             });
 
@@ -402,7 +483,6 @@
                     }, 2000);
                 } catch (err) {
                     console.error('Falha ao copiar o link: ', err);
-                    // Poderia mostrar uma mensagem de erro para o usuário aqui
                 }
             });
         });
