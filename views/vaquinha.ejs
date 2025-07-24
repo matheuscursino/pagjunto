@@ -138,10 +138,31 @@
             justify-content: center;
             padding: 8rem 2rem 4rem; /* Add padding top to account for fixed header */
         }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+            width: 100%;
+            max-width: 960px;
+        }
+        
+        @media (min-width: 992px) {
+            .main-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .form-container {
+                grid-column: 2;
+            }
+            .how-it-works-card {
+                grid-column: 1;
+                grid-row: 1;
+            }
+        }
 
         .form-container {
             width: 100%;
-            max-width: 480px;
             background-color: rgba(255, 255, 255, 0.8);
             -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
@@ -159,11 +180,61 @@
             margin-bottom: 1rem;
         }
 
-        .form-container p {
+        .form-container p.subtitle {
             color: var(--text-muted-dark);
             margin-bottom: 2.5rem;
             font-size: 1.1rem;
         }
+
+        /* ------------------- */
+        /* --- How-it-works Card --- */
+        /* ------------------- */
+        .how-it-works-card {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 2.5rem;
+            border-radius: 24px;
+            text-align: left;
+        }
+        
+        .how-it-works-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background-color: #e6f0fa;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .step-text h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .step-text p {
+            font-size: 0.95rem;
+            color: var(--text-muted-dark);
+            margin: 0;
+        }
+
 
         /* ------------------- */
         /* --- Form Elements --- */
@@ -338,45 +409,72 @@
     </header>
 
     <main>
-        <div class="form-container">
-            <h1>Crie sua vaquinha</h1>
-            <p>Preencha os dados e gere seu link de pagamento na hora.</p>
-            
-            <form id="vaquinha-form">
-                <div class="form-group">
-                    <label for="nome">Seu nome</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-user icon"></i>
-                        <input type="text" id="nome" name="nome" placeholder="Como seus amigos te chamam?" required>
+        <div class="main-grid">
+            <div class="form-container">
+                <h1>Crie sua vaquinha</h1>
+                <p class="subtitle">Preencha os dados e gere seu link de pagamento na hora.</p>
+                
+                <form id="vaquinha-form">
+                    <div class="form-group">
+                        <label for="nome">Seu nome</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user icon"></i>
+                            <input type="text" id="nome" name="nome" placeholder="Como seus amigos te chamam?" required>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="valor">Valor total (R$)</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-dollar-sign icon"></i>
-                        <input type="number" id="valor" name="valor" placeholder="Ex: 150.00" step="0.01" min="1" required>
+                    <div class="form-group">
+                        <label for="valor">Valor total (R$)</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-dollar-sign icon"></i>
+                            <input type="number" id="valor" name="valor" placeholder="Ex: 150.00" step="0.01" min="1" required>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="pix-key">Sua chave Pix</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-key icon"></i>
-                        <input type="text" id="pix-key" name="pix-key" placeholder="CPF, celular, e-mail ou aleatória" required>
+                    <div class="form-group">
+                        <label for="pix-key">Sua chave Pix</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-key icon"></i>
+                            <input type="text" id="pix-key" name="pix-key" placeholder="CPF, celular, e-mail ou aleatória" required>
+                        </div>
+                        <div id="pix-error" class="error-message">
+                            <i class="fas fa-exclamation-circle"></i> Chave Pix inválida. Verifique o formato.
+                        </div>
                     </div>
-                    <div id="pix-error" class="error-message">
-                        <i class="fas fa-exclamation-circle"></i> Chave Pix inválida. Verifique o formato.
-                    </div>
-                </div>
 
-                <button type="submit" id="submit-button" class="btn btn-primary">Gerar link da vaquinha</button>
-            </form>
+                    <button type="submit" id="submit-button" class="btn btn-primary">Gerar link da vaquinha</button>
+                </form>
 
-            <div id="result-section">
-                <h3><i class="fas fa-check-circle"></i> Link gerado com sucesso!</h3>
-                <p style="margin-bottom: 1rem;">Compartilhe com seus amigos:</p>
-                <div class="link-wrapper">
-                    <input type="text" id="vaquinha-link" readonly>
-                    <button id="copy-button">Copiar link</button>
+                <div id="result-section">
+                    <h3><i class="fas fa-check-circle"></i> Link gerado com sucesso!</h3>
+                    <p style="margin-bottom: 1rem;">Compartilhe com seus amigos:</p>
+                    <div class="link-wrapper">
+                        <input type="text" id="vaquinha-link" readonly>
+                        <button id="copy-button">Copiar link</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="how-it-works-card">
+                <h2>Como funciona?</h2>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-edit"></i></div>
+                    <div class="step-text">
+                        <h4>1. Crie a vaquinha</h4>
+                        <p>Preencha os dados no formulário ao lado e gere seu link de pagamento personalizado.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
+                    <div class="step-text">
+                        <h4>2. Compartilhe o link</h4>
+                        <p>Mande o link para a galera no WhatsApp ou em qualquer rede social.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <div class="step-text">
+                        <h4>3. Receba na hora</h4>
+                        <p>Assim que todos pagarem, o valor total cai direto na sua conta via Pix. Simples assim!</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -388,132 +486,122 @@
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('vaquinha-form');
-            const pixInput = document.getElementById('pix-key');
-            const pixError = document.getElementById('pix-error');
-            const resultSection = document.getElementById('result-section');
-            const linkInput = document.getElementById('vaquinha-link');
-            const copyButton = document.getElementById('copy-button');
+ <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('vaquinha-form');
+    const pixInput = document.getElementById('pix-key');
+    const pixError = document.getElementById('pix-error');
+    const resultSection = document.getElementById('result-section');
+    const linkInput = document.getElementById('vaquinha-link');
+    const copyButton = document.getElementById('copy-button');
 
-            /**
-             * Valida a chave Pix com base nos formatos mais comuns.
-             * @param {string} chave - A chave Pix a ser validada.
-             * @returns {boolean} - True se a chave for válida, false caso contrário.
-             */
-            const validarChavePix = (chave) => {
-                if (!chave) return false;
+    /**
+     * Valida a chave Pix com base nos formatos mais comuns.
+     * @param {string} chave - A chave Pix a ser validada.
+     * @returns {boolean} - True se a chave for válida, false caso contrário.
+     */
+    const validarChavePix = (chave) => {
+        if (!chave) return false;
 
-                // Remove caracteres especiais para CPF/CNPJ/Telefone
-                const chaveLimpa = chave.replace(/[.\-\/() ]/g, '');
+        // Remove caracteres especiais para CPF/CNPJ/Telefone
+        const chaveLimpa = chave.replace(/[.\-\/() ]/g, '');
 
-                // 1. CPF (11 dígitos numéricos)
-                if (/^\d{11}$/.test(chaveLimpa)) {
-                    return true;
-                }
-                // 2. CNPJ (14 dígitos numéricos)
-                if (/^\d{14}$/.test(chaveLimpa)) {
-                    return true;
-                }
-                // 3. Celular (formato +55 DDD NÚMERO)
-                if (/^\+55\d{10,11}$/.test(chave.replace(/[()\- ]/g, ''))) {
-                    return true;
-                }
-                // 4. E-mail
-                const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-                if (emailRegex.test(chave)) {
-                    return true;
-                }
-                // 5. Chave Aleatória (formato UUID)
-                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-                if (uuidRegex.test(chave)) {
-                    return true;
-                }
+        // 1. CPF (11 dígitos numéricos)
+        if (/^\d{11}$/.test(chaveLimpa)) return true;
 
-                return false;
-            };
+        // 2. CNPJ (14 dígitos numéricos)
+        if (/^\d{14}$/.test(chaveLimpa)) return true;
 
-            // Adiciona validação em tempo real enquanto o usuário digita
-            pixInput.addEventListener('input', () => {
-                if (pixInput.value && !validarChavePix(pixInput.value)) {
-                    pixInput.classList.add('is-invalid');
-                    pixError.style.display = 'block';
-                } else {
-                    pixInput.classList.remove('is-invalid');
-                    pixError.style.display = 'none';
-                }
-            });
+        // 3. Celular (formato +55 DDD NÚMERO)
+        if (/^\+55\d{10,11}$/.test(chave.replace(/[()\- ]/g, ''))) return true;
 
-            form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+        // 4. E-mail
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (emailRegex.test(chave)) return true;
 
-    const nome = document.getElementById('nome').value;
-    const valor = parseFloat(document.getElementById('valor').value);
-    const chavePix = pixInput.value;
+        // 5. Chave Aleatória (formato UUID)
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (uuidRegex.test(chave)) return true;
 
-    // Validação final antes de submeter
-    if (!validarChavePix(chavePix)) {
-        pixInput.classList.add('is-invalid');
-        pixError.style.display = 'block';
-        pixInput.focus();
-        return;
-    }
+        return false;
+    };
 
-    const submitButton = document.getElementById('submit-button');
-    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
-    submitButton.disabled = true;
+    // Adiciona validação em tempo real enquanto o usuário digita
+    pixInput.addEventListener('input', () => {
+        if (pixInput.value && !validarChavePix(pixInput.value)) {
+            pixInput.classList.add('is-invalid');
+            pixError.style.display = 'block';
+        } else {
+            pixInput.classList.remove('is-invalid');
+            pixError.style.display = 'none';
+        }
+    });
 
-    try {
-        const payload = {
-            name: nome,
-            totalValue: valor,
-            userKey: chavePix
-        };
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-        const response = await fetch(`<%=process.env.API_SITE_URL%>/order`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+        const nome = document.getElementById('nome').value;
+        const valor = parseFloat(document.getElementById('valor').value);
+        const chavePix = pixInput.value;
 
-        if (!response.ok) {
-            throw new Error((await response.json()).message || 'Erro ao criar vaquinha.');
+        // Validação final antes de submeter
+        if (!validarChavePix(chavePix)) {
+            pixInput.classList.add('is-invalid');
+            pixError.style.display = 'block';
+            pixInput.focus();
+            return;
         }
 
-        const data = await response.json();
-        const generatedLink = `<%=process.env.SITE_URL%>/${data}`;
+        const submitButton = document.getElementById('submit-button');
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
+        submitButton.disabled = true;
 
-        linkInput.value = generatedLink;
-        resultSection.style.display = 'block';
-        form.style.display = 'none';
+        try {
+            const payload = {
+                name: nome,
+                totalValue: valor,
+                userKey: chavePix
+            };
 
-    } catch (error) {
-        console.error('Erro ao criar vaquinha:', error);
-        alert(error.message);
-    } finally {
-        submitButton.innerHTML = 'Gerar link da vaquinha';
-        submitButton.disabled = false;
-    }
-});
-
-
-            copyButton.addEventListener('click', () => {
-                linkInput.select();
-                // document.execCommand é usado para compatibilidade, pois navigator.clipboard pode ser bloqueado em iframes
-                try {
-                    document.execCommand('copy');
-                    copyButton.textContent = 'Copiado!';
-                    setTimeout(() => {
-                        copyButton.textContent = 'Copiar link';
-                    }, 2000);
-                } catch (err) {
-                    console.error('Falha ao copiar o link: ', err);
-                }
+            const response = await fetch(`<%=process.env.API_SITE_URL%>/order`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
-        });
-    </script>
+
+            if (!response.ok) {
+                throw new Error((await response.json()).message || 'Erro ao criar vaquinha.');
+            }
+
+            const data = await response.json();
+            const generatedLink = `<%=process.env.SITE_URL%>/${data}`;
+
+            linkInput.value = generatedLink;
+            resultSection.style.display = 'block';
+            form.style.display = 'none';
+        } catch (error) {
+            console.error('Erro ao criar vaquinha:', error);
+            alert(error.message);
+        } finally {
+            submitButton.innerHTML = 'Gerar link da vaquinha';
+            submitButton.disabled = false;
+        }
+    });
+
+    copyButton.addEventListener('click', () => {
+        linkInput.select();
+        // document.execCommand é usado para compatibilidade, pois navigator.clipboard pode ser bloqueado em iframes
+        try {
+            document.execCommand('copy');
+            copyButton.textContent = 'Copiado!';
+            setTimeout(() => {
+                copyButton.textContent = 'Copiar link';
+            }, 2000);
+        } catch (err) {
+            console.error('Falha ao copiar o link: ', err);
+        }
+    });
+});
+</script>
 </body>
 </html>
