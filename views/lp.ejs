@@ -486,6 +486,59 @@
         }
 
         /* ------------------- */
+        /* --- How-it-works Card --- */
+        /* ------------------- */
+        .how-it-works-card {
+            background-color: var(--bg-light);
+            padding: 3rem;
+            border-radius: 24px;
+            text-align: left;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        
+        .how-it-works-card h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .step-icon {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background-color: #e6f0fa;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .step-text h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .step-text p {
+            font-size: 1rem;
+            color: var(--text-muted-dark);
+            margin: 0;
+        }
+
+        /* ------------------- */
         /* --- Final CTA Section --- */
         /* ------------------- */
         #cta-final {
@@ -530,43 +583,6 @@
         }
         .social-links a:hover {
             color: var(--text-light);
-        }
-
-        /* --- Toast Notifications --- */
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 3000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .toast {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-            animation: toast-slide-in 0.5s cubic-bezier(0.2, 1, 0.2, 1);
-        }
-        .toast.fade-out {
-            animation: toast-fade-out 0.5s ease-out forwards;
-        }
-        .toast i {
-            color: var(--success);
-        }
-        @keyframes toast-slide-in {
-            from { opacity: 0; transform: translateX(100%); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes toast-fade-out {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(100%); }
         }
 
         /* ------------------- */
@@ -677,6 +693,36 @@
                              <div class="icon"><i class="fas fa-plane"></i></div>
                             <h4>Viagens e Rolês</h4>
                             <p>Divida os custos da gasolina, hospedagem e passeios de forma justa e transparente. Chega de planilhas complicadas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- HOW IT WORKS SECTION -->
+        <section id="how-it-works">
+            <div class="container section-content fade-in-section">
+                <div class="how-it-works-card">
+                    <h2>Como funciona?</h2>
+                    <div class="step">
+                        <div class="step-icon"><i class="fas fa-edit"></i></div>
+                        <div class="step-text">
+                            <h4>1. Crie a vaquinha</h4>
+                            <p>Preencha os dados e gere seu link de pagamento personalizado em segundos.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="step-text">
+                            <h4>2. Compartilhe o link</h4>
+                            <p>Mande o link para a galera no WhatsApp ou em qualquer rede social.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                        <div class="step-text">
+                            <h4>3. Receba na hora</h4>
+                            <p>Assim que todos pagarem, o valor total cai direto na sua conta via Pix. Simples assim!</p>
                         </div>
                     </div>
                 </div>
