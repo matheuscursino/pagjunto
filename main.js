@@ -48,6 +48,10 @@ app.get('/', (req, res) =>  {
     res.render('lp')
 })
 
+app.get('/vaquinha', (req, res) =>  {
+    res.render('vaquinha')
+})
+
 
 app.get('/:orderId', (req, res) => {
         axios.get('https://api.pagjunto.com/v1/order', {
