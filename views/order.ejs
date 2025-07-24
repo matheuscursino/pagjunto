@@ -599,15 +599,13 @@
             const btnText = document.getElementById('btnText');
             const loader = document.getElementById('loader');
             const errorMessage = document.getElementById('errorMessage');
-            
+
             paymentForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 errorMessage.textContent = '';
                 const remainingValue = TOTAL_VALUE - currentPaidValue;
                 const valorFloat = parseFloat(valueInput.value.replace(',', '.'));
                 if (!nameInput.value.trim() || nameInput.value.trim().split(' ').length < 2) return errorMessage.textContent = "Informe seu nome completo.";
-                if (cpfInput.value.length !== 14) return errorMessage.textContent = "Informe um CPF válido.";
-                if (phoneInput.value.replace(/\D/g, '').length < 10) return errorMessage.textContent = "Informe um telefone válido com DDD.";
                 if (isNaN(valorFloat) || valorFloat <= 0) return errorMessage.textContent = "Insira um valor de pagamento válido.";
                 if (valorFloat > remainingValue + 0.001) return errorMessage.textContent = `O valor excede o restante (R$ ${remainingValue.toFixed(2).replace('.',',')}).`;
                 if (!termsCheckbox.checked) return errorMessage.textContent = "Você deve concordar com os Termos de Uso.";
@@ -618,14 +616,11 @@
 
                 try {
                     const id2 = window.location.pathname.split('/').filter(Boolean).pop();
-                    const rawPhone = phoneInput.value.replace(/\D/g, '');
                     const response = await fetch(`<%=process.env.API_SITE_URL%>/payment/create-pix`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             name: nameInput.value.trim(),
-                            cpf: cpfInput.value.replace(/\D/g, ''),
-                            phone: { country_code: '55', area_code: rawPhone.substring(0, 2), number: rawPhone.substring(2) },
                             amount: Math.round(valorFloat * 100),
                             orderId: id2
                         })
