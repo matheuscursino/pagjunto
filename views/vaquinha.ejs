@@ -445,32 +445,60 @@
                 }
             });
 
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
+            form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-                const nome = document.getElementById('nome').value;
-                const valor = document.getElementById('valor').value;
-                const chavePix = pixInput.value;
+    const nome = document.getElementById('nome').value;
+    const valor = parseFloat(document.getElementById('valor').value);
+    const chavePix = pixInput.value;
 
-                // Validação final antes de submeter
-                if (!validarChavePix(chavePix)) {
-                    pixInput.classList.add('is-invalid');
-                    pixError.style.display = 'block';
-                    pixInput.focus();
-                    return;
-                }
+    // Validação final antes de submeter
+    if (!validarChavePix(chavePix)) {
+        pixInput.classList.add('is-invalid');
+        pixError.style.display = 'block';
+        pixInput.focus();
+        return;
+    }
 
-                // Simula a criação de um link
-                const uniqueId = Math.random().toString(36).substring(2, 10);
-                const generatedLink = `https://pagjunto.com/v/${uniqueId}`;
+    const submitButton = document.getElementById('submit-button');
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
+    submitButton.disabled = true;
 
-                // Exibe o resultado
-                linkInput.value = generatedLink;
-                resultSection.style.display = 'block';
+    try {
+        const payload = {
+            name: nome,
+            totalValue: valor,
+            userKey: chavePix
+        };
 
-                // Opcional: Esconde o formulário após o sucesso
-                form.style.display = 'none';
-            });
+        const response = await fetch(`<%=process.env.API_SITE_URL%>/order`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error((await response.json()).message || 'Erro ao criar vaquinha.');
+        }
+
+        const data = await response.json();
+        const generatedLink = `<%=process.env.SITE_URL%>/${data}`;
+
+        linkInput.value = generatedLink;
+        resultSection.style.display = 'block';
+        form.style.display = 'none';
+
+    } catch (error) {
+        console.error('Erro ao criar vaquinha:', error);
+        alert(error.message);
+    } finally {
+        submitButton.innerHTML = 'Gerar link da vaquinha';
+        submitButton.disabled = false;
+    }
+});
+
 
             copyButton.addEventListener('click', () => {
                 linkInput.select();
