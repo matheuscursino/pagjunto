@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pagjunto - Divida contas com amigos, sem estresse.</title>
-    <meta name="description" content="A forma mais fácil de rachar a conta do restaurante, organizar uma vaquinha para um presente ou dividir as despesas da viagem. Crie um link e resolva tudo pelo celular.">
+    <title>pagjunto - Resolva a conta sem climão.</title>
+    <meta name="description" content="A forma mais fácil de rachar a conta do rolê, organizar a vaquinha para um presente ou dividir as despesas da viagem. Crie um link e resolva tudo pelo celular.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         /* ------------------- */
         /* --- CSS Reset & Variables --- */
@@ -21,16 +21,18 @@
             --text-dark: #1D1D1F;
             --text-muted-light: #A1A1A6;
             --text-muted-dark: #555555;
-            --accent: #0066CC;
+            
+            /* --- Paleta de Cores Corporativa --- */
+            --accent: #0066CC; /* Azul corporativo */
             --accent-hover: #0052A3;
-            --success: #16a34a;
+            --success: #16a34a; /* Verde para sucesso */
+            --secondary-accent: #E5E7EB; /* Cinza claro para elementos secundários */
             --border-light: #E5E5E5;
             --border-dark: #2A2A2A;
 
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
 
-            --section-padding: clamp(6rem, 12vw, 10rem);
+            --section-padding: clamp(5rem, 10vw, 8rem);
         }
 
         *, *::before, *::after {
@@ -54,7 +56,7 @@
             position: relative;
         }
 
-        /* --- Animated Gradient Background --- */
+        /* --- Animated Ethereal Aura Background --- */
         .gradient-bg {
             position: fixed;
             top: 0;
@@ -94,15 +96,9 @@
         }
 
         @keyframes move {
-            0% {
-                transform: translate(-100px, -50px) scale(1);
-            }
-            50% {
-                transform: translate(200px, 100px) scale(1.2);
-            }
-            100% {
-                transform: translate(50px, -150px) scale(0.9);
-            }
+            0% { transform: translate(-100px, -50px) scale(1); }
+            50% { transform: translate(200px, 100px) scale(1.2); }
+            100% { transform: translate(50px, -150px) scale(0.9); }
         }
 
 
@@ -114,14 +110,13 @@
             max-width: 1140px;
             margin-left: auto;
             margin-right: auto;
-            padding-left: 2rem;
-            padding-right: 2rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
         }
 
         section {
             padding-top: var(--section-padding);
             padding-bottom: var(--section-padding);
-            transition: background-color 0.6s ease-in-out;
             position: relative;
             z-index: 1;
         }
@@ -140,8 +135,9 @@
         }
 
         h1 {
-            font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+            font-size: clamp(2.8rem, 5.5vw, 4rem);
             font-weight: 800;
+            color: var(--text-dark); /* Cor sólida */
         }
         
         h2 {
@@ -174,9 +170,8 @@
         .section-header p {
             font-size: 1.15rem;
             max-width: 55ch;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
-
 
         /* ------------------- */
         /* --- Header / Navigation --- */
@@ -192,7 +187,7 @@
             border-bottom: 1px solid transparent;
         }
         .main-header.is-scrolled {
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.8);
             -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-bottom-color: var(--border-light);
@@ -224,7 +219,6 @@
         .main-nav a:not(.btn):hover {
             color: var(--text-dark);
         }
-
 
         /* ------------------- */
         /* --- Animation Utilities --- */
@@ -285,7 +279,7 @@
             background: #181818;
             border-radius: 44px;
             padding: 12px;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0,0,0,0.1);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0,0,0,0.1);
             position: relative;
         }
 
@@ -320,18 +314,10 @@
             position: relative;
         }
 
-        .progress-ring {
-            transform: rotate(-90deg);
-        }
-        .progress-ring circle {
-            transition: stroke-dashoffset 1.5s cubic-bezier(0.6, 0, 0.1, 1);
-        }
-        .progress-ring-bg {
-            stroke: #e9eef2;
-        }
-        .progress-ring-fg {
-            stroke: var(--accent);
-        }
+        .progress-ring { transform: rotate(-90deg); }
+        .progress-ring circle { transition: stroke-dashoffset 1.5s cubic-bezier(0.6, 0, 0.1, 1); }
+        .progress-ring-bg { stroke: #e9eef2; }
+        .progress-ring-fg { stroke: var(--accent); }
 
         .progress-info {
             position: absolute;
@@ -372,7 +358,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-            padding-right: 0.5rem; /* for scrollbar */
+            padding-right: 0.5rem;
         }
         .payers-list-mockup::-webkit-scrollbar { width: 4px; }
         .payers-list-mockup::-webkit-scrollbar-track { background: transparent; }
@@ -397,10 +383,10 @@
         .payer-info { display: flex; align-items: center; gap: 0.75rem; }
         .payer-avatar {
             width: 32px; height: 32px; border-radius: 50%;
-            background-color: var(--bg-secondary);
+            background: var(--secondary-accent);
             display: flex; justify-content: center; align-items: center;
-            font-weight: 600; color: var(--accent); font-size: 0.9rem;
-            border: 1px solid #e9eef2;
+            font-weight: 600; color: var(--text-dark); font-size: 0.9rem;
+            border: none;
         }
         .payer-name { font-size: 0.9rem; font-weight: 500; color: var(--text-dark); }
         .payer-value { font-size: 0.9rem; font-weight: 600; color: var(--success); }
@@ -414,18 +400,18 @@
             font-weight: 600;
             padding: 1rem 2rem;
             border-radius: 12px;
-            border: 1px solid transparent;
+            border: none;
             cursor: pointer;
             text-decoration: none;
-            transition: all 0.2s ease-in-out;
+            transition: all 0.3s ease-in-out;
             letter-spacing: 0.01em;
             width: auto;
+            position: relative;
         }
         
         .btn-primary {
             background-color: var(--accent);
-            color: var(--text-light);
-            border-color: var(--accent);
+            color: white;
         }
         .btn-primary:hover {
             background-color: var(--accent-hover);
@@ -434,14 +420,6 @@
         }
         .btn:active { transform: translateY(0px) scale(0.97); }
 
-        .btn-secondary {
-            background-color: var(--bg-light);
-            color: var(--text-muted-dark);
-            border: 1px solid #D1D1D1;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .btn-secondary:hover { border-color: var(--text-dark); color: var(--text-dark); background-color: #fcfcfc; transform: translateY(-1px); }
-
         .btn-nav {
             font-size: 1rem;
             padding: 0.75rem 1.5rem;
@@ -449,93 +427,97 @@
         }
         
         /* ------------------- */
-        /* --- Use Cases Section --- */
+        /* --- How It Works Section --- */
         /* ------------------- */
-        .use-cases {
-             background-color: var(--bg-secondary);
+        #how-it-works {
+            background-color: var(--bg-secondary);
         }
-        .use-cases .grid {
+        .steps-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 2.5rem;
             text-align: left;
         }
-        
-        .use-case-card {
+        .step-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 20px;
             border: 1px solid var(--border-light);
-            border-radius: 24px;
-            padding: 2.5rem;
-            background-color: var(--bg-light);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
-        }
-        .use-case-card:hover { transform: translateY(-8px); box-shadow: 0 12px 35px rgba(0,0,0,0.06); }
-        .use-case-card p { margin-left: 0; }
-        .use-case-card .icon {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 1.5rem;
-            width: 60px;
-            height: 60px;
-            background-color: #e6f0fa;
-            border-radius: 12px;
-            display: flex;
             align-items: center;
-            justify-content: center;
-        }
-
-        /* ------------------- */
-        /* --- How-it-works Card --- */
-        /* ------------------- */
-        .how-it-works-card {
-            background-color: var(--bg-light);
-            padding: 3rem;
-            border-radius: 24px;
-            text-align: left;
-            border: 1px solid var(--border-light);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-        }
-        
-        .how-it-works-card h2 {
-            font-size: 2.5rem;
             text-align: center;
-            margin-bottom: 3rem;
         }
-        
-        .step {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .step:last-child {
-            margin-bottom: 0;
-        }
-        
-        .step-icon {
+        .step-card .step-icon {
             flex-shrink: 0;
             width: 56px;
             height: 56px;
             border-radius: 16px;
-            background-color: #e6f0fa;
-            color: var(--accent);
+            background-color: var(--accent);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 102, 204, 0.2);
         }
-        
-        .step-text h4 {
+        .step-card h4 {
             font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
         }
-        
-        .step-text p {
+        .step-card p {
             font-size: 1rem;
             color: var(--text-muted-dark);
             margin: 0;
+        }
+
+        /* ------------------- */
+        /* --- Testimonials Section --- */
+        /* ------------------- */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        .testimonial-card {
+            background-color: var(--bg-light);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            text-align: left;
+        }
+        .testimonial-card p {
+            margin: 0 0 1.5rem 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .author-info h5 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0;
+        }
+        .author-info span {
+            font-size: 0.9rem;
+            color: var(--text-muted-dark);
         }
 
         /* ------------------- */
@@ -543,6 +525,7 @@
         /* ------------------- */
         #cta-final {
             background-color: var(--bg-dark);
+            padding: var(--section-padding) 0;
         }
         #cta-final h2, #cta-final p { color: var(--text-light); }
         #cta-final p { color: var(--text-muted-light); }
@@ -561,29 +544,19 @@
             padding: 5rem 0;
             background-color: var(--bg-dark);
             color: var(--text-muted-light);
+            border-top: 1px solid var(--border-dark);
         }
         footer .container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2rem;
+            gap: 1.5rem;
+            text-align: center;
         }
         footer .logo {
             color: var(--text-light);
         }
         footer p { font-size: 0.95rem; color: var(--text-muted-light); margin:0; }
-        .social-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-        .social-links a {
-            color: var(--text-muted-light);
-            font-size: 1.25rem;
-            transition: color 0.2s ease;
-        }
-        .social-links a:hover {
-            color: var(--text-light);
-        }
 
         /* ------------------- */
         /* --- Responsive Design --- */
@@ -591,25 +564,27 @@
         @media (min-width: 992px) {
             .hero .container {
                 grid-template-columns: 1fr 1fr;
-                text-align: left;
             }
             .hero-text {
                 text-align: left;
+                order: 2; /* Inverte a ordem */
+            }
+            .hero-mockup-wrapper {
+                order: 1; /* Inverte a ordem */
             }
             .hero-text p {
                 margin-left: 0;
             }
-             .use-cases .grid { grid-template-columns: 1fr 1fr 1fr; }
+            .steps-grid { grid-template-columns: repeat(3, 1fr); }
+            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (min-width: 768px) {
+             .testimonials-grid { grid-template-columns: 1fr; }
         }
 
-        @media (max-width: 991px) {
-            /* No specific rules needed for this layout */
-        }
-        @media (min-width: 768px) {
-            .use-cases .grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-        }
         @media (max-width: 767px) {
-            .main-nav { display: none; } /* Simplified for this version */
+            .main-nav { display: none; }
             body { font-size: 16px; }
             h1 { font-size: 2.5rem; }
             h2 { font-size: 2rem; }
@@ -626,7 +601,7 @@
         <div class="container">
             <a href="#" class="logo">pagjunto</a>
             <nav class="main-nav">
-                <a href="#casos-de-uso">Para que serve?</a>
+                <a href="#how-it-works">Como funciona</a>
                 <a href="/vaquinha" class="btn btn-primary btn-nav">Criar vaquinha</a>
             </nav>
         </div>
@@ -635,14 +610,7 @@
     <!-- HERO SECTION -->
     <section class="hero" id="hero">
         <div class="container">
-            <div class="hero-text fade-in-section">
-                <h1>Divida a conta, não a amizade.</h1>
-                <p class="lead">Chega de fazer conta de cabeça ou perseguir amigos por Pix. Crie um link, compartilhe no grupo e relaxe. O Pagjunto cuida do resto.</p>
-                <div style="margin-top: 2rem;">
-                     <a href="/vaquinha" class="btn btn-primary">Rachar uma conta agora</a>
-                </div>
-            </div>
-            <div class="hero-mockup-wrapper fade-in-section" style="transition-delay: 200ms;">
+            <div class="hero-mockup-wrapper fade-in-section">
                 <div class="phone-mockup">
                     <div class="phone-screen">
                         <div class="mockup-header">pag<span>junto</span></div>
@@ -654,7 +622,7 @@
                             <div class="progress-info">
                                 <div class="label">Arrecadado</div>
                                 <div id="paidValueSpan" class="paid-value">R$ 0,00</div>
-                                <div id="totalValueSpan" class="total-value">de R$ 180,00</div>
+                                <div id="totalValueSpan" class="total-value">de R$ 215,50</div>
                             </div>
                         </div>
                         <div class="payers-list-container-mockup">
@@ -666,63 +634,76 @@
                     </div>
                 </div>
             </div>
+            <div class="hero-text fade-in-section" style="transition-delay: 200ms;">
+                <h1>A conta chegou? Resolva sem climão.</h1>
+                <p class="lead">Fim da matemática na mesa do bar e daquela caça ao PIX no grupo. Com o pagjunto, você cria um link, manda pra galera e pronto. Simples assim.</p>
+                <div style="margin-top: 2rem;">
+                     <a href="/vaquinha" class="btn btn-primary">Rachar uma conta agora</a>
+                </div>
+            </div>
         </div>
     </section>
 
     <main>
-        <!-- USE CASES SECTION -->
-        <section class="use-cases" id="casos-de-uso">
-            <div class="container">
-                <div class="section-content fade-in-section">
-                    <div class="section-header">
-                        <h2>Para o lanche, a surpresa e o rolê.</h2>
-                        <p class="lead">O Pagjunto é perfeito para qualquer situação em que você precise dividir uma despesa com a galera.</p>
+        <!-- HOW IT WORKS SECTION -->
+        <section id="how-it-works">
+            <div class="container section-content fade-in-section">
+                <div class="section-header">
+                    <h2>É simples que nem parece verdade.</h2>
+                    <p class="lead">Em três passos, a dor de cabeça de dividir a conta vira história.</p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                        </div>
+                        <h4>1. Crie sua vaquinha</h4>
+                        <p>Diga o motivo, defina o valor e gere seu link de pagamento em segundos.</p>
                     </div>
-                    <div class="grid">
-                        <div class="use-case-card">
-                            <div class="icon"><i class="fas fa-utensils"></i></div>
-                            <h4>Jantar & Bar</h4>
-                            <p>Ninguém precisa pegar a calculadora. Gere um link com o valor total e cada um paga a sua parte na hora, com Pix ou cartão.</p>
+                    <div class="step-card">
+                        <div class="step-icon">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.59a2 2 0 0 1-2.83-2.83l.79-.79"/></svg>
                         </div>
-                        <div class="use-case-card">
-                            <div class="icon"><i class="fas fa-gift"></i></div>
-                            <h4>Presentes em Grupo</h4>
-                            <p>Junte a galera para comprar aquele presentão sem ninguém ficar no vácuo. Acompanhe quem já contribuiu e o valor arrecadado.</p>
+                        <h4>2. Compartilhe o link</h4>
+                        <p>Mande no WhatsApp, no Instagram ou onde a galera estiver. Sem precisar de app.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
                         </div>
-                        <div class="use-case-card">
-                             <div class="icon"><i class="fas fa-plane"></i></div>
-                            <h4>Viagens e Rolês</h4>
-                            <p>Divida os custos da gasolina, hospedagem e passeios de forma justa e transparente. Chega de planilhas complicadas.</p>
-                        </div>
+                        <h4>3. Receba na hora</h4>
+                        <p>Cada um paga com Pix e você acompanha em tempo real. Dinheiro na conta, amizade intacta.</p>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <!-- HOW IT WORKS SECTION -->
-        <section id="how-it-works">
-            <div class="container section-content fade-in-section">
-                <div class="how-it-works-card">
-                    <h2>Como funciona?</h2>
-                    <div class="step">
-                        <div class="step-icon"><i class="fas fa-edit"></i></div>
-                        <div class="step-text">
-                            <h4>1. Crie a vaquinha</h4>
-                            <p>Preencha os dados e gere seu link de pagamento personalizado em segundos.</p>
+
+        <!-- TESTIMONIALS SECTION -->
+        <section id="testimonials" class="fade-in-section">
+            <div class="container section-content">
+                <div class="section-header">
+                    <h2>A galera que usa, aprova.</h2>
+                    <p class="lead">Veja como o pagjunto salva os rolês.</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <p>"Sério, o pagjunto mudou o pós-rolê. Antes era uma confusão pra saber quem devia pra quem. Agora é só mandar o link e em 5 minutos tá tudo resolvido. Salvou minhas amizades!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">J</div>
+                            <div class="author-info">
+                                <h5>Juliana F.</h5>
+                                <span>Organizadora de happy hours</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="step">
-                        <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
-                        <div class="step-text">
-                            <h4>2. Compartilhe o link</h4>
-                            <p>Mande o link para a galera no WhatsApp ou em qualquer rede social.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-icon"><i class="fas fa-hand-holding-usd"></i></div>
-                        <div class="step-text">
-                            <h4>3. Receba na hora</h4>
-                            <p>Assim que todos pagarem, o valor total cai direto na sua conta via Pix. Simples assim!</p>
+                    <div class="testimonial-card">
+                        <p>"Usamos pra rachar a gasolina e o aluguel da casa na praia. Foi a primeira viagem em anos que não teve estresse com dinheiro. Todo mundo via o status do pagamento, super transparente."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar" style="background-color: var(--secondary-accent); color: var(--text-dark);">M</div>
+                            <div class="author-info">
+                                <h5>Marcos P.</h5>
+                                <span>Viajante de fim de semana</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -733,25 +714,21 @@
         <section id="cta-final">
              <div class="container section-content fade-in-section">
                 <div class="section-header">
-                    <h2>Pronto para simplificar sua vida?</h2>
-                    <p class="lead">Crie uma vaquinha agora e comece a dividir pagamentos em segundos.</p>
+                    <h2>Chega de perrengue na hora de pagar.</h2>
+                    <p class="lead">Crie sua primeira vaquinha em menos de um minuto. É de graça e sem complicação.</p>
                     <div class="app-buttons">
-                        <a href="/vaquinha" class="btn btn-primary">Rachar conta agora</a>
+                        <a href="/vaquinha" class="btn btn-primary">Começar a usar agora</a>
                     </div>
                 </div>
             </div>
         </section>
-
     </main>
 
     <footer>
         <div class="container">
             <a href="#" class="logo">pagjunto</a>
-            <div class="social-links">
-                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
-            <p>&copy; 2025 Pagjunto. Todos os direitos reservados.</p>
+            <p>Feito pra simplificar a vida. E manter as amizades.</p>
+            <p style="margin-top: 1rem; font-size: 0.85rem;">&copy; 2025 Pagjunto. Todos os direitos reservados.</p>
         </div>
     </footer>
 
@@ -790,20 +767,18 @@
                 progressRing.style.strokeDashoffset = circumference;
 
                 const mockPayers = [
-                    { name: 'Maria', value: 60 },
-                    { name: 'João', value: 60 },
-                    { name: 'Fernanda', value: 15 }
+                    { name: 'Ana', value: 75.50 },
+                    { name: 'Beto', value: 75.50 },
+                    { name: 'Carol', value: 45.00 }
                 ];
+                const totalValue = 215.50;
                 const totalPaid = mockPayers.reduce((sum, p) => sum + p.value, 0);
-                const totalValue = 180;
                 const progressPercentage = totalPaid / totalValue;
 
-                // Animate progress ring
                 setTimeout(() => {
                     progressRing.style.strokeDashoffset = circumference - progressPercentage * circumference;
                 }, 100);
 
-                // Animate paid value counter
                 let startTimestamp = null;
                 const duration = 1500;
                 const step = (timestamp) => {
@@ -817,7 +792,6 @@
                 };
                 window.requestAnimationFrame(step);
 
-                // Animate payers list
                 payersList.innerHTML = '';
                 payersCount.textContent = '0';
                 mockPayers.forEach((payer, index) => {
@@ -837,7 +811,6 @@
                     }, 500 + index * 300);
                 });
             };
-
 
             // --- Intersection Observer for Animations ---
             const sections = document.querySelectorAll('.fade-in-section');
