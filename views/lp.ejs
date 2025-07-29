@@ -763,9 +763,6 @@
                 const radius = progressRing.r.baseVal.value;
                 const circumference = 2 * Math.PI * radius;
                 
-                progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
-                progressRing.style.strokeDashoffset = circumference;
-
                 const mockPayers = [
                     { name: 'Ana', value: 75.50 },
                     { name: 'Beto', value: 75.50 },
@@ -774,11 +771,23 @@
                 const totalValue = 215.50;
                 const totalPaid = mockPayers.reduce((sum, p) => sum + p.value, 0);
                 const progressPercentage = totalPaid / totalValue;
+                const finalOffset = circumference - progressPercentage * circumference;
 
+                // --- CORREÇÃO DA ANIMAÇÃO ---
+                // 1. Define o estado inicial do anel de progresso para vazio (offset de traço completo) sem qualquer animação.
+                progressRing.style.transition = 'none';
+                progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+                progressRing.style.strokeDashoffset = circumference;
+
+                // 2. Usa um timeout mínimo para permitir que o navegador renderize o estado inicial primeiro.
+                // Em seguida, reativa as transições e define o estado final para acionar a animação.
                 setTimeout(() => {
-                    progressRing.style.strokeDashoffset = circumference - progressPercentage * circumference;
-                }, 100);
+                    // Ao definir a propriedade de transição como vazia, ela reverterá para a definida na folha de estilo CSS.
+                    progressRing.style.transition = ''; 
+                    progressRing.style.strokeDashoffset = finalOffset;
+                }, 10); // Um pequeno atraso como 10ms é suficiente.
 
+                // Anima o contador de números
                 let startTimestamp = null;
                 const duration = 1500;
                 const step = (timestamp) => {
@@ -792,6 +801,7 @@
                 };
                 window.requestAnimationFrame(step);
 
+                // Anima a lista de pagadores
                 payersList.innerHTML = '';
                 payersCount.textContent = '0';
                 mockPayers.forEach((payer, index) => {
