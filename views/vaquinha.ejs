@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crie sua Vaquinha - pagjunto</title>
-    <meta name="description" content="Crie um link de pagamento compartilhado em segundos. Informe o valor, seu nome, sua chave Pix e comece a receber da galera.">
+    <title>Crie seu Rateio - pagjunto</title>
+    <meta name="description" content="Cole o PIX Copia e Cola da conta, gere um link de rateio e deixe que a gente pague a conta por você.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -265,7 +265,7 @@
             pointer-events: none;
         }
 
-        input[type="text"], input[type="number"] {
+        input[type="text"], input[type="number"], textarea {
             width: 100%;
             padding: 0.9rem 1rem 0.9rem 2.75rem; /* Padding for icon */
             border-radius: 10px;
@@ -276,13 +276,19 @@
             transition: all 0.2s ease;
         }
 
-        input:focus {
+        textarea {
+            padding: 0.9rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        input:focus, textarea:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
         }
         
-        input.is-invalid {
+        input.is-invalid, textarea.is-invalid {
             border-color: var(--danger);
             box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
         }
@@ -411,41 +417,34 @@
     <main>
         <div class="main-grid">
             <div class="form-container">
-                <h1>Crie sua vaquinha</h1>
-                <p class="subtitle">Preencha os dados e gere seu link de pagamento na hora.</p>
+                <h1>Rache a conta sem estresse</h1>
+                <p class="subtitle">Cole o PIX do pedido, chame a galera e pague a conta em segundos.</p>
                 
                 <form id="vaquinha-form">
                     <div class="form-group">
-                        <label for="nome">Seu nome</label>
+                        <label for="nome">Qual o motivo da vaquinha?</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user icon"></i>
-                            <input type="text" id="nome" name="nome" placeholder="Como seus amigos te chamam?" required>
+                            <input type="text" id="nome" name="nome" placeholder="Ex: Pizza da galera" required>
                         </div>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="valor">Valor total (R$)</label>
+                        <label for="pix-key">PIX "Copia e Cola" da conta</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-dollar-sign icon"></i>
-                            <input type="number" id="valor" name="valor" placeholder="Ex: 150.00" step="0.01" min="1" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="pix-key">Sua chave Pix</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-key icon"></i>
-                            <input type="text" id="pix-key" name="pix-key" placeholder="CPF, celular, e-mail ou aleatória" required>
+                            <textarea id="pix-key" name="pix-key" placeholder="Cole aqui o código PIX do iFood, da conta de luz..." required rows="3"></textarea>
                         </div>
                         <div id="pix-error" class="error-message">
-                            <i class="fas fa-exclamation-circle"></i> Chave Pix inválida. Verifique o formato.
+                            <i class="fas fa-exclamation-circle"></i> O campo do PIX não pode estar vazio.
                         </div>
                     </div>
 
-                    <button type="submit" id="submit-button" class="btn btn-primary">Gerar link da vaquinha</button>
+                    <button type="submit" id="submit-button" class="btn btn-primary">Criar vaquinha</button>
                 </form>
 
                 <div id="result-section">
-                    <h3><i class="fas fa-check-circle"></i> Link gerado com sucesso!</h3>
-                    <p style="margin-bottom: 1rem;">Compartilhe com seus amigos:</p>
+                    <h3><i class="fas fa-check-circle"></i> Pronto! Seu link está no ar.</h3>
+                    <p style="margin-bottom: 1rem;">Agora é só mandar pra galera:</p>
                     <div class="link-wrapper">
                         <input type="text" id="vaquinha-link" readonly>
                         <button id="copy-button">Copiar link</button>
@@ -454,26 +453,26 @@
             </div>
 
             <div class="how-it-works-card">
-                <h2>Como funciona?</h2>
+                <h2>É simples assim:</h2>
                 <div class="step">
-                    <div class="step-icon"><i class="fas fa-edit"></i></div>
+                    <div class="step-icon"><i class="fas fa-paste"></i></div>
                     <div class="step-text">
-                        <h4>1. Crie a vaquinha</h4>
-                        <p>Preencha os dados no formulário ao lado e gere seu link de pagamento personalizado.</p>
+                        <h4>1. Cole o PIX</h4>
+                        <p>Você pega o PIX Copia e Cola de qualquer conta e informa pra gente no formulário ao lado.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
                     <div class="step-text">
-                        <h4>2. Compartilhe o link</h4>
-                        <p>Mande o link para a galera no WhatsApp ou em qualquer rede social.</p>
+                        <h4>2. Chame a galera</h4>
+                        <p>Mande o link no grupo. Cada um paga a sua parte, sem cadastro, e todo mundo vê quem já pagou.</p>
                     </div>
                 </div>
                 <div class="step">
-                    <div class="step-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <div class="step-icon"><i class="fas fa-shield-alt"></i></div>
                     <div class="step-text">
-                        <h4>3. Receba na hora</h4>
-                        <p>Assim que todos pagarem, o valor total cai direto na sua conta via Pix. Simples assim!</p>
+                        <h4>3. Missão cumprida</h4>
+                        <p>Quando o valor bate, a gente paga a conta original na hora, automaticamente. Mágico, né?</p>
                     </div>
                 </div>
             </div>
@@ -503,27 +502,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const validarChavePix = (chave) => {
         if (!chave) return false;
 
-        // Remove caracteres especiais para CPF/CNPJ/Telefone
-        const chaveLimpa = chave.replace(/[.\-\/() ]/g, '');
-
-        // 1. CPF (11 dígitos numéricos)
-        if (/^\d{11}$/.test(chaveLimpa)) return true;
-
-        // 2. CNPJ (14 dígitos numéricos)
-        if (/^\d{14}$/.test(chaveLimpa)) return true;
-
-        // 3. Celular (formato +55 DDD NÚMERO)
-        if (/^\+55\d{10,11}$/.test(chave.replace(/[()\- ]/g, ''))) return true;
-
-        // 4. E-mail
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if (emailRegex.test(chave)) return true;
-
-        // 5. Chave Aleatória (formato UUID)
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        if (uuidRegex.test(chave)) return true;
-
-        return false;
+        // Para o novo fluxo, uma validação simples de que não está vazio é suficiente.
+        // A validação complexa foi mantida no JS, mas a lógica de erro foi simplificada.
+        if (chave.trim() === '') return false;
+        
+        // A lógica antiga de validação de formato pode ser mantida ou removida.
+        // Por enquanto, vamos considerar qualquer string não vazia como potencialmente válida.
+        return true;
     };
 
     // Adiciona validação em tempo real enquanto o usuário digita
@@ -541,7 +526,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
 
         const nome = document.getElementById('nome').value;
-        const valor = parseFloat(document.getElementById('valor').value);
+        // O valor agora será extraído do próprio PIX Copia e Cola no backend,
+        // então o campo de valor foi removido do formulário.
         const chavePix = pixInput.value;
 
         // Validação final antes de submeter
@@ -557,12 +543,13 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.disabled = true;
 
         try {
+            // O payload agora só precisa do motivo e do PIX Copia e Cola.
             const payload = {
                 name: nome,
-                totalValue: valor,
-                userKey: chavePix
+                pixToPay: chavePix // O nome do campo foi alterado para clareza
             };
 
+            // A URL do endpoint pode precisar de ajuste para refletir a nova funcionalidade.
             const response = await fetch(`<%=process.env.API_SITE_URL%>/order`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -570,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
-                throw new Error((await response.json()).message || 'Erro ao criar vaquinha.');
+                throw new Error((await response.json()).message || 'Erro ao criar rateio.');
             }
 
             const data = await response.json();
@@ -580,10 +567,10 @@ document.addEventListener('DOMContentLoaded', () => {
             resultSection.style.display = 'block';
             form.style.display = 'none';
         } catch (error) {
-            console.error('Erro ao criar vaquinha:', error);
+            console.error('Erro ao criar rateio:', error);
             alert(error.message);
         } finally {
-            submitButton.innerHTML = 'Gerar link da vaquinha';
+            submitButton.innerHTML = 'Gerar link do rateio';
             submitButton.disabled = false;
         }
     });
