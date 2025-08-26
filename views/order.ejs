@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pedido - pagjunto</title>
+    <title>Dashboard de Pagamento - Pagjunto</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -177,8 +177,7 @@
         .action-pane {
             background-color: var(--bg-secondary);
             border-radius: 24px; border: 1px solid var(--border-color);
-            padding: 2.5rem; position: relative;
-            margin: 20px;
+            padding: 2.5rem; position: relative; overflow: hidden;
             box-shadow: 0 10px 40px var(--shadow-color);
             animation: fade-in-right 1s var(--ease-out-expo);
             display: flex; flex-direction: column; justify-content: center;
@@ -364,7 +363,7 @@
             .action-pane { order: 2; height: auto; min-height: auto; padding: 1.5rem; }
             .header .logo { font-size: 1.5rem; }
             .header .title { font-size: 1rem; }
-            .action-title { font-size: 1.5rem; overflow-wrap: break-word;}
+            .action-title { font-size: 1.5rem; }
             .action-subtitle { margin-bottom: 1.5rem; }
             .progress-container svg {
                 width: 200px;
