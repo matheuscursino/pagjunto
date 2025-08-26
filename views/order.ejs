@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard de Pagamento - Pagjunto</title>
+    <title>Pedido - pagjunto</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -177,7 +177,8 @@
         .action-pane {
             background-color: var(--bg-secondary);
             border-radius: 24px; border: 1px solid var(--border-color);
-            padding: 2.5rem; position: relative; overflow: hidden;
+            padding: 2.5rem; position: relative;
+            margin: 20px;
             box-shadow: 0 10px 40px var(--shadow-color);
             animation: fade-in-right 1s var(--ease-out-expo);
             display: flex; flex-direction: column; justify-content: center;
@@ -363,7 +364,7 @@
             .action-pane { order: 2; height: auto; min-height: auto; padding: 1.5rem; }
             .header .logo { font-size: 1.5rem; }
             .header .title { font-size: 1rem; }
-            .action-title { font-size: 1.5rem; }
+            .action-title { font-size: 1.5rem; overflow-wrap: break-word;}
             .action-subtitle { margin-bottom: 1.5rem; }
             .progress-container svg {
                 width: 200px;
@@ -377,21 +378,15 @@
                 display: none;
             }
             .qr-wrapper, .paid-message-wrapper {
-                /* FIX: Reset completo e forçado de todos os estilos de posicionamento do desktop */
-                position: static !important;
-                transform: none !important;
-                top: auto !important;
-                left: auto !important;
-                right: auto !important;
-                
-                /* Estilos mobile padrão */
+                position: static;
+                transform: none;
                 opacity: 1;
                 padding: 1rem 0;
                 display: none;
             }
             .action-pane.qr-visible .qr-wrapper,
             .action-pane.paid-visible .paid-message-wrapper {
-                display: block;
+                 display: block;
             }
         }
     </style>
@@ -408,7 +403,7 @@
                             <button class="action-btn" id="showQrBtn" title="Mostrar QR Code do link"><i class="fas fa-qrcode"></i></button>
                         </div>
                     </div>
-                    <h1 class="title">Vaquinha de <%= orderData.name %></h1>
+                    <h1 class="title">Cobrança para <%= partnerData.partnerName %></h1>
                 </header>
 
                 <div class="progress-container">
@@ -451,6 +446,14 @@
                                     <input type="text" id="name" required />
                                 </div>
                                 <div class="form-group">
+                                    <label for="cpf">CPF (para identificação)</label>
+                                    <input type="text" id="cpf" required />
+                                </div>
+                                 <div class="form-group">
+                                    <label for="phone">Telefone (com DDD)</label>
+                                    <input type="text" id="phone" required />
+                                </div>
+                                <div class="form-group">
                                     <label for="valor">Valor (R$)</label>
                                     <input type="text" id="valor" inputmode="decimal" required />
                                 </div>
@@ -478,31 +481,15 @@
                 <h2 class="modal-title">Termos e Condições de Uso</h2>
                 <button class="close-btn">&times;</button>
             </div>
-<div class="modal-body">
-    <p><strong>Última atualização:</strong> 29 de julho de 2025</p>
-    
-    <h3>1. Objeto do Serviço</h3>
-    <p>
-        A Pagjunto é uma <strong>plataforma que facilita a criação de vaquinhas digitais e recebimento de valores via Pix</strong>. 
-        Atuamos exclusivamente como facilitador de pagamentos, permitindo que você crie um link de cobrança e receba contribuições de terceiros.
-        A Pagjunto <strong>NÃO</strong> participa da relação entre você e seus contribuintes, nem se responsabiliza pelo uso dos valores arrecadados.
-    </p>
-    
-    <h3>2. Coleta e Uso de Dados Pessoais</h3>
-    <p>
-        Ao utilizar a plataforma, você autoriza a coleta e o processamento dos seus dados (nome, chave Pix, e eventualmente CPF ou telefone) 
-        para viabilizar a geração do link de pagamento, a transferência dos valores arrecadados e garantir a segurança das transações.
-        Os dados dos contribuintes são tratados apenas para identificar os pagamentos.
-    </p>
-    
-    <h3>3. Política de Pagamentos, Reembolsos e Disputas</h3>
-    <p>
-        Após a confirmação do pagamento, os valores são <strong>transferidos imediatamente</strong> para a chave Pix informada pelo organizador da vaquinha.
-        A Pagjunto <strong>não realiza estorno nem intermedia disputas</strong>. Caso haja necessidade de reembolso, este deverá ser tratado diretamente entre 
-        o organizador e os contribuintes.
-    </p>
-</div>
-
+            <div class="modal-body">
+                <p><strong>Última atualização:</strong> 16 de julho de 2025</p>
+                <h3>1. Objeto do Serviço</h3>
+                <p>A Pagjunto atua como uma <strong>plataforma de intermediação de pagamentos</strong>, facilitando a transferência de valores entre você, o pagador, e o comerciante ou organizador da cobrança ("Parceiro"). Nós <strong>NÃO</strong> somos o vendedor do produto ou serviço. Nossa responsabilidade se limita a processar o seu pagamento de forma segura.</p>
+                <h3>2. Coleta e Uso de Dados Pessoais</h3>
+                <p>Ao prosseguir, você autoriza a Pagjunto a coletar e processar seus dados pessoais (nome, CPF, telefone) para a finalidade estrita de processar a transação, garantir a segurança e identificar seu pagamento junto ao Parceiro.</p>
+                <h3>3. Política de Não Reembolso e Disputas</h3>
+                <p>Uma vez que um pagamento é confirmado, a transação é <strong>final e irrevogável</strong> pela Pagjunto. Quaisquer solicitações de reembolso ou disputas sobre o produto/serviço devem ser tratadas <strong>DIRETAMENTE</strong> com o Parceiro que originou a cobrança.</p>
+            </div>
         </div>
     </div>
     <div id="pageQrModal" class="modal">
@@ -614,6 +601,8 @@
         const paymentForm = document.getElementById('paymentForm');
         if (paymentForm) {
             const nameInput = document.getElementById('name');
+            const cpfInput = document.getElementById('cpf');
+            const phoneInput = document.getElementById('phone');
             const valueInput = document.getElementById('valor');
             const termsCheckbox = document.getElementById('termsCheckbox');
             const generateBtn = document.getElementById('generateBtn');
@@ -621,12 +610,17 @@
             const loader = document.getElementById('loader');
             const errorMessage = document.getElementById('errorMessage');
 
+            cpfInput.addEventListener('input', e => { let v = e.target.value.replace(/\D/g, '').slice(0, 11); v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2'); e.target.value = v; });
+            phoneInput.addEventListener('input', e => { let v = e.target.value.replace(/\D/g, '').slice(0, 11); if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3'); else if (v.length > 5) v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3'); else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2'); else v = v.replace(/^(\d*)/, '($1'); e.target.value = v; });
+
             paymentForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 errorMessage.textContent = '';
                 const remainingValue = TOTAL_VALUE - currentPaidValue;
                 const valorFloat = parseFloat(valueInput.value.replace(',', '.'));
                 if (!nameInput.value.trim() || nameInput.value.trim().split(' ').length < 2) return errorMessage.textContent = "Informe seu nome completo.";
+                if (cpfInput.value.length !== 14) return errorMessage.textContent = "Informe um CPF válido.";
+                if (phoneInput.value.replace(/\D/g, '').length < 10) return errorMessage.textContent = "Informe um telefone válido com DDD.";
                 if (isNaN(valorFloat) || valorFloat <= 0) return errorMessage.textContent = "Insira um valor de pagamento válido.";
                 if (valorFloat > remainingValue + 0.001) return errorMessage.textContent = `O valor excede o restante (R$ ${remainingValue.toFixed(2).replace('.',',')}).`;
                 if (!termsCheckbox.checked) return errorMessage.textContent = "Você deve concordar com os Termos de Uso.";
@@ -637,12 +631,16 @@
 
                 try {
                     const id2 = window.location.pathname.split('/').filter(Boolean).pop();
+                    const rawPhone = phoneInput.value.replace(/\D/g, '');
                     const response = await fetch(`<%=process.env.API_SITE_URL%>/payment/create-pix`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             name: nameInput.value.trim(),
+                            cpf: cpfInput.value.replace(/\D/g, ''),
+                            phone: { country_code: '55', area_code: rawPhone.substring(0, 2), number: rawPhone.substring(2) },
                             amount: Math.round(valorFloat * 100),
+                            recipient_id: "<%=partnerData.recipient_id%>",
                             orderId: id2
                         })
                     });
